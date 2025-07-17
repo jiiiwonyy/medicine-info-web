@@ -27,7 +27,7 @@ export default function Detail() {
         ← 목록으로 돌아가기
       </Link>
 
-      <h1 className="text-3xl font-bold mb-2">{med.제품명}</h1>
+      <h1 className="text-xl font-bold mb-2">{med.제품명}</h1>
       {med.제품영문명 && (
         <p className="text-gray-600 italic mb-4">{med.제품영문명}</p>
       )}

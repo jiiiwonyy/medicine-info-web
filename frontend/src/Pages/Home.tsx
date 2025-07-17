@@ -17,12 +17,13 @@ export default function Home() {
   } = useQuery<Medicine[], Error>({
     queryKey: ['medicines', q, page],
     queryFn: () => searchMedicines(q, page, 20),
-    enabled: q.length >= 2, // 이제 여기 에러 안 납니다!
+    enabled: q.length >= 2,
   });
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
+    <div className="p-4 max-w-3xl">
       <SearchBar
+        id="medicine-search-bar"
         value={q}
         onChange={(v: string) => {
           setQ(v);
@@ -52,7 +53,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => setPage((p) => p + 1)}
-            className="px-3 py-1 bg-gray-200 rounded"
+            className="py-2 px-4 font-semibold"
           >
             다음
           </button>

@@ -9,11 +9,11 @@ export default function MedicineCard({ medicine }: Props) {
   return (
     <Link
       to={`/medicines/${medicine.번호}`}
-      className="block border rounded-lg p-4 hover:shadow-md transition-shadow"
+      className="block border bg-white rounded-lg p-4 hover:shadow-md transition-shadow"
     >
-      <h2 className="text-xl font-semibold mb-1">{medicine.제품명}</h2>
+      <h2 className="text-3xl font-semibold mb-1">{medicine.제품명}</h2>
       {medicine.제품영문명 && (
-        <p className="text-sm text-gray-600 mb-2">{medicine.제품영문명}</p>
+        <p className="text-sm text-red-600 mb-2">{medicine.제품영문명}</p>
       )}
       <div className="text-sm space-y-1">
         {medicine.업체명 && (

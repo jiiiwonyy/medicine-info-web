@@ -1,12 +1,14 @@
 import type { ChangeEvent } from 'react';
 
 interface SearchBarProps {
+  id: string;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
 }
 
 export default function SearchBar({
+  id,
   value,
   onChange,
   placeholder,
@@ -17,6 +19,7 @@ export default function SearchBar({
 
   return (
     <input
+      id={id}
       type="text"
       value={value}
       onChange={handleInput}
