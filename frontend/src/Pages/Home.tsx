@@ -1,64 +1,46 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { searchMedicines } from '../api/searchMedicine';
-import SearchBar from '../components/SearchBar';
-import MedicineCard from '../components/MedicineCard';
-import type { Medicine } from '../types/medicine';
+import SearchBar from '@/components/SearchBar';
+import { useNavigate } from 'react-router-dom';
+import { searchMedicines } from '@/api/searchMedicine';
+import Spinner from '@/components/Spinner';
+import type { Medicine } from '@/types/medicine';
 
 export default function Home() {
-  const [q, setQ] = useState<string>(''); // 검색어
-  const [page, setPage] = useState<number>(1); // 페이지
+  const [q, setQ] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const {
-    data: medicines,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<Medicine[], Error>({
-    queryKey: ['medicines', q, page],
-    queryFn: () => searchMedicines(q, page, 20),
-    enabled: q.length >= 2,
-  });
+  const handleSearch = async () => {
+    if (q.trim().length < 2) return;
+    setLoading(true);
+    try {
+      const result: Medicine[] = await searchMedicines(q, 1, 20);
+      navigate(`/search?query=${encodeURIComponent(q)}`, { state: { result } });
+    } catch (e) {
+      console.error('검색 실패', e);
+      alert('검색 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="p-4 max-w-3xl">
+    <div className="flex flex-col items-center justify-center w-full min-h-screen">
+      <h1
+        onClick={() => navigate('/')}
+        className="text-3xl md:text-4xl font-bold mb-6 cursor-pointer hover:text-green-600 transition-colors"
+      >
+        약 정보 검색 사이트
+      </h1>
+
       <SearchBar
         id="medicine-search-bar"
         value={q}
-        onChange={(v: string) => {
-          setQ(v);
-          setPage(1);
-        }}
+        onChange={(v: string) => setQ(v)}
+        onSearch={handleSearch}
         placeholder="약 이름을 입력하세요 (최소 2글자)"
       />
-
-      {isLoading && <p>🔄 검색 중…</p>}
-      {isError && <p className="text-red-600">❗ 오류: {error?.message}</p>}
-
-      <div className="mt-4 space-y-2">
-        {medicines?.map((med: Medicine) => (
-          <MedicineCard key={med.번호} medicine={med} />
-        ))}
-      </div>
-
-      {/* 페이징 컨트롤 */}
-      {medicines?.length === 20 && (
-        <div className="mt-4 flex justify-between">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((p) => p - 1)}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-          >
-            이전
-          </button>
-          <button
-            onClick={() => setPage((p) => p + 1)}
-            className="py-2 px-4 font-semibold"
-          >
-            다음
-          </button>
-        </div>
-      )}
+      {loading && <Spinner />}
     </div>
   );
 }
