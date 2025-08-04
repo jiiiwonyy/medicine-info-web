@@ -39,7 +39,7 @@ export default function SearchBar({
       <button
         type="button"
         onClick={onSearch}
-        className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+        className="px-4 py-2 bg-green-600 text-white rounded cursor-pointer hover:bg-green-700 transition-colors"
       >
         검색
       </button>
