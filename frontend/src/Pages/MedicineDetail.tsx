@@ -4,6 +4,8 @@ import { getMedicine } from '../api/searchMedicine';
 import type { Medicine } from '../types/medicine';
 import { useRef } from 'react';
 import TopButton from '@/components/TopButton';
+import Spinner from '@/components/Spinner';
+import FloatingNavigation from '@/components/FloatingNavigation';
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
@@ -14,6 +16,12 @@ export default function Detail() {
 
   const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleFloatingNavClick = (target: 'effect' | 'usage' | 'caution') => {
+    if (target === 'effect') scrollTo(effectRef);
+    else if (target === 'usage') scrollTo(usageRef);
+    else if (target === 'caution') scrollTo(cautionRef);
   };
 
   const {
@@ -27,7 +35,7 @@ export default function Detail() {
     enabled: !!id,
   });
 
-  if (isLoading) return <p>🔄 불러오는 중…</p>;
+  if (isLoading) return <Spinner />;
   if (isError) return <p className="text-red-600">❗ 오류: {error?.message}</p>;
   if (!med) return <p>해당 약품을 찾을 수 없습니다.</p>;
 
@@ -156,6 +164,7 @@ export default function Detail() {
           <p className="whitespace-pre-line">{med.주의사항}</p>
         </section>
       </div>
+      <FloatingNavigation onScrollTo={handleFloatingNavClick} />
       <TopButton />
     </div>
   );

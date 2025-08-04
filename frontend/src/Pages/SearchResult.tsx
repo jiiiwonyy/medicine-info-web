@@ -1,87 +1,72 @@
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import type { Medicine } from '../types/medicine';
-import SearchBar from '@/components/SearchBar';
 import { useState, useEffect } from 'react';
 import Spinner from '@/components/Spinner';
 import { searchMedicines } from '@/api/searchMedicine';
+import type { AxiosError } from 'axios';
 
 export default function SearchResult() {
-  const location = useLocation();
   const navigate = useNavigate();
-  const [q, setQ] = useState<string>('');
   const [params] = useSearchParams();
-  const [loading, setLoading] = useState(false);
   const query = params.get('query') || '';
 
-  const [medicines, setMedicines] = useState<Medicine[]>(
-    (location.state as { result?: Medicine[] })?.result || [],
-  );
+  const [loading, setLoading] = useState(true);
+  const [medicines, setMedicines] = useState<Medicine[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!query || query.trim().length < 2) {
-      setMedicines([]);
-      return;
-    }
-
     const fetchData = async () => {
       setLoading(true);
+      setError(null);
       try {
         const result = await searchMedicines(query, 1, 20);
         setMedicines(result);
-      } catch (e) {
-        console.error('검색 실패', e);
+        if (result.length === 0) {
+          setError('검색 결과가 없습니다.');
+        }
+      } catch (err) {
+        const axiosErr = err as AxiosError;
+        const status = axiosErr.response?.status;
+        if (status === 404) {
+          setError('검색 결과가 없습니다.');
+        } else {
+          setError('검색 중 오류가 발생했습니다.');
+        }
         setMedicines([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    if (query.trim().length >= 2) fetchData();
   }, [query]);
 
-  const handleSearch = async () => {
-    if (q.trim().length < 2) return;
-    navigate(`/search?query=${encodeURIComponent(q)}`);
-  };
-
   return (
-    <>
-      <div className="flex flex-col items-center justify-center w-full mt-5">
-        <h1
-          onClick={() => navigate('/')}
-          className="text-3xl md:text-4xl font-bold mb-6 cursor-pointer hover:text-green-600 transition-colors"
-        >
-          약 정보 검색 사이트
-        </h1>
+    <div className="p-6">
+      <h2 className="text-center text-xl mb-5">
+        통합검색 : <span className="font-semibold">{query}</span> (으)로 검색한
+        결과입니다.
+      </h2>
+      <h3 className="text-lg font-bold text-green-600 mb-4">
+        검색결과 리스트 ( {medicines.length}개 )
+      </h3>
 
-        <SearchBar
-          id="medicine-search-bar"
-          value={q}
-          onChange={(v: string) => setQ(v)}
-          onSearch={handleSearch}
-          placeholder="약 이름을 입력하세요 (최소 2글자)"
-        />
-      </div>
-
-      <div className="p-15">
-        <h2 className="text-center text-xl mb-5">
-          통합검색 : {query} (으)로 검색한 결과입니다.
-        </h2>
-        <h3 className="text-lg font-bold text-green-600 mb-4">
-          검색결과 리스트 ( {medicines.length}개 )
-        </h3>
-        {loading ? (
+      {loading ? (
+        <div className="flex justify-center my-10">
           <Spinner />
-        ) : medicines.length === 0 ? (
-          <div className="text-center text-gray-500 mt-30">
-            검색 결과가 없습니다.
-          </div>
-        ) : (
-          <div className="overflow-x-auto border rounded">
+        </div>
+      ) : (
+        <div className="overflow-x-auto border rounded min-h-[100px] flex items-center justify-center">
+          {medicines.length === 0 && error ? (
+            <div className="text-gray-500 text-center p-4">
+              검색 결과가 없습니다.
+            </div>
+          ) : (
             <table className="min-w-full border-collapse text-sm">
               <thead>
                 <tr className="bg-gray-100 text-left">
                   <th className="p-2 border">제품명</th>
+                  <th className="p-2 border">제품영문명</th>
                   <th className="p-2 border">주성분</th>
                   <th className="p-2 border">효능</th>
                   <th className="p-2 border">회사명</th>
@@ -95,6 +80,7 @@ export default function SearchResult() {
                     className="hover:bg-green-100 cursor-pointer"
                   >
                     <td className="p-2 border font-medium">{med.제품명}</td>
+                    <td className="p-2 border">{med.제품영문명}</td>
                     <td className="p-2 border">{med.주성분}</td>
                     <td className="p-2 border">
                       {med.효능효과
@@ -108,9 +94,9 @@ export default function SearchResult() {
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
-      </div>
-    </>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
