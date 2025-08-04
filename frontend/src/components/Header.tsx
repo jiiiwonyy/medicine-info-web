@@ -19,7 +19,7 @@ export default function Header() {
 
   useEffect(() => {
     if (location.pathname.startsWith('/search')) {
-      setHoverMain('의약품검색');
+      setHoverMain('의약품정보');
       setActiveSub('의약품 상세정보');
     } else {
       setHoverMain(null);
@@ -29,32 +29,29 @@ export default function Header() {
 
   const mainTabs = useMemo(
     () => [
-      '의약품검색',
-      '복약안내 및 DUR',
-      '이상반응정보',
-      '안정성 서한 및 조치이력',
+      '의약품정보',
+      '안전성 서한 및 실마리정보',
+      '부작용 보고자료',
       '부작용대응 및 피해구제',
-      '법적,제도 정보',
+      '의약품 관련 사이트',
     ],
     [],
   );
 
   const subTabsMap: Record<string, string[]> = {
-    의약품검색: ['의약품 상세정보'],
-    '복약안내 및 DUR': ['복약지도서안내', 'DUR, 복약지도 정보'],
-    이상반응정보: ['국내 이상반응건수', '해외 이상반응건수'],
-    '안정성 서한 및 조치이력': [
-      '의약품 관련 안정성 경고',
-      '안정성 서한, 회수폐기 이력',
-      '실마리정보 알리미',
+    의약품정보: ['의약품 상세정보'],
+    '안전성 서한 및 실마리정보': [
+      '의약품 안전성 서한(속보)',
+      '의약품이상반응(실마리) 정보',
     ],
-    '부작용대응 및 피해구제': [
-      '피해구제 제도 안내',
-      'WHO-UMC',
-      '지역의약품안전센터',
+    '부작용 보고자료': [
+      '국내 부작용 보고건수',
+      '미국 FDA 부작용 보고건수',
+      'WHO 부작용 보고건수',
       '의약품 부작용 보고사이트',
     ],
-    '법적,제도 정보': ['마약류 종합시스템'],
+    '부작용대응 및 피해구제': ['피해구제 제도 안내', '복약지도서 연결'],
+    '의약품 관련 사이트': ['KOPS', '마약류 종합 시스템'],
   };
 
   useEffect(() => {
@@ -103,7 +100,7 @@ export default function Header() {
         className="w-full xl:px-72 bg-green-700 relative"
         onMouseLeave={() => {
           if (isSearchPage) {
-            setHoverMain('의약품검색');
+            setHoverMain('의약품정보');
             setActiveSub('의약품 상세정보');
           } else {
             setHoverMain(null);
