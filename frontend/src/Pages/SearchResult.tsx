@@ -9,6 +9,7 @@ export default function SearchResult() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const query = params.get('query') || '';
+  const type = params.get('type') || 'product';
 
   const [loading, setLoading] = useState(true);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
@@ -19,7 +20,13 @@ export default function SearchResult() {
       setLoading(true);
       setError(null);
       try {
-        const result = await searchMedicines(query, 1, 20);
+        const result = await searchMedicines(
+          query,
+          1,
+          20,
+          type as 'product' | 'ingredient',
+        );
+
         setMedicines(result);
         if (result.length === 0) {
           setError('검색 결과가 없습니다.');
@@ -39,7 +46,7 @@ export default function SearchResult() {
     };
 
     if (query.trim().length >= 2) fetchData();
-  }, [query]);
+  }, [query, type]);
 
   return (
     <div className="p-6">

@@ -16,10 +16,11 @@ export const searchMedicines = (
   q: string,
   page: number = 1,
   limit: number = 20,
+  type: 'product' | 'ingredient' = 'product',
 ) =>
   api
     .get<Medicine[]>('/api/medicines', {
-      params: { q, page, limit },
+      params: { q, page, limit, type },
     })
     .then((res) => res.data);
 

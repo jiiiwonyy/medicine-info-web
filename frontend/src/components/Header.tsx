@@ -13,6 +13,10 @@ export default function Header() {
   const [hoverLeft, setHoverLeft] = useState(0);
   const mainRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
+  const [filterType, setFilterType] = useState<'product' | 'ingredient'>(
+    'product',
+  );
+
   useEffect(() => {
     if (location.pathname.startsWith('/search')) {
       setHoverMain('의약품검색');
@@ -59,7 +63,7 @@ export default function Header() {
       const el = mainRefs.current[idx];
       if (el) {
         const rect = el.getBoundingClientRect();
-        const leftX = rect.left + window.scrollX; // 시작 좌표
+        const leftX = rect.left + window.scrollX;
         setHoverLeft(leftX);
       }
     }
@@ -67,7 +71,8 @@ export default function Header() {
 
   const handleSearch = async () => {
     if (q.trim().length < 2) return;
-    navigate(`/search?query=${encodeURIComponent(q)}`);
+
+    navigate(`/search?query=${encodeURIComponent(q)}&type=${filterType}`);
   };
 
   return (
@@ -86,7 +91,9 @@ export default function Header() {
             value={q}
             onChange={setQ}
             onSearch={handleSearch}
-            placeholder="약 이름을 입력하세요 (최소 2글자)"
+            filterType={filterType}
+            onFilterChange={setFilterType}
+            placeholder="검색어를 입력하세요 (최소 2글자)"
           />
         </div>
       </div>

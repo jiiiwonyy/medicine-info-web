@@ -5,15 +5,18 @@ interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
   onSearch: () => void;
+  onFilterChange: (type: 'product' | 'ingredient') => void;
+  filterType: 'product' | 'ingredient';
   placeholder?: string;
 }
-
 export default function SearchBar({
   id,
   value,
   onChange,
   placeholder,
   onSearch,
+  onFilterChange,
+  filterType,
 }: SearchBarProps) {
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -25,8 +28,21 @@ export default function SearchBar({
     }
   };
 
+  const handleFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    onFilterChange(e.target.value as 'product' | 'ingredient');
+  };
+
   return (
     <div className="flex w-full max-w-xl gap-2">
+      <select
+        value={filterType}
+        onChange={handleFilterChange}
+        className="border border-green-700 rounded px-2"
+      >
+        <option value="product">약명</option>
+        <option value="ingredient">주성분</option>
+      </select>
+
       <input
         id={id}
         type="text"
@@ -36,6 +52,7 @@ export default function SearchBar({
         placeholder={placeholder}
         className="flex-1 p-2 border rounded border-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
       />
+
       <button
         type="button"
         onClick={onSearch}

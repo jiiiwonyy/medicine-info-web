@@ -8,15 +8,20 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite dev 서버 주소
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 @app.get("/api/medicines", response_model=List[Medicine])
-def api_search(q: str = Query(..., min_length=2), limit: int = 20, page: int = 1):
-    items = search_medicines(q, limit=limit, offset=(page-1)*limit)
+def api_search(
+    q: str = Query(..., min_length=2),
+    type: str = "product",
+    limit: int = 20,
+    page: int = 1
+):
+    items = search_medicines(q, type=type, limit=limit, offset=(page - 1) * limit)
     if not items:
         raise HTTPException(status_code=404, detail="No medicines found")
     return items
