@@ -1,9 +1,16 @@
 from pydantic import BaseModel, Field
 from datetime import date
 from typing import Optional
+from typing import List, Dict, Any, Optional
+
+class DURInfo(BaseModel):
+    interactions: List[Dict[str, Any]]
+    age: List[Dict[str, Any]]
+    pregnancy: List[Dict[str, Any]]
+
 
 class Medicine(BaseModel):
-    번호: int
+    id: int
     품목기준코드: int
     제품명: str
     구분: int
@@ -41,6 +48,7 @@ class Medicine(BaseModel):
     효능효과: Optional[str]
     용법용량: Optional[str]
     주의사항: Optional[str]
+    dur: Optional[DURInfo] = None
 
     class Config:
         allow_population_by_field_name = True

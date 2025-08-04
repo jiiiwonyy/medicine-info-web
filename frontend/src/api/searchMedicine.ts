@@ -1,5 +1,3 @@
-// src/api/medicines.ts
-
 import axios from 'axios';
 import type { Medicine } from '../types/medicine';
 
@@ -24,6 +22,7 @@ export const searchMedicines = (
     })
     .then((res) => res.data);
 
-export function getMedicine(id: number): Promise<Medicine> {
-  return api.get<Medicine>(`/api/medicines/${id}`).then((res) => res.data);
+export async function getMedicineById(id: number): Promise<Medicine> {
+  const res = await api.get<Medicine>(`/api/medicines/${id}`);
+  return res.data;
 }

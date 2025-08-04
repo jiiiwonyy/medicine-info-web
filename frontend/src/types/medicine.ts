@@ -1,5 +1,7 @@
+import type { DurData } from './dur';
+
 export interface Medicine {
-  번호: number;
+  id: number;
   품목기준코드: number;
   제품명: string;
   구분: number;
@@ -37,4 +39,5 @@ export interface Medicine {
   효능효과?: string;
   용법용량?: string;
   주의사항?: string;
+  dur?: DurData;
 }

@@ -82,8 +82,8 @@ export default function SearchResult() {
               <tbody>
                 {medicines.map((med) => (
                   <tr
-                    key={med.번호}
-                    onClick={() => navigate(`/medicines/${med.번호}`)}
+                    key={med.id}
+                    onClick={() => navigate(`/medicines/${med.id}`)}
                     className="hover:bg-green-100 cursor-pointer"
                   >
                     <td className="p-2 border font-medium">{med.제품명}</td>

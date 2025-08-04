@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getMedicine } from '../api/searchMedicine';
+import { getMedicineById } from '../api/searchMedicine';
 import type { Medicine } from '../types/medicine';
 import { useRef } from 'react';
 import TopButton from '@/components/TopButton';
 import Spinner from '@/components/Spinner';
 import FloatingNavigation from '@/components/FloatingNavigation';
+import DurSection from '@/components/DurSection';
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
@@ -18,22 +19,28 @@ export default function Detail() {
     ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handleFloatingNavClick = (target: 'effect' | 'usage' | 'caution') => {
-    if (target === 'effect') scrollTo(effectRef);
-    else if (target === 'usage') scrollTo(usageRef);
-    else if (target === 'caution') scrollTo(cautionRef);
+  const handleScrollTo = (targetId: string) => {
+    const el = document.getElementById(targetId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const numericId = Number(id);
   const {
     data: med,
     isLoading,
     isError,
     error,
   } = useQuery<Medicine, Error>({
-    queryKey: ['medicine', id],
-    queryFn: () => getMedicine(Number(id!)),
-    enabled: !!id,
+    queryKey: ['medicine', numericId],
+    queryFn: () => getMedicineById(numericId),
+    enabled: !!numericId,
   });
+
+  const dur = med?.dur ?? {
+    interactions: [],
+    age: [],
+    pregnancy: [],
+  };
 
   if (isLoading) return <Spinner />;
   if (isError) return <p className="text-red-600">❗ 오류: {error?.message}</p>;
@@ -53,74 +60,36 @@ export default function Detail() {
         <p className="text-gray-600 italic mb-4">{med.제품영문명}</p>
       )}
 
+      {/* 기본 정보 테이블 */}
       <table className="table-auto w-full mb-6 border-collapse">
         <tbody>
-          <tr>
-            <th className="text-left p-2 border">품목기준코드</th>
-            <td className="p-2 border">{med.품목기준코드}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">업체명</th>
-            <td className="p-2 border">{med.업체명}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">허가일</th>
-            <td className="p-2 border">{med.허가일}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">주성분</th>
-            <td className="p-2 border">{med.주성분}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">주성분영문</th>
-            <td className="p-2 border">{med.주성분영문}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">첨가제</th>
-            <td className="p-2 border">{med.첨가제}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">전문의약품</th>
-            <td className="p-2 border">{med.전문의약품}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">완제/원료</th>
-            <td className="p-2 border">{med.완제원료}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">원료</th>
-            <td className="p-2 border">{med.원료}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">허가신고</th>
-            <td className="p-2 border">{med.허가신고}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">제조수입</th>
-            <td className="p-2 border">{med.제조수입}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">마약구분</th>
-            <td className="p-2 border">{med.마약구분}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">제형</th>
-            <td className="p-2 border">{med.제형}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">신약구분</th>
-            <td className="p-2 border">{med.신약구분}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">ATC코드</th>
-            <td className="p-2 border">{med.ATC코드}</td>
-          </tr>
-          <tr>
-            <th className="text-left p-2 border">수입제조국</th>
-            <td className="p-2 border">{med.수입제조국}</td>
-          </tr>
+          {[
+            ['품목기준코드', med.품목기준코드],
+            ['업체명', med.업체명],
+            ['허가일', med.허가일],
+            ['주성분', med.주성분],
+            ['주성분영문', med.주성분영문],
+            ['첨가제', med.첨가제],
+            ['전문의약품', med.전문의약품],
+            ['완제/원료', med.완제원료],
+            ['원료', med.원료],
+            ['허가신고', med.허가신고],
+            ['제조수입', med.제조수입],
+            ['마약구분', med.마약구분],
+            ['제형', med.제형],
+            ['신약구분', med.신약구분],
+            ['ATC코드', med.ATC코드],
+            ['수입제조국', med.수입제조국],
+          ].map(([label, value]) => (
+            <tr key={label}>
+              <th className="text-left p-2 border">{label}</th>
+              <td className="p-2 border">{value || '-'}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
+
+      {/* 탭 */}
       <div className="flex border-b mb-4 space-x-4">
         <button
           onClick={() => scrollTo(effectRef)}
@@ -142,29 +111,43 @@ export default function Detail() {
         </button>
       </div>
 
+      {/* 본문 내용 */}
       <div className="space-y-8 mb-6">
-        <section ref={effectRef} className="pt-4">
+        <section id="effect" ref={effectRef} className="pt-4">
           <h2 className="text-green-700 font-bold text-lg mb-2">
             📌 효능·효과
           </h2>
           <p className="whitespace-pre-line">{med.효능효과}</p>
         </section>
 
-        <section ref={usageRef} className="pt-4 border-t border-gray-300">
+        <section
+          id="usage"
+          ref={usageRef}
+          className="pt-4 border-t border-gray-300"
+        >
           <h2 className="text-green-700 font-bold text-lg mb-2">
             📌 용법·용량
           </h2>
           <p className="whitespace-pre-line">{med.용법용량}</p>
         </section>
 
-        <section ref={cautionRef} className="pt-4 border-t border-gray-300">
+        <section
+          id="caution"
+          ref={cautionRef}
+          className="pt-4 border-t border-gray-300"
+        >
           <h2 className="text-green-700 font-bold text-lg mb-2">
             📌 사용상의 주의사항
           </h2>
           <p className="whitespace-pre-line">{med.주의사항}</p>
         </section>
       </div>
-      <FloatingNavigation onScrollTo={handleFloatingNavClick} />
+
+      {/* DUR 섹션 */}
+      {med.dur && <DurSection dur={med.dur} />}
+
+      <FloatingNavigation dur={dur} onScrollTo={handleScrollTo} />
+
       <TopButton />
     </div>
   );

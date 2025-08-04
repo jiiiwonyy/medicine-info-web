@@ -8,7 +8,7 @@ interface Props {
 export default function MedicineCard({ medicine }: Props) {
   return (
     <Link
-      to={`/medicines/${medicine.번호}`}
+      to={`/medicines/${medicine.id}`}
       className="block border bg-white rounded-lg p-4 hover:shadow-md transition-shadow"
     >
       <h2 className="text-xl font-semibold mb-1">{medicine.제품명}</h2>
