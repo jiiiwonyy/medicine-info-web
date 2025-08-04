@@ -1,11 +1,12 @@
 from .database import supabase
 
 def search_medicines(q: str, limit: int = 20, offset: int = 0):
+    filter_expr = f"제품명.ilike.%{q}%,제품영문명.ilike.%{q}%"
     resp = (
         supabase
         .table("medicines")
         .select("*")
-        .ilike("제품명", f"%{q}%")
+        .or_(filter_expr)
         .limit(limit)
         .offset(offset)
         .execute()
