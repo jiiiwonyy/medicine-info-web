@@ -7,6 +7,7 @@ import TopButton from '@/components/TopButton';
 import Spinner from '@/components/Spinner';
 import FloatingNavigation from '@/components/FloatingNavigation';
 import DurSection from '@/components/DurSection';
+import { scrollToId } from '@/hooks/useScrollSpy';
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
@@ -15,14 +16,7 @@ export default function Detail() {
   const usageRef = useRef<HTMLDivElement>(null);
   const cautionRef = useRef<HTMLDivElement>(null);
 
-  const scrollTo = (ref: React.RefObject<HTMLDivElement | null>) => {
-    ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  const handleScrollTo = (targetId: string) => {
-    const el = document.getElementById(targetId);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const HEADER_OFFSET = 72;
 
   const numericId = Number(id);
   const {
@@ -92,19 +86,19 @@ export default function Detail() {
       {/* 탭 */}
       <div className="flex border-b mb-4 space-x-4">
         <button
-          onClick={() => scrollTo(effectRef)}
+          onClick={() => scrollToId('effect', HEADER_OFFSET)}
           className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-green-600 cursor-pointer"
         >
           효능·효과
         </button>
         <button
-          onClick={() => scrollTo(usageRef)}
+          onClick={() => scrollToId('usage', HEADER_OFFSET)}
           className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-green-600 cursor-pointer"
         >
           용법·용량
         </button>
         <button
-          onClick={() => scrollTo(cautionRef)}
+          onClick={() => scrollToId('caution', HEADER_OFFSET)}
           className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-green-600 cursor-pointer"
         >
           사용상의 주의사항
@@ -112,8 +106,8 @@ export default function Detail() {
       </div>
 
       {/* 본문 내용 */}
-      <div className="space-y-8 mb-6">
-        <section id="effect" ref={effectRef} className="pt-4">
+      <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
+        <section id="effect" ref={effectRef} className="scroll-mt-24 pt-4">
           <h2 className="text-green-700 font-bold text-lg mb-2">
             📌 효능·효과
           </h2>
@@ -123,7 +117,7 @@ export default function Detail() {
         <section
           id="usage"
           ref={usageRef}
-          className="pt-4 border-t border-gray-300"
+          className="scroll-mt-24 pt-4 border-t border-gray-300"
         >
           <h2 className="text-green-700 font-bold text-lg mb-2">
             📌 용법·용량
@@ -134,19 +128,19 @@ export default function Detail() {
         <section
           id="caution"
           ref={cautionRef}
-          className="pt-4 border-t border-gray-300"
+          className="pt-4 border-t border-gray-300 scroll-mt-24"
         >
           <h2 className="text-green-700 font-bold text-lg mb-2">
             📌 사용상의 주의사항
           </h2>
           <p className="whitespace-pre-line">{med.주의사항}</p>
         </section>
-      </div>
+        <section id="dur" className="scroll-mt-24">
+          {med.dur && <DurSection dur={med.dur} />}
+        </section>
+      </section>
 
-      {/* DUR 섹션 */}
-      {med.dur && <DurSection dur={med.dur} />}
-
-      <FloatingNavigation dur={dur} onScrollTo={handleScrollTo} />
+      <FloatingNavigation dur={dur} />
 
       <TopButton />
     </div>
