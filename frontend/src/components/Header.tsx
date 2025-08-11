@@ -80,7 +80,7 @@ export default function Header() {
           onClick={() => navigate('/')}
           className="text-2xl md:text-3xl font-bold mb-6 cursor-pointer hover:text-green-600 transition-colors"
         >
-          💊 약 정보 검색 사이트
+          💊 MediSafeNurse
         </h1>
         <div className="w-full max-w-xl">
           <SearchBar
