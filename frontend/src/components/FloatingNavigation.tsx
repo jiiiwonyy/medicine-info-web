@@ -1,4 +1,3 @@
-// FloatingNavigation.tsx
 import { useMemo } from 'react';
 import { useScrollSpy, scrollToId } from '@/hooks/useScrollSpy';
 
@@ -40,11 +39,11 @@ export default function FloatingNavigation({
       { id: 'effect', label: '효능·효과' },
       { id: 'usage', label: '용법·용량' },
       { id: 'caution', label: '사용상의 주의사항' },
-      ...(hasDur ? [{ id: 'dur', label: 'DUR' }] : []),
     ];
 
     return [
       { id: 'detail', label: '의약품 상세정보', children: detailChildren },
+      ...(hasDur ? [{ id: 'dur', label: 'DUR' }] : []),
       { id: 'letters', label: '안전성 서한 및 실마리' },
       { id: 'adrs', label: '부작용 보고자료' },
     ];
