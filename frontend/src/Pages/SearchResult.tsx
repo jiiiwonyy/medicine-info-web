@@ -8,53 +8,88 @@ import type { AxiosError } from 'axios';
 export default function SearchResult() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const query = params.get('query') || '';
-  const type = params.get('type') || 'product';
+  const rawQuery = params.get('query') || '';
+  const query = rawQuery.trim();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    // 2글자 미만이면 초기화 후 종료
+    if (query.length < 2) {
+      setMedicines([]);
       setError(null);
-      try {
-        const result = await searchMedicines(
-          query,
-          1,
-          20,
-          type as 'product' | 'ingredient',
-        );
+      return;
+    }
 
-        setMedicines(result);
-        if (result.length === 0) {
-          setError('검색 결과가 없습니다.');
-        }
-      } catch (err) {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    (async () => {
+      // 제품명/성분 검색을 병렬 호출 (기존 API 재사용)
+      const [byProduct, byIngredient] = await Promise.allSettled([
+        searchMedicines(query, 1, 20, 'product'),
+        searchMedicines(query, 1, 20, 'ingredient'),
+      ]);
+
+      if (cancelled) return;
+
+      const productList =
+        byProduct.status === 'fulfilled' ? byProduct.value : [];
+      const ingredientList =
+        byIngredient.status === 'fulfilled' ? byIngredient.value : [];
+
+      const mergedMap = new Map<number, Medicine>();
+      for (const item of [...productList, ...ingredientList]) {
+        mergedMap.set(item.id, item);
+      }
+      const merged = Array.from(mergedMap.values());
+
+      const q = query.toLowerCase();
+      const score = (m: Medicine) => {
+        const name = (m.제품명 || '').toLowerCase();
+        const eng = (m.제품영문명 || '').toLowerCase();
+        const ing = (m.주성분 || '').toLowerCase();
+        const eff = (m.효능효과 || '').toLowerCase();
+        let s = 0;
+        if (name.startsWith(q)) s += 6;
+        if (name.includes(q)) s += 3;
+        if (eng.includes(q)) s += 2;
+        if (ing.includes(q)) s += 2;
+        if (eff.includes(q)) s += 1;
+        return s;
+      };
+      merged.sort((a, b) => score(b) - score(a));
+
+      setMedicines(merged);
+      if (merged.length === 0) setError('검색 결과가 없습니다.');
+    })()
+      .catch((err) => {
+        if (cancelled) return;
         const axiosErr = err as AxiosError;
         const status = axiosErr.response?.status;
-        if (status === 404) {
-          setError('검색 결과가 없습니다.');
-        } else {
-          setError('검색 중 오류가 발생했습니다.');
-        }
+        if (status === 404) setError('검색 결과가 없습니다.');
+        else setError('검색 중 오류가 발생했습니다.');
         setMedicines([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
 
-    if (query.trim().length >= 2) fetchData();
-  }, [query, type]);
+    return () => {
+      cancelled = true;
+    };
+  }, [query]);
 
   return (
     <div className="p-6">
       <h2 className="text-center text-xl mb-5">
-        통합검색 : <span className="font-semibold">{query}</span> (으)로 검색한
-        결과입니다.
+        통합검색 : <span className="font-semibold">{rawQuery}</span> (으)로
+        검색한 결과입니다.
       </h2>
-      <h3 className="text-lg font-bold text-green-600 mb-4">
+      <h3 className="text-lg font-bold text-sky-600 mb-4">
         검색결과 리스트 ( {medicines.length}개 )
       </h3>
 
@@ -84,7 +119,7 @@ export default function SearchResult() {
                   <tr
                     key={med.id}
                     onClick={() => navigate(`/medicines/${med.id}`)}
-                    className="hover:bg-green-100 cursor-pointer"
+                    className="hover:bg-sky-100 cursor-pointer"
                   >
                     <td className="p-2 border font-medium">{med.제품명}</td>
                     <td className="p-2 border">{med.제품영문명}</td>

@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from '@/components/SearchBar';
+import logo from '@/assets/logo.png';
 
 export default function Header() {
   const location = useLocation();
@@ -74,14 +75,8 @@ export default function Header() {
 
   return (
     <div className="w-full flex flex-col items-center mb-7">
-      {/* 검색바 영역 */}
       <div className="w-full bg-white shadow p-10 flex xl:px-72 flex-col items-center">
-        <h1
-          onClick={() => navigate('/')}
-          className="text-2xl md:text-3xl font-bold mb-6 cursor-pointer hover:text-green-600 transition-colors"
-        >
-          💊 MediSafeNurse
-        </h1>
+        <img src={logo} alt="로고" onClick={() => navigate('/')} />
         <div className="w-full max-w-xl">
           <SearchBar
             id="medicine-search-bar"
@@ -97,7 +92,7 @@ export default function Header() {
 
       {/* 메인탭 + 서브탭 */}
       <div
-        className="w-full xl:px-72 bg-green-700 relative"
+        className="w-full xl:px-72 bg-sky-700 relative"
         onMouseLeave={() => {
           if (isSearchPage) {
             setHoverMain('의약품정보');
@@ -117,7 +112,7 @@ export default function Header() {
               }}
               onMouseEnter={() => setHoverMain(tab)}
               className={`px-4 py-2 font-medium cursor-pointer ${
-                hoverMain === tab ? 'bg-green-200 text-gray-800' : 'text-white'
+                hoverMain === tab ? 'bg-sky-200 text-gray-800' : 'text-white'
               }`}
             >
               {tab}
@@ -135,8 +130,8 @@ export default function Header() {
                     onClick={() => setActiveSub(sub)}
                     className={`text-sm px-3 py-1 transition-colors border-b-2 border-transparent cursor-pointer ${
                       activeSub === sub
-                        ? 'border-green-500 text-green-700 font-medium'
-                        : 'text-gray-600 hover:font-bold hover:border-b-2 hover:border-green-500'
+                        ? 'border-sky-500 text-sky-700 font-medium'
+                        : 'text-gray-600 hover:font-bold hover:border-b-2 hover:border-sky-500'
                     }`}
                   >
                     {sub}

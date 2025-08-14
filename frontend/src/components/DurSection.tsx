@@ -91,7 +91,7 @@ export default function DurSection({ dur }: Props) {
           <div key={key}>
             <h2
               id={sectionId}
-              className="scroll-mt-24 text-green-700 font-bold text-lg mb-3"
+              className="scroll-mt-24 text-sky-700 font-bold text-lg mb-3"
             >
               📌 {LABEL_MAP[key]}
             </h2>

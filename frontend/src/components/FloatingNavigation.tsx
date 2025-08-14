@@ -11,7 +11,6 @@ type DurLite = {
 type FloatingNavProps = {
   dur: DurLite;
   headerOffset?: number;
-  onScrollTo: (targetId: string) => void; // 선택: 부모에서 여전히 넘겨주고 있다면 경고 방지용
 };
 
 type NavItem = {
@@ -29,9 +28,7 @@ const collectIds = (items: NavItem[]): string[] =>
 export default function FloatingNavigation({
   dur,
   headerOffset = 72,
-  onScrollTo,
 }: FloatingNavProps) {
-  // DUR 표시 여부만 boolean으로 관리 → useMemo 의존성 최소화
   const hasDur = !!(
     dur?.interactions?.length ||
     dur?.age?.length ||
@@ -67,7 +64,7 @@ export default function FloatingNavigation({
             <button
               onClick={() => scrollToId(item.id, headerOffset)}
               className={`w-full text-left px-3 py-2 rounded-lg text-sm transition
-                ${isParentActive(item) ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50 text-gray-800'}`}
+                ${isParentActive(item) ? 'bg-sky-50 text-sky-700' : 'hover:bg-gray-50 text-gray-800'}`}
               aria-current={isParentActive(item) ? 'location' : undefined}
             >
               {item.label}
@@ -82,7 +79,7 @@ export default function FloatingNavigation({
                       <button
                         onClick={() => scrollToId(c.id, headerOffset)}
                         className={`w-full text-left px-3 py-1.5 rounded-md text-sm transition
-                          ${childActive ? 'bg-green-50 text-green-700' : 'hover:bg-gray-50 text-gray-600'}`}
+                          ${childActive ? 'bg-sky-50 text-sky-700' : 'hover:bg-gray-50 text-gray-600'}`}
                         aria-current={childActive ? 'location' : undefined}
                       >
                         {c.label}
