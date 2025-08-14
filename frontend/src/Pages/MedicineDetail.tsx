@@ -44,7 +44,7 @@ export default function Detail() {
     <div className="p-4 max-w-3xl mx-auto">
       <button
         onClick={() => navigate(-1)}
-        className="text-green-700 hover:underline mb-4 block"
+        className="text-sky-700 hover:underline mb-4 block"
       >
         ← 목록으로 돌아가기
       </button>
@@ -87,19 +87,19 @@ export default function Detail() {
       <div className="flex border-b mb-4 space-x-4">
         <button
           onClick={() => scrollToId('effect', HEADER_OFFSET)}
-          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-green-600 cursor-pointer"
+          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-sky-600 cursor-pointer"
         >
           효능·효과
         </button>
         <button
           onClick={() => scrollToId('usage', HEADER_OFFSET)}
-          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-green-600 cursor-pointer"
+          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-sky-600 cursor-pointer"
         >
           용법·용량
         </button>
         <button
           onClick={() => scrollToId('caution', HEADER_OFFSET)}
-          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-green-600 cursor-pointer"
+          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-sky-600 cursor-pointer"
         >
           사용상의 주의사항
         </button>
@@ -108,9 +108,7 @@ export default function Detail() {
       {/* 본문 내용 */}
       <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
         <section id="effect" ref={effectRef} className="scroll-mt-24 pt-4">
-          <h2 className="text-green-700 font-bold text-lg mb-2">
-            📌 효능·효과
-          </h2>
+          <h2 className="text-sky-700 font-bold text-lg mb-2">📌 효능·효과</h2>
           <p className="whitespace-pre-line">{med.효능효과}</p>
         </section>
 
@@ -119,9 +117,7 @@ export default function Detail() {
           ref={usageRef}
           className="scroll-mt-24 pt-4 border-t border-gray-300"
         >
-          <h2 className="text-green-700 font-bold text-lg mb-2">
-            📌 용법·용량
-          </h2>
+          <h2 className="text-sky-700 font-bold text-lg mb-2">📌 용법·용량</h2>
           <p className="whitespace-pre-line">{med.용법용량}</p>
         </section>
 
@@ -130,7 +126,7 @@ export default function Detail() {
           ref={cautionRef}
           className="pt-4 border-t border-gray-300 scroll-mt-24"
         >
-          <h2 className="text-green-700 font-bold text-lg mb-2">
+          <h2 className="text-sky-700 font-bold text-lg mb-2">
             📌 사용상의 주의사항
           </h2>
           <p className="whitespace-pre-line">{med.주의사항}</p>
