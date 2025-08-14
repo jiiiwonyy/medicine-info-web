@@ -76,7 +76,12 @@ export default function Header() {
   return (
     <div className="w-full flex flex-col items-center mb-7">
       <div className="w-full bg-white shadow p-10 flex xl:px-72 flex-col items-center">
-        <img src={logo} alt="로고" onClick={() => navigate('/')} />
+        <img
+          src={logo}
+          alt="로고"
+          onClick={() => navigate('/')}
+          className="cursor-pointer"
+        />
         <div className="w-full max-w-xl">
           <SearchBar
             id="medicine-search-bar"
