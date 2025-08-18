@@ -1,4 +1,6 @@
-fastapi
-uvicorn[standard]
-python-dotenv
-supabase
+fastapi>=0.115
+uvicorn[standard]>=0.30
+gunicorn>=22.0.0
+pydantic>=2.8
+pydantic-settings>=2.3
+python-multipart>=0.0.9
