@@ -29,6 +29,7 @@ allow_origins = [
     "http://127.0.0.1:5173",
     "http://localhost:4173", 
     "http://127.0.0.1:4173",
+    "https://medisafenurse.vercel.app",
 ]
 if settings.FRONTEND_URL:
     allow_origins.append(settings.FRONTEND_URL)
