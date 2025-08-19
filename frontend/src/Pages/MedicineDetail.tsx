@@ -41,7 +41,7 @@ export default function Detail() {
   if (!med) return <p>해당 약품을 찾을 수 없습니다.</p>;
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
+    <div className="p-6">
       <button
         onClick={() => navigate(-1)}
         className="text-sky-700 hover:underline mb-4 block"
