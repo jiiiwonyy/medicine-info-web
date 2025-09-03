@@ -2,21 +2,18 @@ from .database import supabase
 import re
 from difflib import SequenceMatcher
 
-def search_medicines(q: str, type: str = 'product', limit: int = 20, offset: int = 0):
+def search_medicines(q: str, type: str = 'product', limit: int = 20, last_id: int | None = None):
     if type == 'ingredient':
         filter_expr = f"주성분.ilike.%{q}%,주성분영문.ilike.%{q}%"
     else:
         filter_expr = f"제품명.ilike.%{q}%,제품영문명.ilike.%{q}%"
 
-    resp = (
-        supabase
-        .table("medicines")
-        .select("*")
-        .or_(filter_expr)
-        .limit(limit)
-        .offset(offset)
-        .execute()
-    )
+    query = supabase.table("medicines").select("*").or_(filter_expr).limit(limit)
+
+    if last_id: 
+        query = query.gt("id", last_id)
+
+    resp = query.execute()
     return resp.data
 
 def norm_tokens(text: str) -> set[str]:
@@ -55,41 +52,32 @@ def get_medicine_by_id(external_id: int):
         med["dur"] = {"interactions": [], "age": [], "pregnancy": []}
         return med
 
-    interactions_resp = supabase.table("dur_interactions").select("*").execute()
-    all_rows = interactions_resp.data or []
+    tokens = list(med_tokens)
 
-    dur_comb = []
-    debug_samples = 0
-    for row in all_rows:
-        s1 = row.get("유효성분1", "") or row.get("substance1", "") or ""
-        s2 = row.get("유효성분2", "") or row.get("substance2", "") or ""
-        row_tokens = norm_tokens(s1) | norm_tokens(s2)
+    interactions_resp = (
+        supabase.table("dur_interactions")
+        .select("*")
+        .or_(",".join([f"유효성분1.ilike.%{t}%" for t in tokens] +
+                      [f"유효성분2.ilike.%{t}%" for t in tokens]))
+        .execute()
+    )
+    dur_comb = interactions_resp.data or []
 
-        if med_tokens & row_tokens:
-            dur_comb.append(row)
-        elif debug_samples < 3:
-            sim_hints = []
-            for mt in med_tokens:
-                for rt in row_tokens:
-                    if max(len(mt), len(rt)) >= 6:
-                        r = SequenceMatcher(None, mt, rt).ratio()
-                        if r >= 0.8:
-                            sim_hints.append((mt, rt, round(r, 2)))
-            debug_samples += 1
+    age_resp = (
+        supabase.table("dur_age_limits")
+        .select("*")
+        .or_(",".join([f"성분명.ilike.%{t}%" for t in tokens]))
+        .execute()
+    )
+    dur_age = age_resp.data or []
 
-    age_resp = supabase.table("dur_age_limits").select("*").execute()
-    dur_age = []
-    for row in (age_resp.data or []):
-        if med_tokens & norm_tokens(row.get("성분명", "") or row.get("substance", "") or ""):
-            dur_age.append(row)
-
-    preg_resp = supabase.table("dur_pregnancy_warnings").select("*").execute()
-    dur_preg = []
-    for row in (preg_resp.data or []):
-        if med_tokens & norm_tokens(row.get("성분명", "") or row.get("substance", "") or ""):
-            dur_preg.append(row)
+    preg_resp = (
+        supabase.table("dur_pregnancy_warnings")
+        .select("*")
+        .or_(",".join([f"성분명.ilike.%{t}%" for t in tokens]))
+        .execute()
+    )
+    dur_preg = preg_resp.data or []
 
     med["dur"] = {"interactions": dur_comb, "age": dur_age, "pregnancy": dur_preg}
-
     return med
-

@@ -9,10 +9,15 @@ from .crud import search_medicines, get_medicine_by_id
 
 class Settings(BaseSettings):
     ENV: Literal["local", "dev", "prod"] = "local"
-    FRONTEND_URL: Optional[str] = None          
-    ALLOW_ORIGIN_REGEX: Optional[str] = r"https://.*\.vercel\.app$"  
+    FRONTEND_URL: Optional[str] = None
+    ALLOW_ORIGIN_REGEX: Optional[str] = r"https://.*\.vercel\.app$"
+    
+    supabase_url: Optional[str] = None
+    supabase_service_key: Optional[str] = None
+
     class Config:
-        env_file = ".env" 
+        env_file = ".env"
+
 
 settings = Settings()
 
