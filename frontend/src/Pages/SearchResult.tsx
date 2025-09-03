@@ -16,7 +16,6 @@ export default function SearchResult() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // 2글자 미만이면 초기화 후 종료
     if (query.length < 2) {
       setMedicines([]);
       setError(null);
@@ -28,10 +27,9 @@ export default function SearchResult() {
     setError(null);
 
     (async () => {
-      // 제품명/성분 검색을 병렬 호출 (기존 API 재사용)
       const [byProduct, byIngredient] = await Promise.allSettled([
-        searchMedicines(query, 1, 20, 'product'),
-        searchMedicines(query, 1, 20, 'ingredient'),
+        searchMedicines(query, 'product', 20),
+        searchMedicines(query, 'ingredient', 20),
       ]);
 
       if (cancelled) return;

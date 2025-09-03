@@ -39,7 +39,6 @@ allow_origins = [
 if settings.FRONTEND_URL:
     allow_origins.append(settings.FRONTEND_URL)
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
@@ -49,13 +48,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-SearchType = Literal["product", "ingredient", "all"]
+SearchType = Literal["product", "ingredient"]
 
 class SearchResponse(BaseModel):
     items: List[Medicine]
-    page: int = Field(1, ge=1)
     limit: int = Field(20, ge=1, le=100)
-    total: Optional[int] = Field(0, ge=0)
+    last_id: Optional[int] = None
     has_next: bool = False
 
 @app.get("/healthz")
@@ -66,36 +64,14 @@ def healthz():
 def version():
     return {"version": app.version}
 
-@app.get("/api/medicines/search", response_model=SearchResponse)
-def api_search_meta(
-    q: str = Query(..., min_length=2),
-    type: SearchType = Query("product"),
-    limit: int = Query(20, ge=1, le=100),
-    page: int = Query(1, ge=1),
-):
-    offset = (page - 1) * limit
-
-    rows = search_medicines(q, type=type, limit=limit + 1, offset=offset)
-    has_next = len(rows) > limit
-    items = rows[:limit]
-
-    return SearchResponse(
-        items=items,
-        page=page,
-        limit=limit,
-        total=None,          
-        has_next=has_next,
-    )
-
 @app.get("/api/medicines", response_model=List[Medicine])
-def api_search_legacy(
+def api_search_medicines(
     q: str = Query(..., min_length=2),
     type: SearchType = Query("product"),
-    limit: int = Query(20, ge=1, le=100),
-    page: int = Query(1, ge=1),
+    limit: int = Query(200, ge=1, le=200),
 ):
-    items = search_medicines(q, type=type, limit=limit, offset=(page - 1) * limit)
-    return items
+    return search_medicines(q, type=type, limit=limit)
+
 
 @app.get("/api/medicines/{external_id}", response_model=Medicine)
 def api_detail(external_id: int):
