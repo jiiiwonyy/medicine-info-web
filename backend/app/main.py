@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 from typing import List, Literal, Optional
-
+from .database import supabase
 from .schemas import Medicine
 from .crud import search_medicines, get_medicine_by_id
 
@@ -55,6 +55,7 @@ class SearchResponse(BaseModel):
     limit: int = Field(20, ge=1, le=100)
     last_id: Optional[int] = None
     has_next: bool = False
+    total: int = 0
 
 @app.get("/healthz")
 def healthz():
@@ -64,13 +65,37 @@ def healthz():
 def version():
     return {"version": app.version}
 
-@app.get("/api/medicines", response_model=List[Medicine])
+@app.get("/api/medicines", response_model=SearchResponse)
 def api_search_medicines(
     q: str = Query(..., min_length=2),
-    type: SearchType = Query("product"),
-    limit: int = Query(200, ge=1, le=200),
+    limit: int = Query(20, ge=1, le=100),
+    last_id: Optional[int] = Query(None),
 ):
-    return search_medicines(q, type=type, limit=limit)
+    filter_expr = (
+        f"제품명.ilike.%{q}%,"
+        f"제품영문명.ilike.%{q}%,"
+        f"주성분.ilike.%{q}%,"
+        f"주성분영문.ilike.%{q}%"
+    )
+    total_resp = (
+        supabase.table("medicines")
+        .select("id", count="exact")
+        .or_(filter_expr)
+        .execute()
+    )
+    total = total_resp.count or 0
+    rows = search_medicines(q, limit=limit + 1, last_id=last_id)
+    has_next = len(rows) > limit
+    items = rows[:limit]
+    next_last_id = items[-1]["id"] if items else None
+
+    return {
+        "items": items,
+        "limit": limit,
+        "last_id": next_last_id,
+        "has_next": has_next,
+        "total": total,
+    }
 
 
 @app.get("/api/medicines/{external_id}", response_model=Medicine)

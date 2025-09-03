@@ -6,16 +6,24 @@ const api = axios.create({
   timeout: 5000,
 });
 
-export const searchMedicines = (
+export interface SearchResponse {
+  items: Medicine[];
+  limit: number;
+  last_id?: number;
+  has_next: boolean;
+  total: number;
+}
+
+export const searchMedicines = async (
   q: string,
-  type: 'product' | 'ingredient' = 'product',
   limit: number = 20,
-) =>
-  api
-    .get<Medicine[]>('/api/medicines', {
-      params: { q, type, limit },
-    })
-    .then((res) => res.data);
+  lastId?: number,
+): Promise<SearchResponse> => {
+  const res = await api.get<SearchResponse>('/api/medicines', {
+    params: { q, limit, last_id: lastId },
+  });
+  return res.data;
+};
 
 export async function getMedicineById(id: number): Promise<Medicine> {
   const res = await api.get<Medicine>(`/api/medicines/${id}`);

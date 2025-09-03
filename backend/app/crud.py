@@ -2,21 +2,20 @@ from .database import supabase
 import re
 from difflib import SequenceMatcher
 
-def search_medicines(q: str, type: str = 'product', limit: int = 200):
-    if type == 'ingredient':
-        filter_expr = f"주성분.ilike.%{q}%,주성분영문.ilike.%{q}%"
-    else:
-        filter_expr = f"제품명.ilike.%{q}%,제품영문명.ilike.%{q}%"
-
-    resp = (
-        supabase.table("medicines")
-        .select("*")
-        .or_(filter_expr)
-        .limit(limit)
-        .execute()
+def search_medicines(q: str, limit: int = 20, last_id: int | None = None):
+    filter_expr = (
+        f"제품명.ilike.%{q}%,"
+        f"제품영문명.ilike.%{q}%,"
+        f"주성분.ilike.%{q}%,"
+        f"주성분영문.ilike.%{q}%"
     )
-    return resp.data
 
+    query = supabase.table("medicines").select("*").or_(filter_expr).limit(limit)
+    if last_id:
+        query = query.gt("id", last_id)
+
+    resp = query.execute()
+    return resp.data
 
 def norm_tokens(text: str) -> set[str]:
     if not text:

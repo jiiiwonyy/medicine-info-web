@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { getMedicineById } from '../api/searchMedicine';
+import { getMedicineById } from '@/api/searchMedicine';
 import type { Medicine } from '../types/medicine';
 import { useRef } from 'react';
 import TopButton from '@/components/TopButton';
