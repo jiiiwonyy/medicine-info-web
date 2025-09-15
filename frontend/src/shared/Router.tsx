@@ -7,6 +7,7 @@ import Layout from '@/components/Layout';
 import SafetyLetter from '@/Pages/SafetyLetter';
 import Signal from '@/Pages/SignalInfo';
 import AdverseEventDomestic from '@/Pages/AdverseEventDomestic';
+import ReliefPage from '@/Pages/Relief';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -47,10 +48,7 @@ const Router = () => {
         />
 
         {/* 부작용보고 및 피해구제 */}
-        <Route
-          path="/relief"
-          element={<PlaceholderPage title="피해구제 제도 안내" />}
-        />
+        <Route path="/relief" element={<ReliefPage />} />
         <Route
           path="/local-center"
           element={<PlaceholderPage title="지역의약품안전센터" />}
