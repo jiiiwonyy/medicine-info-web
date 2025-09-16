@@ -17,6 +17,15 @@ def search_medicines(q: str, limit: int = 20, last_id: int | None = None):
     resp = query.execute()
     return resp.data
 
+def list_medicines(limit: int = 20, last_id: int | None = None):
+    query = supabase.table("medicines").select("*").order("id").limit(limit)
+    if last_id:
+        query = query.gt("id", last_id)
+
+    resp = query.execute()
+    return resp.data
+
+
 def norm_tokens(text: str) -> set[str]:
     if not text:
         return set()

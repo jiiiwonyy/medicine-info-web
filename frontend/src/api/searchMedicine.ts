@@ -19,9 +19,13 @@ export const searchMedicines = async (
   limit: number = 20,
   lastId?: number,
 ): Promise<SearchResponse> => {
-  const res = await api.get<SearchResponse>('/api/medicines', {
-    params: { q, limit, last_id: lastId },
-  });
+  const params: Record<string, any> = { limit, last_id: lastId };
+
+  if (q && q.trim() !== '') {
+    params.q = q.trim();
+  }
+
+  const res = await api.get<SearchResponse>('/api/medicines', { params });
   return res.data;
 };
 

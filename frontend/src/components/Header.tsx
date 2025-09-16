@@ -56,8 +56,19 @@ export default function Header() {
   };
 
   const handleSearch = async () => {
-    if (q.trim().length < 2) return;
-    navigate(`/search?query=${encodeURIComponent(q)}&type=${filterType}`);
+    const trimmed = q.trim();
+
+    if (trimmed === '') {
+      navigate('/search');
+      return;
+    }
+
+    if (trimmed.length < 2) {
+      alert('검색어는 2글자 이상 입력해주세요.');
+      return;
+    }
+
+    navigate(`/search?query=${encodeURIComponent(trimmed)}&type=${filterType}`);
   };
 
   return (

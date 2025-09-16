@@ -27,7 +27,7 @@ export default function SearchResult() {
     initialPageParam: undefined,
     getNextPageParam: (lastPage) =>
       lastPage.has_next ? lastPage.last_id : undefined,
-    enabled: query.length >= 2,
+    enabled: query === '' || query.length >= 2,
   });
 
   const medicines: Medicine[] = data
@@ -58,11 +58,17 @@ export default function SearchResult() {
   return (
     <div className="p-6">
       <h2 className="text-center text-xl mb-5">
-        통합검색 : <span className="font-semibold">{rawQuery}</span> (으)로
-        검색한 결과입니다.
+        {query ? (
+          <>
+            통합검색 : <span className="font-semibold">{rawQuery}</span> (으)로
+            검색한 결과입니다.
+          </>
+        ) : (
+          '전체 의약품 목록'
+        )}
       </h2>
       <h3 className="text-lg font-bold text-sky-600 mb-4">
-        검색결과 리스트 ( {total}개 )
+        {query ? '검색결과 리스트' : '등록된 의약품 목록'} ( {total}개 )
       </h3>
 
       {(isFetching && medicines.length === 0) || error ? (
