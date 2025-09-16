@@ -1,6 +1,6 @@
 from .database import supabase
 import re
-from difflib import SequenceMatcher
+from typing import Optional
 
 def search_medicines(q: str, limit: int = 20, last_id: int | None = None):
     filter_expr = (
@@ -17,8 +17,8 @@ def search_medicines(q: str, limit: int = 20, last_id: int | None = None):
     resp = query.execute()
     return resp.data
 
-def list_medicines(limit: int = 20, last_id: int | None = None):
-    query = supabase.table("medicines").select("*").order("id").limit(limit)
+def list_medicines(limit: int = 20, last_id: Optional[int] = None):
+    query = supabase.table("medicines").select("*").limit(limit)
     if last_id:
         query = query.gt("id", last_id)
 

@@ -76,7 +76,12 @@ def api_search_medicines(
         total_resp = (
             supabase.table("medicines")
             .select("id", count="exact")
-            .or_(...)
+            .or_(
+                f"제품명.ilike.%{q}%,"
+                f"제품영문명.ilike.%{q}%,"
+                f"주성분.ilike.%{q}%,"
+                f"주성분영문.ilike.%{q}%"
+            )
             .execute()
         )
         total = total_resp.count or 0
