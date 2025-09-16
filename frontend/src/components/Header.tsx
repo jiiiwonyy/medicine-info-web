@@ -77,7 +77,10 @@ export default function Header() {
         <img
           src={logo}
           alt="로고"
-          onClick={() => navigate('/')}
+          onClick={() => {
+            setQ('');
+            navigate('/');
+          }}
           className="cursor-pointer"
         />
         <div className="w-full max-w-xl">
