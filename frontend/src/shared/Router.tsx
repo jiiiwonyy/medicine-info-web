@@ -11,6 +11,7 @@ import ReliefPage from '@/Pages/Relief';
 // import LocalCenter from '@/Pages/LocalCenter';
 import MedicationGuide from '@/Pages/MedicationGuide';
 import LocalCenter from '@/Pages/LocalCenter';
+import KopsPage from '@/Pages/Kops';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -56,10 +57,7 @@ const Router = () => {
         <Route path="/medication-guide" element={<MedicationGuide />} />
 
         {/* 의약품 관련 사이트 */}
-        <Route
-          path="/kops"
-          element={<PlaceholderPage title="KOPS (한국의약품안전관리원)" />}
-        />
+        <Route path="/kops" element={<KopsPage />} />
         <Route
           path="/narcotics"
           element={<PlaceholderPage title="마약류 종합 시스템" />}
