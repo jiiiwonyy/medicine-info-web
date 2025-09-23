@@ -10,6 +10,7 @@ import AdverseEventDomestic from '@/Pages/AdverseEventDomestic';
 import ReliefPage from '@/Pages/Relief';
 // import LocalCenter from '@/Pages/LocalCenter';
 import MedicationGuide from '@/Pages/MedicationGuide';
+import LocalCenter from '@/Pages/LocalCenter';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -51,10 +52,7 @@ const Router = () => {
 
         {/* 부작용보고 및 피해구제 */}
         <Route path="/relief" element={<ReliefPage />} />
-        <Route
-          path="/local-center"
-          element={<PlaceholderPage title="지역의약품안전센터" />}
-        />
+        <Route path="/local-center" element={<LocalCenter />} />
         <Route path="/medication-guide" element={<MedicationGuide />} />
 
         {/* 의약품 관련 사이트 */}
