@@ -8,10 +8,10 @@ import SafetyLetter from '@/Pages/SafetyLetter';
 import Signal from '@/Pages/SignalInfo';
 import AdverseEventDomestic from '@/Pages/AdverseEventDomestic';
 import ReliefPage from '@/Pages/Relief';
-// import LocalCenter from '@/Pages/LocalCenter';
 import MedicationGuide from '@/Pages/MedicationGuide';
 import LocalCenter from '@/Pages/LocalCenter';
 import KopsPage from '@/Pages/Kops';
+import NimsPage from '@/Pages/NimsPage';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -58,10 +58,7 @@ const Router = () => {
 
         {/* 의약품 관련 사이트 */}
         <Route path="/kops" element={<KopsPage />} />
-        <Route
-          path="/narcotics"
-          element={<PlaceholderPage title="마약류 종합 시스템" />}
-        />
+        <Route path="/nims" element={<NimsPage />} />
 
         {/* 잘못된 경로 → 홈 리다이렉트 */}
         <Route path="*" element={<Navigate to="/" replace />} />
