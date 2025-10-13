@@ -1,26 +1,28 @@
-export type InteractDur = {
-  유효성분1: string;
-  유효성분2: string;
-  비고?: string;
-  허가사항?: string;
-};
+export interface DURInteraction {
+  id?: number;
+  ingredient_1?: string;
+  ingredient_2?: string;
+  remarks?: string;
+  approval_info?: string;
+}
 
-export type AgeDur = {
-  성분명: string;
-  연령기준: string;
-  제형?: string;
-  허가사항?: string;
-};
+export interface DURAgeLimit {
+  id?: number;
+  ingredient_name?: string;
+  age_criteria?: string;
+  dosage_form?: string;
+  approval_info?: string;
+}
 
-export type PregDur = {
-  성분명: string;
-  임부금기등급: string;
-  비고?: string;
-  허가사항?: string;
-};
+export interface DURPregnancyWarning {
+  id?: number;
+  ingredient_name?: string;
+  pregnancy_risk_grade?: string;
+  approval_info?: string;
+}
 
-export type DurData = {
-  interactions: InteractDur[];
-  age: AgeDur[];
-  pregnancy: PregDur[];
-};
+export interface DurData {
+  interactions: DURInteraction[];
+  age: DURAgeLimit[];
+  pregnancy: DURPregnancyWarning[];
+}

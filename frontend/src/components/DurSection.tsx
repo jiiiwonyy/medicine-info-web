@@ -17,50 +17,59 @@ const VARIANT_MAP: Record<keyof DurData, 'info' | 'note' | 'warning'> = {
   pregnancy: 'info',
 };
 
-const HIDDEN_KEYS = ['연번'];
+const HIDDEN_KEYS = ['id'];
+
+const COLUMN_LABELS: Record<string, string> = {
+  ingredient_1: '유효성분 1',
+  ingredient_2: '유효성분 2',
+  remarks: '비고',
+  approval_info: '허가사항',
+
+  ingredient_name: '성분명',
+  age_criteria: '연령기준',
+  dosage_form: '제형',
+
+  pregnancy_risk_grade: '임부금기 등급',
+};
 
 type DurRow = DurData[keyof DurData][number];
 
+// 각 DUR 섹션 설명 텍스트
 const INFO_MAP: Record<keyof DurData, React.ReactNode> = {
   interactions: (
     <>
-      "병용금기 성분" 이란 두 가지 이상의 유효성분을 함께 사용하는 경우
+      "병용금기 성분"이란 두 가지 이상의 유효성분을 함께 사용하는 경우
       치료효과의 변화 또는 심각한 부작용 발생 등의 우려가 있어 동시에 사용하지
       않아야 하는 유효성분의 조합을 말함.
     </>
   ),
   age: (
     <>
-      "특정연령대 금기 성분" 이란 소아, 노인 등 특정한 연령대의 환자가 사용함에
+      "특정 연령대 금기 성분"이란 소아, 노인 등 특정한 연령대의 환자가 사용함에
       있어 안전성이 확보되지 않았거나 심각한 부작용 발생 등의 우려가 있어
-      사용하지 않아야 하는 유효성분을 말한다
+      사용하지 않아야 하는 유효성분을 말함.
     </>
   ),
   pregnancy: (
     <>
-      "임부금기 성분"이란 태아에게 매우 심각한 위해성(태아기형 또는 태아독성
-      등)을 유발하거나 유발할 가능성이 높아 임부에게 사용하는 것이 권장되지 않는
-      유효성분을 말하는 것으로 다음 각 목의 구분에 따라 사용이 금지되는 성분을
-      말한다.
+      "임부금기 성분"이란 태아에게 심각한 위해성(기형 또는 태아독성 등)을 유발할
+      가능성이 높아 임부에게 사용하는 것이 권장되지 않는 유효성분을 의미함.
       <div className="mt-2 space-y-1 pl-4">
         <div className="flex">
           <span className="w-6 shrink-0">가.</span>
           <span>
-            1 등급 : 사람에서 태아에 대한 위해성이 명확하고, 약물사용의 위험성이
-            치료 상의 유익성을 상회하는 경우로 <b>원칙적으로 사용금지</b>
+            1등급 : 태아 위해성이 명확하며 약물 사용의 위험성이 치료 유익성을
+            상회 → <b>원칙적으로 사용 금지</b>
           </span>
         </div>
         <div className="flex">
           <span className="w-6 shrink-0">나.</span>
           <span>
-            2 등급 : 사람에서 태아에 대한 위해성이 나타날 수 있으며, 약물사용의
-            위험성이 치료 상의 유익성을 상회하는 경우로{' '}
-            <b>원칙적으로 사용금지</b>.
+            2등급 : 태아 위해성이 나타날 수 있으며 약물 사용의 위험성이 유익성을
+            상회 → <b>원칙적으로 사용 금지</b>
           </span>
         </div>
       </div>
-      다만, 치료 상의 유익성이 약물사용의 잠재적 위험성을 상회하거나 명확한
-      임상적 사유가 있어 사용하는 경우에는 예외로 한다
     </>
   ),
 };
@@ -71,6 +80,7 @@ export default function DurSection({ dur }: Props) {
     { key: 'age', list: (dur.age ?? []) as DurRow[] },
     { key: 'pregnancy', list: (dur.pregnancy ?? []) as DurRow[] },
   ];
+
   return (
     <div className="space-y-10 mt-8">
       {sections.map(({ key, list }) => {
@@ -109,7 +119,8 @@ export default function DurSection({ dur }: Props) {
                         key={col}
                         className="border border-gray-200 px-3 py-2 text-left font-medium"
                       >
-                        {col}
+                        {/* ✅ 한글 라벨로 표시 */}
+                        {COLUMN_LABELS[col] ?? col}
                       </th>
                     ))}
                   </tr>

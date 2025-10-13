@@ -17,8 +17,8 @@ export default function Detail() {
   const cautionRef = useRef<HTMLDivElement>(null);
 
   const HEADER_OFFSET = 72;
-
   const numericId = Number(id);
+
   const {
     data: med,
     isLoading,
@@ -49,31 +49,32 @@ export default function Detail() {
         ← 목록으로 돌아가기
       </button>
 
-      <h1 className="text-xl font-bold mb-2">{med.제품명}</h1>
-      {med.제품영문명 && (
-        <p className="text-gray-600 italic mb-4">{med.제품영문명}</p>
+      {/* ✅ 필드명 영문화 적용 */}
+      <h1 className="text-xl font-bold mb-2">{med.product_name}</h1>
+      {med.product_name_eng && (
+        <p className="text-gray-600 italic mb-4">{med.product_name_eng}</p>
       )}
 
       {/* 기본 정보 테이블 */}
       <table className="table-auto w-full mb-6 border-collapse">
         <tbody>
           {[
-            ['품목기준코드', med.품목기준코드],
-            ['업체명', med.업체명],
-            ['허가일', med.허가일],
-            ['주성분', med.주성분],
-            ['주성분영문', med.주성분영문],
-            ['첨가제', med.첨가제],
-            ['전문의약품', med.전문의약품],
-            ['완제/원료', med.완제원료],
-            ['원료', med.원료],
-            ['허가신고', med.허가신고],
-            ['제조수입', med.제조수입],
-            ['마약구분', med.마약구분],
-            ['제형', med.제형],
-            ['신약구분', med.신약구분],
-            ['ATC코드', med.ATC코드],
-            ['수입제조국', med.수입제조국],
+            ['품목기준코드', med.item_code],
+            ['업체명', med.company_name],
+            ['허가일', med.approval_date],
+            ['주성분', med.main_ingredient],
+            ['주성분영문', med.main_ingredient_eng],
+            ['첨가제', med.additive],
+            ['전문의약품', med.prescription_type],
+            ['완제/원료', med.formulation_type],
+            ['원료', med.raw_material],
+            ['허가/신고', med.approval_or_report],
+            ['제조/수입', med.manufacture_or_import],
+            ['마약구분', med.narcotic_class],
+            ['제형', med.dosage_form],
+            ['신약구분', med.new_drug_flag],
+            ['ATC코드', med.atc_code],
+            ['수입제조국', med.import_country],
           ].map(([label, value]) => (
             <tr key={label}>
               <th className="text-left p-2 border">{label}</th>
@@ -109,7 +110,7 @@ export default function Detail() {
       <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
         <section id="effect" ref={effectRef} className="scroll-mt-24 pt-4">
           <h2 className="text-sky-700 font-bold text-lg mb-2">📌 효능·효과</h2>
-          <p className="whitespace-pre-line">{med.효능효과}</p>
+          <p className="whitespace-pre-line">{med.efficacy}</p>
         </section>
 
         <section
@@ -118,7 +119,7 @@ export default function Detail() {
           className="scroll-mt-24 pt-4 border-t border-gray-300"
         >
           <h2 className="text-sky-700 font-bold text-lg mb-2">📌 용법·용량</h2>
-          <p className="whitespace-pre-line">{med.용법용량}</p>
+          <p className="whitespace-pre-line">{med.dosage_and_administration}</p>
         </section>
 
         <section
@@ -129,15 +130,15 @@ export default function Detail() {
           <h2 className="text-sky-700 font-bold text-lg mb-2">
             📌 사용상의 주의사항
           </h2>
-          <p className="whitespace-pre-line">{med.주의사항}</p>
+          <p className="whitespace-pre-line">{med.precautions}</p>
         </section>
+
         <section id="dur" className="scroll-mt-24">
           {med.dur && <DurSection dur={med.dur} />}
         </section>
       </section>
 
       <FloatingNavigation dur={dur} />
-
       <TopButton />
     </div>
   );

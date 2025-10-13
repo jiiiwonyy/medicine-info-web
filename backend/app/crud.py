@@ -1,93 +1,71 @@
-from .database import supabase
+from .database import get_connection
+from typing import Optional, Tuple
 import re
-from typing import Optional
 
-def search_medicines(q: str, limit: int = 20, last_id: int | None = None):
-    filter_expr = (
-        f"제품명.ilike.%{q}%,"
-        f"제품영문명.ilike.%{q}%,"
-        f"주성분.ilike.%{q}%,"
-        f"주성분영문.ilike.%{q}%"
-    )
+def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
+    conn = get_connection()
+    cur = conn.cursor()
 
-    query = supabase.table("medicines").select("*").or_(filter_expr).limit(limit)
+    base_query = """
+        SELECT * FROM medicine
+        WHERE (
+            product_name ILIKE %s OR
+            product_name_eng ILIKE %s OR
+            main_ingredient ILIKE %s OR
+            main_ingredient_eng ILIKE %s
+        )
+    """
+    params = [f"%{q}%"] * 4
+
     if last_id:
-        query = query.gt("id", last_id)
+        base_query += " AND id > %s"
+        params.append(last_id)
 
-    resp = query.execute()
-    return resp.data
+    base_query += " ORDER BY id LIMIT %s"
+    params.append(limit + 1)
 
-def list_medicines(limit: int = 20, last_id: Optional[int] = None):
-    query = supabase.table("medicines").select("*").limit(limit)
+    cur.execute(base_query, params)
+    rows = cur.fetchall()
+
+    count_query = """
+        SELECT COUNT(*) FROM medicine
+        WHERE (
+            product_name ILIKE %s OR
+            product_name_eng ILIKE %s OR
+            main_ingredient ILIKE %s OR
+            main_ingredient_eng ILIKE %s
+        )
+    """
+    cur.execute(count_query, [f"%{q}%"] * 4)
+    total = cur.fetchone()["count"]
+
+    cur.close()
+    conn.close()
+    return rows, total
+
+def list_medicines(limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
+    conn = get_connection()
+    cur = conn.cursor()
+
     if last_id:
-        query = query.gt("id", last_id)
+        cur.execute("SELECT * FROM medicine WHERE id > %s ORDER BY id LIMIT %s", (last_id, limit + 1))
+    else:
+        cur.execute("SELECT * FROM medicine ORDER BY id LIMIT %s", (limit + 1,))
+    rows = cur.fetchall()
 
-    resp = query.execute()
-    return resp.data
+    cur.execute("SELECT COUNT(*) FROM medicine")
+    total = cur.fetchone()["count"]
 
+    cur.close()
+    conn.close()
+    return rows, total
 
-def norm_tokens(text: str) -> set[str]:
-    if not text:
-        return set()
-    t = re.sub(r'[\(\)\[\]\{\}]', ' ', text)
-    t = re.sub(r'[-_/+·∙,;]', ' ', t)
-    t = re.sub(r'\s+', ' ', t).strip().lower()
-    toks = {w for w in t.split(' ') if w}
-    stop = {'anhydrous', 'hydrate', 'monohydrate', 'dihydrate',
-            'sodium', 'potassium', 'calcium', 'hydrochloride'}
-    return {w for w in toks if w not in stop}
 
 def get_medicine_by_id(external_id: int):
-    med_resp = (
-        supabase.table("medicines")
-        .select("*")
-        .eq("id", external_id)
-        .single()
-        .execute()
-    )
-    med = med_resp.data
-    if not med:
-        return None
-
-    ko = med.get("주성분", "") or ""
-    en = med.get("주성분영문", "") or ""
-    med_tokens = set()
-    for part in re.split(r'[,\s/]+', ko):
-        med_tokens |= norm_tokens(part)
-    for part in en.split(','):
-        med_tokens |= norm_tokens(part)
-
-    if not med_tokens:
-        print("❗ 주성분 없음")
-        med["dur"] = {"interactions": [], "age": [], "pregnancy": []}
-        return med
-
-    tokens = list(med_tokens)
-
-    interactions_resp = (
-        supabase.table("dur_interactions")
-        .select("*")
-        .or_(",".join([f"유효성분1.ilike.%{t}%" for t in tokens] +
-                      [f"유효성분2.ilike.%{t}%" for t in tokens]))
-        .execute()
-    )
-    dur_comb = interactions_resp.data or []
-
-    age_resp = (
-        supabase.table("dur_age_limits")
-        .select("*")
-        .or_(",".join([f"성분명.ilike.%{t}%" for t in tokens]))
-        .execute()
-    )
-    dur_age = age_resp.data or []
-
-    preg_resp = (
-        supabase.table("dur_pregnancy_warnings")
-        .select("*")
-        .or_(",".join([f"성분명.ilike.%{t}%" for t in tokens]))
-        .execute()
-    )
-    dur_preg = preg_resp.data or []
-
-    med["dur"] = {"interactions": dur_comb, "age": dur_age, "pregnancy": dur_preg}
-    return med
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM medicine WHERE id = %s", (external_id,))
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
+    return row

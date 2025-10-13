@@ -5,6 +5,7 @@ import Spinner from '@/components/Spinner';
 import { searchMedicines } from '@/api/searchMedicine';
 import type { SearchResponse } from '@/api/searchMedicine';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useDebounce } from '@/hooks/useDebounce';
 
 export default function SearchResult() {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ export default function SearchResult() {
   const rawQuery = params.get('query') || '';
   const query = rawQuery.trim();
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const debouncedQuery = useDebounce(query, 300);
 
   const {
     data,
@@ -21,13 +24,14 @@ export default function SearchResult() {
     isFetchingNextPage,
     error,
   } = useInfiniteQuery<SearchResponse>({
-    queryKey: ['medicines', query],
+    queryKey: ['medicines', debouncedQuery],
     queryFn: ({ pageParam }) =>
-      searchMedicines(query, 20, pageParam as number | undefined),
+      searchMedicines(debouncedQuery, 20, pageParam as number | undefined),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) =>
       lastPage.has_next ? lastPage.last_id : undefined,
-    enabled: query === '' || query.length >= 2,
+    enabled: debouncedQuery === '' || debouncedQuery.length >= 2,
+    staleTime: 5000,
   });
 
   const medicines: Medicine[] = data
@@ -49,10 +53,7 @@ export default function SearchResult() {
     });
 
     observer.observe(target);
-
-    return () => {
-      observer.unobserve(target);
-    };
+    return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
@@ -67,6 +68,7 @@ export default function SearchResult() {
           '전체 의약품 목록'
         )}
       </h2>
+
       <h3 className="text-lg font-bold text-sky-600 mb-4">
         {query ? '검색결과 리스트' : '등록된 의약품 목록'} ( {total}개 )
       </h3>
@@ -103,25 +105,25 @@ export default function SearchResult() {
                   <tr
                     key={med.id}
                     onClick={() => navigate(`/medicines/${med.id}`)}
-                    className="hover:bg-sky-100 cursor-pointer h-[72px]" // 전체 행 높이 고정
+                    className="hover:bg-sky-100 cursor-pointer h-[72px]"
                   >
                     <td className="p-2 border w-[200px] max-w-[200px] truncate">
-                      {med.제품명}
+                      {med.product_name}
                     </td>
                     <td className="p-2 border w-[180px] max-w-[180px] truncate">
-                      {med.제품영문명}
+                      {med.product_name_eng}
                     </td>
                     <td className="p-2 border w-[200px] max-w-[200px] truncate">
-                      {med.주성분}
+                      {med.main_ingredient}
                     </td>
                     <td
                       className="p-2 border w-[250px] max-w-[250px] h-[72px] overflow-hidden"
-                      title={med.효능효과}
+                      title={med.efficacy}
                     >
-                      <div className="line-clamp-3">{med.효능효과 || '-'}</div>
+                      <div className="line-clamp-3">{med.efficacy || '-'}</div>
                     </td>
                     <td className="p-2 border w-[150px] max-w-[150px] truncate">
-                      {med.업체명}
+                      {med.company_name}
                     </td>
                   </tr>
                 ))}
@@ -130,6 +132,7 @@ export default function SearchResult() {
           )}
         </div>
       )}
+
       <div ref={loadMoreRef} className="h-10" />
 
       {isFetchingNextPage && (
