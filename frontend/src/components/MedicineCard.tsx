@@ -11,25 +11,28 @@ export default function MedicineCard({ medicine }: Props) {
       to={`/medicines/${medicine.id}`}
       className="block border bg-white rounded-lg p-4 hover:shadow-md transition-shadow"
     >
-      <h2 className="text-xl font-semibold mb-1">{medicine.제품명}</h2>
-      {medicine.제품영문명 && (
-        <p className="text-sm text-gray-400 mb-2">{medicine.제품영문명}</p>
+      <h2 className="text-xl font-semibold mb-1">{medicine.product_name}</h2>
+      {medicine.product_name_eng && (
+        <p className="text-sm text-gray-400 mb-2">
+          {medicine.product_name_eng}
+        </p>
       )}
       <div className="text-sm space-y-1">
-        {medicine.업체명 && (
+        {medicine.company_name && (
           <p>
-            <span className="font-medium">제조사:</span> {medicine.업체명}
+            <span className="font-medium">제조사:</span> {medicine.company_name}
           </p>
         )}
-        {medicine.주성분 && (
+        {medicine.main_ingredient && (
           <p>
-            <span className="font-medium">주성분:</span> {medicine.주성분}
+            <span className="font-medium">주성분:</span>{' '}
+            {medicine.main_ingredient}
           </p>
         )}
-        {medicine.용법용량 && (
+        {medicine.dosage_and_administration && (
           <p>
             <span className="font-medium">용법·용량:</span>{' '}
-            {medicine.용법용량.split('\n')[0]}…
+            {medicine.dosage_and_administration.split('\n')[0]}…
           </p>
         )}
       </div>
