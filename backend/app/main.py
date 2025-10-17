@@ -4,6 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from .crud import search_medicines, list_medicines, get_medicine_by_id
 from .schemas import Medicine
+from fastapi import APIRouter
+import psycopg2
+from psycopg2.extras import RealDictCursor
+import os
 
 app = FastAPI(
     title="Medicine API",
@@ -15,6 +19,7 @@ app = FastAPI(
 
 allow_origins = [
     "http://localhost:5173",
+    "http://localhost:5174",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
     "https://medisafenurse.vercel.app",
@@ -28,6 +33,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+router = APIRouter()
+
+@router.get("/test-db-connection")
+def test_db_connection():
+    try:
+        conn = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            port=os.getenv("DB_PORT", 5432),
+            connect_timeout=5,  # 5초 내 응답 없으면 바로 실패 처리
+            cursor_factory=RealDictCursor,
+        )
+        cur = conn.cursor()
+        cur.execute("SELECT version();")
+        version = cur.fetchone()
+        conn.close()
+        return {"status": "success", "db_version": version["version"]}
+    except Exception as e:
+        return {"status": "failed", "error": str(e)}
+    
 @app.get("/healthz")
 def healthz():
     return {"ok": True}
