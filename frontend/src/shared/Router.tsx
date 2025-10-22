@@ -13,6 +13,7 @@ import LocalCenter from '@/Pages/LocalCenter';
 import KopsPage from '@/Pages/Kops';
 import NimsPage from '@/Pages/NimsPage';
 import AdverseReliefPage from '@/Pages/AdverseReliefPage';
+import LawInfoPage from '@/Pages/LawInfo';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -61,6 +62,7 @@ const Router = () => {
         {/* 의약품 관련 사이트 */}
         <Route path="/kops" element={<KopsPage />} />
         <Route path="/nims" element={<NimsPage />} />
+        <Route path="/lawinfo" element={<LawInfoPage />} />
 
         {/* 잘못된 경로 → 홈 리다이렉트 */}
         <Route path="*" element={<Navigate to="/" replace />} />

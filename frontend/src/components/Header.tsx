@@ -53,6 +53,7 @@ export default function Header() {
     '의약품 관련 사이트': [
       { label: 'KOPS', path: '/kops' },
       { label: '마약류 종합 시스템', path: '/nims' },
+      { label: '국가법령정보센터', path: '/lawinfo' },
     ],
   };
 
