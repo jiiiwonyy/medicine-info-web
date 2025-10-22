@@ -1,0 +1,15 @@
+.interactive-map polyline,
+.interactive-map path,
+.interactive-map polygon {
+  fill: #e2e8f0 !important;
+  stroke: #ffffff !important;
+  stroke-width: 0.5 !important;
+  transition: all 0.25s ease-in-out;
+  cursor: pointer;
+}
+
+.interactive-map [data-active='true'] {
+  fill: #38bdf8 !important;
+  stroke: #0284c7 !important;
+  stroke-width: 1.5 !important;
+}
