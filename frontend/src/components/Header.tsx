@@ -45,6 +45,7 @@ export default function Header() {
 
     '부작용보고 및 피해구제': [
       { label: '피해구제 제도 안내', path: '/relief' },
+      { label: '의약품 부작용 피해 구제', path: '/drug-adverse-relief' },
       { label: '지역의약품안전센터', path: '/local-center' },
       { label: '복약지도서', path: '/medication-guide' },
     ],

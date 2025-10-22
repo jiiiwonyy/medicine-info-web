@@ -12,6 +12,7 @@ import MedicationGuide from '@/Pages/MedicationGuide';
 import LocalCenter from '@/Pages/LocalCenter';
 import KopsPage from '@/Pages/Kops';
 import NimsPage from '@/Pages/NimsPage';
+import AdverseReliefPage from '@/Pages/AdverseReliefPage';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -53,6 +54,7 @@ const Router = () => {
 
         {/* 부작용보고 및 피해구제 */}
         <Route path="/relief" element={<ReliefPage />} />
+        <Route path="/drug-adverse-relief" element={<AdverseReliefPage />} />
         <Route path="/local-center" element={<LocalCenter />} />
         <Route path="/medication-guide" element={<MedicationGuide />} />
 
