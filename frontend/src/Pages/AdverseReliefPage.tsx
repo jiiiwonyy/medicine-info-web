@@ -1,4 +1,5 @@
 import Callout from '@/components/Callout';
+import ReliefProcess from '@/components/ReliefProcess';
 
 export default function AdverseReliefPage() {
   return (
@@ -130,6 +131,7 @@ export default function AdverseReliefPage() {
           🔗 신청 방법 유튜브 안내 보기
         </a>
       </div>
+      <ReliefProcess />
     </section>
   );
 }
