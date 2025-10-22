@@ -5,6 +5,27 @@ export default function SignalInfo() {
         의약품 이상반응(실마리) 정보
       </h2>
 
+      <div className="flex justify-center items-end mb-12 relative h-72">
+        <div className="absolute bottom-0 w-72 h-72 bg-sky-900 rounded-full" />
+        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[calc(16rem-20px)] text-center text-white z-30">
+          <p className="font-semibold text-lg">부작용</p>
+          <p className="text-sm opacity-90">Side Effect</p>
+        </div>
+
+        <div className="absolute bottom-0 w-56 h-56 bg-sky-700 rounded-full" />
+        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[calc(12rem-20px)] text-center text-white z-30">
+          <p className="font-semibold text-base">이상사례</p>
+          <p className="text-sm opacity-90">Adverse Event</p>
+        </div>
+
+        <div className="absolute bottom-0 w-40 h-40 bg-sky-400 rounded-full" />
+        <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[calc(5rem-20px)] text-center text-white z-30">
+          <p className="font-semibold text-sm">약물이상반응</p>
+          <p className="text-xs opacity-90">Adverse Drug Reaction</p>
+        </div>
+      </div>
+
+      {/* 설명 섹션 */}
       <div className="space-y-6 mb-8">
         <div className="border rounded-lg p-4 bg-sky-50">
           <h3 className="text-lg font-semibold mb-2">
@@ -18,7 +39,7 @@ export default function SignalInfo() {
             예시: 발진, 어지럼증, 간수치 상승, 심각한 경우 사망까지 이어질 수
             있음
           </p>
-          <br></br>
+          <br />
           <h3 className="text-lg font-semibold mb-2">
             이상사례 (AE, Adverse Event)
           </h3>
@@ -35,7 +56,7 @@ export default function SignalInfo() {
             의약품 등을 정상적인 용량에 따라 투여할 경우 발생하는 모든 의도되지
             않은 효과를 말합니다.
           </p>
-          <br></br>
+          <br />
           <h3 className="text-lg font-semibold mb-2">실마리정보 (Signal)</h3>
           <p>
             약물과 이상사례 간 새로운 잠재적 인과관계 또는 알려진 관계의 새로운
