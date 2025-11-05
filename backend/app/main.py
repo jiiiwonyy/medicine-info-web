@@ -23,6 +23,8 @@ allow_origins = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
     "https://medisafenurse.vercel.app",
+    "https://medisafenurse.com",
+    "https://www.medisafenurse.com",
 ]
 
 app.add_middleware(
