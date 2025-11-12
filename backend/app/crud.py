@@ -1,10 +1,11 @@
 from .database import get_connection
 from typing import Optional, Tuple
-import re
+from psycopg2.extras import RealDictCursor
+
 
 def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
     base_query = """
         SELECT * FROM medicine
@@ -27,7 +28,8 @@ def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> 
     cur.execute(base_query, params)
     rows = cur.fetchall()
 
-    count_query = """
+    cur.execute(
+        """
         SELECT COUNT(*) FROM medicine
         WHERE (
             product_name ILIKE %s OR
@@ -35,8 +37,9 @@ def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> 
             main_ingredient ILIKE %s OR
             main_ingredient_eng ILIKE %s
         )
-    """
-    cur.execute(count_query, [f"%{q}%"] * 4)
+        """,
+        [f"%{q}%"] * 4,
+    )
     total = cur.fetchone()["count"]
 
     cur.close()
@@ -46,7 +49,7 @@ def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> 
 
 def list_medicines(limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
     if last_id:
         cur.execute("SELECT * FROM medicine WHERE id > %s ORDER BY id LIMIT %s", (last_id, limit + 1))
@@ -62,53 +65,68 @@ def list_medicines(limit: int = 20, last_id: Optional[int] = None) -> Tuple[list
     return rows, total
 
 
-# ✅ DUR 정보 병합된 상세 조회
+# ✅ DUR 정보까지 포함한 상세 조회 (공백무시 + 대소문자무시)
 def get_medicine_by_id(external_id: int):
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
     # 1️⃣ 기본 약 정보
     cur.execute("SELECT * FROM medicine WHERE id = %s", (external_id,))
-    row = cur.fetchone()
+    medicine = cur.fetchone()
 
-    if not row:
+    if not medicine:
         cur.close()
         conn.close()
         return None
 
-    # psycopg2 기본 cursor는 tuple 형태 → dict 형태로 변환 필요
-    columns = [desc[0] for desc in cur.description]
-    medicine = dict(zip(columns, row))
-
     main_ingredient = medicine.get("main_ingredient")
+    if not main_ingredient:
+        medicine["dur"] = {"interactions": [], "age": [], "pregnancy": []}
+        cur.close()
+        conn.close()
+        return medicine
 
-    # 2️⃣ DUR 데이터 조회 (main_ingredient 기준)
+    # 2️⃣ DUR 데이터 조회 (공백 무시 + 대소문자 무시)
     # 병용금기
-    cur.execute("""
-        SELECT * FROM dur_interactions 
-        WHERE ingredient_1 = %s OR ingredient_2 = %s
-    """, (main_ingredient, main_ingredient))
-    dur_interactions = [dict(zip([desc[0] for desc in cur.description], r)) for r in cur.fetchall()]
+    cur.execute(
+        """
+        SELECT * FROM dur_interactions
+        WHERE 
+            REPLACE(LOWER(ingredient_1), ' ', '') = REPLACE(LOWER(%s), ' ', '')
+            OR
+            REPLACE(LOWER(ingredient_2), ' ', '') = REPLACE(LOWER(%s), ' ', '')
+        """,
+        (main_ingredient, main_ingredient),
+    )
+    interactions = cur.fetchall()
 
     # 연령금기
-    cur.execute("""
-        SELECT * FROM dur_age 
-        WHERE ingredient_name = %s
-    """, (main_ingredient,))
-    dur_age = [dict(zip([desc[0] for desc in cur.description], r)) for r in cur.fetchall()]
+    cur.execute(
+        """
+        SELECT * FROM dur_age
+        WHERE 
+            REPLACE(LOWER(ingredient_name), ' ', '') = REPLACE(LOWER(%s), ' ', '')
+        """,
+        (main_ingredient,),
+    )
+    age = cur.fetchall()
 
     # 임부금기
-    cur.execute("""
-        SELECT * FROM dur_pregnancy 
-        WHERE ingredient_name = %s
-    """, (main_ingredient,))
-    dur_pregnancy = [dict(zip([desc[0] for desc in cur.description], r)) for r in cur.fetchall()]
+    cur.execute(
+        """
+        SELECT * FROM dur_pregnancy
+        WHERE 
+            REPLACE(LOWER(ingredient_name), ' ', '') = REPLACE(LOWER(%s), ' ', '')
+        """,
+        (main_ingredient,),
+    )
+    pregnancy = cur.fetchall()
 
-    # 3️⃣ 병합
+    # 3️⃣ 병합 (Pydantic DURInfo 구조 맞추기)
     medicine["dur"] = {
-        "interactions": dur_interactions,
-        "age": dur_age,
-        "pregnancy": dur_pregnancy,
+        "interactions": interactions or [],
+        "age": age or [],
+        "pregnancy": pregnancy or [],
     }
 
     cur.close()
