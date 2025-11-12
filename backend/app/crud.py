@@ -90,7 +90,7 @@ def get_medicine_by_id(external_id: int):
     # 병용금기
     cur.execute(
         """
-        SELECT * FROM dur_interactions
+        SELECT * FROM dur_interaction
         WHERE 
             REPLACE(LOWER(ingredient_1), ' ', '') = REPLACE(LOWER(%s), ' ', '')
             OR
