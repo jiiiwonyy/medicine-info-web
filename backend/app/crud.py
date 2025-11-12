@@ -79,7 +79,7 @@ def get_medicine_by_id(external_id: int):
         conn.close()
         return None
 
-    main_ingredient = medicine.get("main_ingredient")
+    main_ingredient = medicine.get("main_ingredient_eng")
     if not main_ingredient:
         medicine["dur"] = {"interactions": [], "age": [], "pregnancy": []}
         cur.close()
