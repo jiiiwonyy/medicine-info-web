@@ -1,9 +1,8 @@
+import PageLayout from '@/components/PageLayout';
+
 export default function SafetyLetter() {
   return (
-    <section className="max-w-3xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
-      <h2 className="text-2xl font-bold border-b-2 border-sky-800 pb-2 mb-4">
-        의약품 안전성서한(속보)란?
-      </h2>
+    <PageLayout title="의약품 안전성서한(속보)란?">
       <p className="mb-6">
         식품의약품안전처가 의약품 사용 중 발생할 수 있는{' '}
         <span className="font-semibold">중대한 부작용</span>이나{' '}
@@ -76,12 +75,6 @@ export default function SafetyLetter() {
           <strong>제목 / 공개일자 / 상세정보 / PDF 다운로드</strong>
         </p>
       </div>
-
-      {/* 문의 */}
-      {/* <p className="text-sm text-gray-600 border-t border-gray-200 pt-4">
-        📩 문의: 안전성 서한 관련 추가 안내가 필요할 경우 이메일로 문의해
-        주세요.
-      </p> */}
-    </section>
+    </PageLayout>
   );
 }

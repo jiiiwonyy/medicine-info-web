@@ -6,6 +6,7 @@ import { searchMedicines } from '@/api/searchMedicine';
 import type { SearchResponse } from '@/api/searchMedicine';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useDebounce } from '@/hooks/useDebounce';
+import PageLayout from '@/components/PageLayout';
 
 export default function SearchResult() {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ export default function SearchResult() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <div className="p-6">
+    <PageLayout>
       <h2 className="text-center text-xl mb-5">
         {query ? (
           <>
@@ -140,6 +141,6 @@ export default function SearchResult() {
           <Spinner />
         </div>
       )}
-    </div>
+    </PageLayout>
   );
 }

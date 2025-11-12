@@ -1,4 +1,5 @@
 import Callout from '@/components/Callout';
+import PageLayout from '@/components/PageLayout';
 
 export default function LawInfoPage() {
   const laws = [
@@ -65,11 +66,7 @@ export default function LawInfoPage() {
   ];
 
   return (
-    <section className="max-w-5xl mx-auto px-4 py-10 text-gray-800 leading-relaxed space-y-16">
-      <h2 className="text-2xl font-bold border-b-2 border-sky-800 pb-2 mb-4">
-        국가법령정보센터
-      </h2>
-
+    <PageLayout title="국가법령정보센터">
       <Callout variant="info" title="국가법령정보센터란?">
         <p>
           대한민국 법제처가 운영하는 공식적인{' '}
@@ -164,6 +161,6 @@ export default function LawInfoPage() {
           </div>
         ))}
       </div>
-    </section>
+    </PageLayout>
   );
 }

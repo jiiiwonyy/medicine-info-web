@@ -1,10 +1,8 @@
+import PageLayout from '@/components/PageLayout';
+
 export default function DURPage() {
   return (
-    <section className="max-w-4xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
-      <h2 className="text-2xl font-bold border-b-2 border-blue-800 pb-2 mb-6">
-        의약품안전사용(DUR; Drug Utilization Review)
-      </h2>
-
+    <PageLayout title="의약품안전사용(DUR; Drug Utilization Review)">
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-2">
           DUR(의약품안전사용서비스)란?
@@ -57,6 +55,6 @@ export default function DURPage() {
           맡기 때문에 DUR 활용은 환자 보호와 직결
         </li>
       </ul>
-    </section>
+    </PageLayout>
   );
 }

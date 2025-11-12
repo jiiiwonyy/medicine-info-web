@@ -1,6 +1,8 @@
+import PageLayout from '@/components/PageLayout';
+
 export default function MedicationGuide() {
   return (
-    <section className="max-w-4xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
+    <PageLayout>
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-3">약학정보원 (KPIS)</h2>
         <p className="mb-2">
@@ -73,6 +75,6 @@ export default function MedicationGuide() {
           🔗 약학정보원 복약지도서 검색 바로가기
         </a>
       </div>
-    </section>
+    </PageLayout>
   );
 }

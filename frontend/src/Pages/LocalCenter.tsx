@@ -193,14 +193,12 @@ export default function LocalCenter() {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
   useEffect(() => {
-    // 모든 data-active 제거
     document
       .querySelectorAll('.interactive-map [data-active]')
       .forEach((el) => {
         el.removeAttribute('data-active');
       });
 
-    // 현재 hover된 region 그룹 찾아서 모두 강조
     if (hoveredRegion) {
       const ids = Object.keys(regionGroups).filter(
         (key) => regionGroups[key] === hoveredRegion,
@@ -266,7 +264,6 @@ export default function LocalCenter() {
 
   return (
     <section className="max-w-5xl mx-auto px-4 py-8 text-gray-800 leading-relaxed space-y-8">
-      {/* 상단 설명 */}
       <Callout variant="info" title="지역의약품안전센터란?">
         우리나라는 권역별로 지정된 지역의약품안전센터를 통해 의약품 이상사례를
         수집·분석하고, 교육 및 상담을 제공합니다. 가까운 센터를 통해 이상사례

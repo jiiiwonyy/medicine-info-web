@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import Spinner from '@/components/Spinner';
 import type { Medicine } from '@/types/medicine';
+import PageLayout from '@/components/PageLayout';
 
 export default function Home() {
   const [loading] = useState(false);
   const [searchResult] = useState<Medicine[]>([]);
 
   return (
-    <div className=" w-full flex flex-col items-center">
+    <PageLayout>
       <div className="w-full max-w-5xl mt-6">
         {loading && <Spinner />}
         {searchResult.length > 0 && (
@@ -16,6 +17,6 @@ export default function Home() {
           </div>
         )}
       </div>
-    </div>
+    </PageLayout>
   );
 }

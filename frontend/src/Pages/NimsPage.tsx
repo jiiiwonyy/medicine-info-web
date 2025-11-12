@@ -1,10 +1,8 @@
+import PageLayout from '@/components/PageLayout';
+
 export default function NimsPage() {
   return (
-    <section className="w-full px-6 py-10 text-gray-800 leading-relaxed">
-      <h2 className="text-2xl font-bold border-b-2 border-sky-800 pb-2 mb-4">
-        마약류통합관리시스템(NIMS)
-      </h2>
-
+    <PageLayout title="마약류통합관리시스템(NIMS)">
       <p className="mb-6">
         <span className="font-semibold">
           마약류의 제조, 수입, 유통, 사용, 폐기
@@ -113,6 +111,6 @@ export default function NimsPage() {
           </tr>
         </tbody>
       </table>
-    </section>
+    </PageLayout>
   );
 }

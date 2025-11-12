@@ -1,13 +1,10 @@
 import Callout from '@/components/Callout';
+import PageLayout from '@/components/PageLayout';
 import ReliefProcess from '@/components/ReliefProcess';
 
 export default function AdverseReliefPage() {
   return (
-    <section className="max-w-4xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
-      {/* 제목 */}
-      <h2 className="text-2xl font-bold border-b-2 border-sky-800 pb-2 mb-4">
-        의약품 부작용 피해구제
-      </h2>
+    <PageLayout title="의약품 부작용 피해구제">
       <p className="mb-6 text-lg font-semibold text-sky-900">
         부작용 피해구제 제도 안내
       </p>
@@ -132,6 +129,6 @@ export default function AdverseReliefPage() {
         </a>
       </div>
       <ReliefProcess />
-    </section>
+    </PageLayout>
   );
 }

@@ -1,11 +1,9 @@
 import Callout from '@/components/Callout';
+import PageLayout from '@/components/PageLayout';
 
 export default function KopsPage() {
   return (
-    <section className="max-w-4xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
-      <h2 className="text-2xl font-bold border-b-2 border-sky-800 pb-2 mb-4">
-        KOPS (Korea Patient Safety reporting & learning system)
-      </h2>
+    <PageLayout title="환자안전보고학습시스템 (KOPS; Korea Patient Safety reporting & learning system)">
       <p className="mb-6 text-lg font-semibold text-sky-900">
         환자안전보고학습시스템
       </p>
@@ -141,6 +139,6 @@ export default function KopsPage() {
           </div>
         </div>
       </div>
-    </section>
+    </PageLayout>
   );
 }

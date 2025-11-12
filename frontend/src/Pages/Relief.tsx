@@ -1,9 +1,10 @@
 import kidsLogo from '@/assets/kids_logo.png';
 import Callout from '@/components/Callout';
+import PageLayout from '@/components/PageLayout';
 
 export default function KidsInfoPage() {
   return (
-    <section className="max-w-5xl mx-auto px-4 py-12 text-gray-800 leading-relaxed">
+    <PageLayout>
       <Callout variant="info" className="mb-12" icon={<></>}>
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <img
@@ -102,6 +103,6 @@ export default function KidsInfoPage() {
           </li>
         </ul>
       </div>
-    </section>
+    </PageLayout>
   );
 }

@@ -1,11 +1,8 @@
+import PageLayout from '@/components/PageLayout';
+
 export default function AdverseEventDomestic() {
   return (
-    <section className="max-w-4xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
-      {/* 제목 */}
-      <h2 className="text-2xl font-bold border-b-2 border-sky-800 pb-2 mb-6">
-        국내 의약품 부작용 보고자료
-      </h2>
-
+    <PageLayout title="국내 의약품 부작용 보고자료">
       {/* 소개 */}
       <div className="mb-8 space-y-2">
         <p>
@@ -59,6 +56,6 @@ export default function AdverseEventDomestic() {
       >
         🔗 의약품안전나라 이상사례보고동향 바로가기
       </a>
-    </section>
+    </PageLayout>
   );
 }

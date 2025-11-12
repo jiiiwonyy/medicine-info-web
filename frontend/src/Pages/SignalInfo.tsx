@@ -1,10 +1,8 @@
+import PageLayout from '@/components/PageLayout';
+
 export default function SignalInfo() {
   return (
-    <section className="max-w-3xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
-      <h2 className="text-2xl font-bold border-b-2 border-sky-800 pb-2 mb-6">
-        의약품 이상반응(실마리) 정보
-      </h2>
-
+    <PageLayout title="의약품 이상반응(실마리) 정보">
       <div className="flex justify-center items-end mb-12 relative h-72">
         <div className="absolute bottom-0 w-72 h-72 bg-sky-900 rounded-full" />
         <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[calc(16rem-20px)] text-center text-white z-30">
@@ -106,6 +104,6 @@ export default function SignalInfo() {
           🔗 한국의약품안전관리원 소식지 바로가기
         </a>
       </div>
-    </section>
+    </PageLayout>
   );
 }
