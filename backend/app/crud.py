@@ -1,132 +1,106 @@
-from .database import get_connection
-from typing import Optional, Tuple
+import re
+from difflib import SequenceMatcher
 from psycopg2.extras import RealDictCursor
 
+def norm_tokens(text: str) -> set[str]:
+    if not text:
+        return set()
+    # 괄호 제거
+    t = re.sub(r'[\(\)\[\]\{\}]', ' ', text)
+    # 구분자 제거
+    t = re.sub(r'[-_/+·∙,;]', ' ', t)
+    # 공백 정리 + 소문자화
+    t = re.sub(r'\s+', ' ', t).strip().lower()
 
-def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
-    conn = get_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    toks = {w for w in t.split(' ') if w}
 
-    base_query = """
-        SELECT * FROM medicine
-        WHERE (
-            product_name ILIKE %s OR
-            product_name_eng ILIKE %s OR
-            main_ingredient ILIKE %s OR
-            main_ingredient_eng ILIKE %s
-        )
-    """
-    params = [f"%{q}%"] * 4
+    # 필요 없는 화학 토큰 제거
+    stop = {
+        'anhydrous', 'hydrate', 'monohydrate', 'dihydrate',
+        'sodium', 'potassium', 'calcium', 'hydrochloride',
+        'acetate', 'chloride'
+    }
 
-    if last_id:
-        base_query += " AND id > %s"
-        params.append(last_id)
-
-    base_query += " ORDER BY id LIMIT %s"
-    params.append(limit + 1)
-
-    cur.execute(base_query, params)
-    rows = cur.fetchall()
-
-    cur.execute(
-        """
-        SELECT COUNT(*) FROM medicine
-        WHERE (
-            product_name ILIKE %s OR
-            product_name_eng ILIKE %s OR
-            main_ingredient ILIKE %s OR
-            main_ingredient_eng ILIKE %s
-        )
-        """,
-        [f"%{q}%"] * 4,
-    )
-    total = cur.fetchone()["count"]
-
-    cur.close()
-    conn.close()
-    return rows, total
+    return {w for w in toks if w not in stop}
 
 
-def list_medicines(limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
-    conn = get_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-
-    if last_id:
-        cur.execute("SELECT * FROM medicine WHERE id > %s ORDER BY id LIMIT %s", (last_id, limit + 1))
-    else:
-        cur.execute("SELECT * FROM medicine ORDER BY id LIMIT %s", (limit + 1,))
-    rows = cur.fetchall()
-
-    cur.execute("SELECT COUNT(*) FROM medicine")
-    total = cur.fetchone()["count"]
-
-    cur.close()
-    conn.close()
-    return rows, total
-
-
-# ✅ DUR 정보까지 포함한 상세 조회 (공백무시 + 대소문자무시)
 def get_medicine_by_id(external_id: int):
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # 1️⃣ 기본 약 정보
+    # 1) 기본 약 정보
     cur.execute("SELECT * FROM medicine WHERE id = %s", (external_id,))
     medicine = cur.fetchone()
-
     if not medicine:
         cur.close()
         conn.close()
         return None
 
-    main_ingredient = medicine.get("main_ingredient_eng")
-    if not main_ingredient:
+    # 약 성분 가져오기
+    ko = medicine.get("main_ingredient", "") or ""
+    en = medicine.get("main_ingredient_eng", "") or ""
+
+    # 2) 약 성분 토큰화 (한글/영문/복합성분 모두)
+    med_tokens = set()
+    for part in re.split(r'[,\s/]+', ko):
+        med_tokens |= norm_tokens(part)
+    for part in re.split(r'[,\s/]+', en):
+        med_tokens |= norm_tokens(part)
+
+    if not med_tokens:
         medicine["dur"] = {"interactions": [], "age": [], "pregnancy": []}
         cur.close()
         conn.close()
         return medicine
 
-    # 2️⃣ DUR 데이터 조회 (공백 무시 + 대소문자 무시)
-    # 병용금기
-    cur.execute(
-        """
-        SELECT * FROM dur_interaction
-        WHERE 
-            REPLACE(LOWER(ingredient_1), ' ', '') = REPLACE(LOWER(%s), ' ', '')
-            OR
-            REPLACE(LOWER(ingredient_2), ' ', '') = REPLACE(LOWER(%s), ' ', '')
-        """,
-        (main_ingredient, main_ingredient),
-    )
-    interactions = cur.fetchall()
+    # ---------------------------------------------------------
+    # 3) DUR: 병용금기 전체 조회 후 Python에서 토큰매칭
+    # ---------------------------------------------------------
+    cur.execute("SELECT * FROM dur_interaction")
+    all_interactions = cur.fetchall() or []
 
-    # 연령금기
-    cur.execute(
-        """
-        SELECT * FROM dur_age
-        WHERE 
-            REPLACE(LOWER(ingredient_name), ' ', '') = REPLACE(LOWER(%s), ' ', '')
-        """,
-        (main_ingredient,),
-    )
-    age = cur.fetchall()
+    dur_interactions = []
+    for row in all_interactions:
+        s1 = row.get("ingredient_1", "") or ""
+        s2 = row.get("ingredient_2", "") or ""
 
-    # 임부금기
-    cur.execute(
-        """
-        SELECT * FROM dur_pregnancy
-        WHERE 
-            REPLACE(LOWER(ingredient_name), ' ', '') = REPLACE(LOWER(%s), ' ', '')
-        """,
-        (main_ingredient,),
-    )
-    pregnancy = cur.fetchall()
+        row_tokens = norm_tokens(s1) | norm_tokens(s2)
 
-    # 3️⃣ 병합 (Pydantic DURInfo 구조 맞추기)
+        # 토큰 교집합 매칭
+        if med_tokens & row_tokens:
+            dur_interactions.append(row)
+
+    # ---------------------------------------------------------
+    # 4) DUR: 연령금기
+    # ---------------------------------------------------------
+    cur.execute("SELECT * FROM dur_age")
+    all_age = cur.fetchall() or []
+
+    dur_age = []
+    for row in all_age:
+        toks = norm_tokens(row.get("ingredient_name", "") or "")
+        if med_tokens & toks:
+            dur_age.append(row)
+
+    # ---------------------------------------------------------
+    # 5) DUR: 임부금기
+    # ---------------------------------------------------------
+    cur.execute("SELECT * FROM dur_pregnancy")
+    all_preg = cur.fetchall() or []
+
+    dur_preg = []
+    for row in all_preg:
+        toks = norm_tokens(row.get("ingredient_name", "") or "")
+        if med_tokens & toks:
+            dur_preg.append(row)
+
+    # ---------------------------------------------------------
+    # 6) 결과 병합
+    # ---------------------------------------------------------
     medicine["dur"] = {
-        "interactions": interactions or [],
-        "age": age or [],
-        "pregnancy": pregnancy or [],
+        "interactions": dur_interactions,
+        "age": dur_age,
+        "pregnancy": dur_preg,
     }
 
     cur.close()
