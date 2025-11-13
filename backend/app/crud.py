@@ -2,6 +2,7 @@ import re
 from difflib import SequenceMatcher
 from psycopg2.extras import RealDictCursor
 from typing import Optional, Tuple
+from .database import get_connection
 
 def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
     conn = get_connection()
