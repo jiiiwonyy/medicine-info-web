@@ -26,6 +26,22 @@ export default function SignalInfo() {
       {/* 설명 섹션 */}
       <div className="space-y-6 mb-8">
         <div className="border rounded-lg p-4 bg-sky-50">
+          <h2 className="text-2xl font-bold mb-4">약물이상반응이란?</h2>
+          <h3 className="text-lg font-semibold mb-2">부작용 (Side Effect)</h3>
+          <p>
+            의약품 등을 정상적인 용량에 따라 투여할 경우 발생하는 모든 의도되지
+            않은 효과
+          </p>
+          <br />
+          <h3 className="text-lg font-semibold mb-2">
+            이상사례 (AE, Adverse Event)
+          </h3>
+          <p>
+            의약품 등의 투여·사용 중 발생한 바람직하지 않고 의도되지 아니한 징후
+            (sign), 증상(symptom) 또는 질병을 말하며, 해당 의약품 등과 반드시
+            인과관계를 가져야 하는 것은 아닙니다.
+          </p>
+          <br />
           <h3 className="text-lg font-semibold mb-2">
             의약품 이상반응 (ADR, Adverse Drug Reaction)
           </h3>
@@ -38,22 +54,9 @@ export default function SignalInfo() {
             있음
           </p>
           <br />
-          <h3 className="text-lg font-semibold mb-2">
-            이상사례 (AE, Adverse Event)
-          </h3>
-          <p>
-            의약품 등의 투여·사용 중 발생한 바람직하지 않고 의도되지 아니한 징후
-            (sign), 증상(symptom) 또는 질병을 말합니다. 해당 의약품과 반드시
-            인과관계를 가져야 하는 것은 아닙니다.
-          </p>
         </div>
 
         <div className="border rounded-lg p-4 bg-sky-50">
-          <h3 className="text-lg font-semibold mb-2">부작용 (Side Effect)</h3>
-          <p>
-            의약품 등을 정상적인 용량에 따라 투여할 경우 발생하는 모든 의도되지
-            않은 효과를 말합니다.
-          </p>
           <br />
           <h3 className="text-lg font-semibold mb-2">실마리정보 (Signal)</h3>
           <p>
@@ -61,15 +64,15 @@ export default function SignalInfo() {
             측면을 제시하는 것으로, 분석할 만한 가치가 있는 정보입니다. 관계가
             유해한 것에 국한하지 않습니다.
           </p>
+          <br />
+          <h3 className="text-lg font-semibold mb-3">실마리 소식지</h3>
+          <p className="mb-6">
+            KAERS(한국의약품안전관리원 이상사례 보고시스템)를 통해 수집·분석된
+            실마리정보를 바탕으로, 식품의약품안전처가 안전성 검토 및 후속 조치를
+            진행한 결과를 정리하여 의료인과 국민에게 제공하는 소식지입니다.
+          </p>
         </div>
       </div>
-
-      <h3 className="text-xl font-semibold mb-3">실마리 소식지</h3>
-      <p className="mb-6">
-        KAERS(한국의약품안전관리원 이상사례 보고시스템)를 통해 수집·분석된
-        실마리정보를 바탕으로, 식품의약품안전처가 안전성 검토 및 후속 조치를
-        진행한 결과를 정리하여 의료인과 국민에게 제공하는 소식지입니다.
-      </p>
 
       <h3 className="text-xl font-semibold mb-3">실마리정보 확인 경로</h3>
       <ol className="list-decimal pl-6 mb-6 space-y-1">
