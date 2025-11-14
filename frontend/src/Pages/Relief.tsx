@@ -1,31 +1,27 @@
 import kidsLogo from '@/assets/kids_logo.png';
-import Callout from '@/components/Callout';
 import PageLayout from '@/components/PageLayout';
 
 export default function KidsInfoPage() {
   return (
     <PageLayout>
-      <Callout variant="info" className="mb-12" icon={<></>}>
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-          <img
-            src={kidsLogo}
-            alt="한국의약품안전관리원 로고"
-            className="w-40 h-auto object-contain"
-          />
-          <div>
-            <h2 className="text-2xl font-bold mb-3">
-              한국의약품안전관리원 (KIDS)
-            </h2>
-            <p className="mb-2">
-              <strong>Korea Institute of Drug Safety & Risk Management</strong>
-            </p>
-            <p>
-              의약품의 안전한 사용을 지원하고, 부작용 피해를 예방·보상하기 위해
-              설립된 <strong>식품의약품안전처 산하 공공기관</strong>입니다.
-            </p>
-          </div>
+      {/* 소개 섹션 */}
+      <div className="mb-10 flex items-center space-x-6">
+        <img
+          src={kidsLogo}
+          alt="한국의약품안전관리원 로고"
+          className="w-40 h-auto object-contain"
+        />
+        <div>
+          <h3 className="text-xl font-bold">한국의약품안전관리원 (KIDS)</h3>
+          <p className="mb-2">
+            <strong>Korea Institute of Drug Safety & Risk Management</strong>
+          </p>
+          <p>
+            의약품의 안전한 사용을 지원하고, 부작용 피해를 예방·보상하기 위해
+            설립된 <strong>식품의약품안전처 산하 공공기관</strong>입니다.
+          </p>
         </div>
-      </Callout>
+      </div>
 
       {/* 주요 기능 */}
       <div className="mb-10">
@@ -60,6 +56,7 @@ export default function KidsInfoPage() {
         </ul>
       </div>
 
+      {/* 이상사례 보고하기 */}
       <div className="mb-10">
         <a
           href="https://kaers.drugsafe.or.kr/"
@@ -71,6 +68,7 @@ export default function KidsInfoPage() {
         </a>
       </div>
 
+      {/* 보고 시 작성 항목 */}
       <div className="mb-10">
         <h3 className="text-xl font-semibold mb-4">보고 시 작성 항목</h3>
         <div className="mb-3">
