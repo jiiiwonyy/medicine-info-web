@@ -6,49 +6,51 @@ from .database import get_connection
 from bs4 import BeautifulSoup
 import json
 
-def parse_xml_to_json(xml_raw: str):
-    soup = BeautifulSoup(xml_raw, "xml")
+from bs4 import BeautifulSoup
+
+def parse_xml_to_json(xml_string: str):
+    soup = BeautifulSoup(xml_string, "xml")
+
     result = []
 
-    articles = soup.find_all("ARTICLE")
-    for article in articles:
-        title = article.get("title") or ""
-        items = []
-        paragraphs = article.find_all("PARAGRAPH")
+    sections = soup.find_all("SECTION")
+    for sec in sections:
+        for art in sec.find_all("ARTICLE"):
+            title = art.get("title", "")
 
-        for p in paragraphs:
-            tag = p.get("tagName")
+            items = []
+            for p in art.find_all("PARAGRAPH"):
+                tag_name = p.get("tagName")
 
-            if tag == "p":
-                text = p.get_text().strip()
-                if text:
-                    items.append(text)
+                # 1) 표(table)
+                if tag_name == "table":
+                    # HTML table 내부 내용을 BeautifulSoup으로 다시 파싱
+                    inner_html = p.text or p.decode_contents() or ""
+                    table_soup = BeautifulSoup(inner_html, "html.parser")
 
-            elif tag == "table":
-                html = p.get_text()
-                table_soup = BeautifulSoup(html, "html.parser")
+                    rows = []
+                    for tr in table_soup.find_all("tr"):
+                        cols = []
+                        for td in tr.find_all("td"):
+                            # HTML 유지 (sup 태그 등)
+                            cols.append(td.decode_contents())
+                        rows.append(cols)
 
-                table_data = []
-                for row in table_soup.find_all("tr"):
-                    cells = []
-                    for c in row.find_all(["td","th"]):
-                        cell_text = c.get_text().strip()
-                        cells.append(cell_text)
-                    if cells:
-                        table_data.append(cells)
+                    items.append({"type": "table", "data": rows})
+                    continue
 
-                if table_data:
-                    items.append({
-                        "type": "table",
-                        "data": table_data
-                    })
+                # 2) 일반 텍스트 (HTML 유지)
+                text_html = p.decode_contents()
+                items.append(text_html)
 
-        result.append({
-            "title": title,
-            "items": items
-        })
+            result.append({"title": title, "items": items})
 
     return result
+
+
+import json
+from psycopg2.extras import RealDictCursor
+from .database import get_connection
 
 def update_json_parsed(medicine_id: int):
     conn = get_connection()
@@ -59,6 +61,7 @@ def update_json_parsed(medicine_id: int):
         FROM medicine_detail
         WHERE medicine_id = %s
     """, (medicine_id,))
+
     rows = cur.fetchall()
 
     for row in rows:
@@ -76,6 +79,7 @@ def update_json_parsed(medicine_id: int):
     conn.commit()
     cur.close()
     conn.close()
+
 
 
 def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
