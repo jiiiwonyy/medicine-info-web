@@ -7,8 +7,11 @@ from ..crud import insert_xml_detail, update_json_parsed
 
 admin_router = APIRouter(prefix="/admin")
 
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 SESSIONS = {}  # {token: True}
+
+def get_admin_password():
+    """항상 .env에서 최신 값을 읽어오도록 한다"""
+    return os.getenv("ADMIN_PASSWORD")
 
 # ----------------------------
 # 1) 관리자 로그인
@@ -18,7 +21,12 @@ class LoginRequest(BaseModel):
 
 @admin_router.post("/login")
 def admin_login(req: LoginRequest):
-    if req.password != ADMIN_PASSWORD:
+
+    expected_pw = get_admin_password()
+    print("💡 ADMIN_PASSWORD from env:", expected_pw)
+    print("💡 entered:", req.password)
+
+    if req.password != expected_pw:
         return {"success": False}
 
     token = secrets.token_hex(32)
