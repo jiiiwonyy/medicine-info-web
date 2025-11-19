@@ -8,6 +8,25 @@ import json
 
 from bs4 import BeautifulSoup
 
+def insert_xml_detail(medicine_id: int, category: str, xml_raw: str):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        INSERT INTO medicine_detail (medicine_id, category, xml_raw)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (medicine_id, category)
+        DO UPDATE SET xml_raw = EXCLUDED.xml_raw;
+        """,
+        (medicine_id, category, xml_raw)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
 def parse_xml_to_json(xml_string: str):
     soup = BeautifulSoup(xml_string, "xml")
 

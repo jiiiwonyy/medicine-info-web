@@ -8,6 +8,8 @@ from fastapi import APIRouter
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
+from fastapi.staticfiles import StaticFiles
+from .routers.admin_router import admin_router
 
 app = FastAPI(
     title="Medicine API",
@@ -16,6 +18,10 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+app.include_router(admin_router)
+
+app.mount("/admin-page", StaticFiles(directory="admin"), name="admin-html")
 
 allow_origins = [
     "http://localhost:5173",
@@ -56,6 +62,8 @@ def test_db_connection():
         return {"status": "success", "db_version": version["version"]}
     except Exception as e:
         return {"status": "failed", "error": str(e)}
+    
+app.include_router(router)
     
 @app.get("/healthz")
 def healthz():
