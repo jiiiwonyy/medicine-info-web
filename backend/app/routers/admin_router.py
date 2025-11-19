@@ -1,12 +1,13 @@
 from fastapi import APIRouter, UploadFile, Form, Header, HTTPException
 from pydantic import BaseModel
 import secrets
+import os
 
 from ..crud import insert_xml_detail, update_json_parsed
 
 admin_router = APIRouter(prefix="/admin")
 
-ADMIN_PASSWORD = "너만아는관리자비번"
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 SESSIONS = {}  # {token: True}
 
 # ----------------------------
