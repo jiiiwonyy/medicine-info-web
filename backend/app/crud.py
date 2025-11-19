@@ -52,28 +52,35 @@ def parse_xml_to_json(xml_raw: str):
 
 def update_json_parsed(medicine_id: int):
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
     # xml_raw 가져오기
     cur.execute("""
-        SELECT xml_raw FROM medicine_detail
+        SELECT category, xml_raw
+        FROM medicine_detail
         WHERE medicine_id = %s
     """, (medicine_id,))
     rows = cur.fetchall()
 
+    print("ROWS:", rows)  # 디버깅용
+
     for row in rows:
-        xml_raw = row[0]
+        cat = row["category"]
+        xml_raw = row["xml_raw"]
+
         parsed = parse_xml_to_json(xml_raw)
+        print("PARSED:", parsed)  # 디버깅용
 
         cur.execute("""
             UPDATE medicine_detail
             SET json_parsed = %s
-            WHERE medicine_id = %s
-        """, (json.dumps(parsed, ensure_ascii=False), medicine_id))
+            WHERE medicine_id = %s AND category = %s
+        """, (json.dumps(parsed, ensure_ascii=False), medicine_id, cat))
 
     conn.commit()
     cur.close()
     conn.close()
+
 
 
 def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
