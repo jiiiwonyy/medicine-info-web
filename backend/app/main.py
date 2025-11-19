@@ -10,6 +10,9 @@ from psycopg2.extras import RealDictCursor
 import os
 from fastapi.staticfiles import StaticFiles
 from .routers.admin_router import admin_router
+from dotenv import load_dotenv
+load_dotenv()
+
 
 app = FastAPI(
     title="Medicine API",
