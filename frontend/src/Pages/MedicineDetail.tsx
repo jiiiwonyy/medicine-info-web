@@ -8,6 +8,7 @@ import Spinner from '@/components/Spinner';
 import FloatingNavigation from '@/components/FloatingNavigation';
 import DurSection from '@/components/DurSection';
 import { scrollToId } from '@/hooks/useScrollSpy';
+import MedicineDetailRenderer from '@/components/MedicineDetailRender';
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
@@ -110,7 +111,7 @@ export default function Detail() {
       <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
         <section id="effect" ref={effectRef} className="scroll-mt-24 pt-4">
           <h2 className="text-sky-700 font-bold text-lg mb-2">📌 효능·효과</h2>
-          <p className="whitespace-pre-line">{med.efficacy}</p>
+          <MedicineDetailRenderer data={med.efficacy} />
         </section>
 
         <section
@@ -119,7 +120,7 @@ export default function Detail() {
           className="scroll-mt-24 pt-4 border-t border-gray-300"
         >
           <h2 className="text-sky-700 font-bold text-lg mb-2">📌 용법·용량</h2>
-          <p className="whitespace-pre-line">{med.dosage_and_administration}</p>
+          <MedicineDetailRenderer data={med.dosage_and_administration} />
         </section>
 
         <section
@@ -130,7 +131,7 @@ export default function Detail() {
           <h2 className="text-sky-700 font-bold text-lg mb-2">
             📌 사용상의 주의사항
           </h2>
-          <p className="whitespace-pre-line">{med.precautions}</p>
+          <MedicineDetailRenderer data={med.precautions} />
         </section>
 
         <section id="dur" className="scroll-mt-24">

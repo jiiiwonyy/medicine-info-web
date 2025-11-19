@@ -54,7 +54,6 @@ def update_json_parsed(medicine_id: int):
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # xml_raw 가져오기
     cur.execute("""
         SELECT category, xml_raw
         FROM medicine_detail
@@ -62,14 +61,11 @@ def update_json_parsed(medicine_id: int):
     """, (medicine_id,))
     rows = cur.fetchall()
 
-    print("ROWS:", rows)  # 디버깅용
-
     for row in rows:
         cat = row["category"]
         xml_raw = row["xml_raw"]
 
         parsed = parse_xml_to_json(xml_raw)
-        print("PARSED:", parsed)  # 디버깅용
 
         cur.execute("""
             UPDATE medicine_detail
@@ -80,7 +76,6 @@ def update_json_parsed(medicine_id: int):
     conn.commit()
     cur.close()
     conn.close()
-
 
 
 def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
