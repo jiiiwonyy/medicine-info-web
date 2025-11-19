@@ -3,6 +3,78 @@ from difflib import SequenceMatcher
 from psycopg2.extras import RealDictCursor
 from typing import Optional, Tuple
 from .database import get_connection
+from bs4 import BeautifulSoup
+import json
+
+def parse_xml_to_json(xml_raw: str):
+    soup = BeautifulSoup(xml_raw, "xml")
+    result = []
+
+    articles = soup.find_all("ARTICLE")
+    for article in articles:
+        title = article.get("title") or ""
+        items = []
+        paragraphs = article.find_all("PARAGRAPH")
+
+        for p in paragraphs:
+            tag = p.get("tagName")
+
+            if tag == "p":
+                text = p.get_text().strip()
+                if text:
+                    items.append(text)
+
+            elif tag == "table":
+                html = p.get_text()
+                table_soup = BeautifulSoup(html, "html.parser")
+
+                table_data = []
+                for row in table_soup.find_all("tr"):
+                    cells = []
+                    for c in row.find_all(["td","th"]):
+                        cell_text = c.get_text().strip()
+                        cells.append(cell_text)
+                    if cells:
+                        table_data.append(cells)
+
+                if table_data:
+                    items.append({
+                        "type": "table",
+                        "data": table_data
+                    })
+
+        result.append({
+            "title": title,
+            "items": items
+        })
+
+    return result
+
+def update_json_parsed(medicine_id: int):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    # xml_raw 가져오기
+    cur.execute("""
+        SELECT xml_raw FROM medicine_detail
+        WHERE medicine_id = %s
+    """, (medicine_id,))
+    rows = cur.fetchall()
+
+    for row in rows:
+        xml_raw = row[0]
+        parsed = parse_xml_to_json(xml_raw)
+
+        cur.execute("""
+            UPDATE medicine_detail
+            SET json_parsed = %s
+            WHERE medicine_id = %s
+        """, (json.dumps(parsed, ensure_ascii=False), medicine_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
 
 def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
     conn = get_connection()
@@ -91,7 +163,9 @@ def get_medicine_by_id(external_id: int):
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # 1) 기본 약 정보
+    # ------------------------------------------------
+    # 1) 기본 약 정보 조회
+    # ------------------------------------------------
     cur.execute("SELECT * FROM medicine WHERE id = %s", (external_id,))
     medicine = cur.fetchone()
     if not medicine:
@@ -99,11 +173,52 @@ def get_medicine_by_id(external_id: int):
         conn.close()
         return None
 
-    # 약 성분 가져오기
+    # ------------------------------------------------
+    # 2) XML 상세정보 조회
+    # ------------------------------------------------
+    cur.execute("""
+        SELECT category, xml_raw, json_parsed
+        FROM medicine_detail
+        WHERE medicine_id = %s
+    """, (external_id,))
+    details = cur.fetchall() or []
+
+    # 기본값은 medicine 테이블의 기존 컬럼
+    # medicine["efficacy"]
+    # medicine["dosage_and_administration"]
+    # medicine["precautions"]
+
+    # ------------------------------------------------
+    # 3) XML 있으면 기존 컬럼 덮어쓰기
+    # ------------------------------------------------
+    for d in details:
+        cat = d["category"]
+        parsed = d["json_parsed"]
+
+        if parsed:
+            # JSON 파싱된 구조가 있는 경우
+            if cat == "efficacy":
+                medicine["efficacy"] = parsed
+            elif cat == "dosage":
+                medicine["dosage_and_administration"] = parsed
+            elif cat == "warning":
+                medicine["precautions"] = parsed
+
+        else:
+            # XML만 있고 parsing 안된 경우
+            if cat == "efficacy":
+                medicine["efficacy_xml_raw"] = d["xml_raw"]
+            elif cat == "dosage":
+                medicine["dosage_xml_raw"] = d["xml_raw"]
+            elif cat == "warning":
+                medicine["precautions_xml_raw"] = d["xml_raw"]
+
+    # ------------------------------------------------
+    # 4) DUR 로직 그대로 유지
+    # ------------------------------------------------
     ko = medicine.get("main_ingredient", "") or ""
     en = medicine.get("main_ingredient_eng", "") or ""
 
-    # 2) 약 성분 토큰화 (한글/영문/복합성분 모두)
     med_tokens = set()
     for part in re.split(r'[,\s/]+', ko):
         med_tokens |= norm_tokens(part)
@@ -116,50 +231,33 @@ def get_medicine_by_id(external_id: int):
         conn.close()
         return medicine
 
-    # ---------------------------------------------------------
-    # 3) DUR: 병용금기 전체 조회 후 Python에서 토큰매칭
-    # ---------------------------------------------------------
+    # 병용금기
     cur.execute("SELECT * FROM dur_interaction")
     all_interactions = cur.fetchall() or []
-
     dur_interactions = []
     for row in all_interactions:
-        s1 = row.get("ingredient_1", "") or ""
-        s2 = row.get("ingredient_2", "") or ""
-
-        row_tokens = norm_tokens(s1) | norm_tokens(s2)
-
-        # 토큰 교집합 매칭
-        if med_tokens & row_tokens:
+        tokens = norm_tokens(row.get("ingredient_1", "")) | norm_tokens(row.get("ingredient_2", ""))
+        if med_tokens & tokens:
             dur_interactions.append(row)
 
-    # ---------------------------------------------------------
-    # 4) DUR: 연령금기
-    # ---------------------------------------------------------
+    # 연령금기
     cur.execute("SELECT * FROM dur_age")
     all_age = cur.fetchall() or []
-
     dur_age = []
     for row in all_age:
         toks = norm_tokens(row.get("ingredient_name", "") or "")
         if med_tokens & toks:
             dur_age.append(row)
 
-    # ---------------------------------------------------------
-    # 5) DUR: 임부금기
-    # ---------------------------------------------------------
+    # 임부금기
     cur.execute("SELECT * FROM dur_pregnancy")
     all_preg = cur.fetchall() or []
-
     dur_preg = []
     for row in all_preg:
         toks = norm_tokens(row.get("ingredient_name", "") or "")
         if med_tokens & toks:
             dur_preg.append(row)
 
-    # ---------------------------------------------------------
-    # 6) 결과 병합
-    # ---------------------------------------------------------
     medicine["dur"] = {
         "interactions": dur_interactions,
         "age": dur_age,
@@ -169,3 +267,5 @@ def get_medicine_by_id(external_id: int):
     cur.close()
     conn.close()
     return medicine
+
+
