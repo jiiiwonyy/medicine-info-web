@@ -1,12 +1,12 @@
 export default function MedicineDetailRenderer({ data }: { data: any }) {
   if (!data) return null;
 
-  // 1) 문자열 → 그냥 표시
+  // 문자열일 경우
   if (typeof data === 'string') {
     return <p className="whitespace-pre-line">{data}</p>;
   }
 
-  // 2) JSON 배열 → 파싱 구조 렌더링
+  // JSON 배열일 경우
   if (Array.isArray(data)) {
     return (
       <div className="space-y-4">
@@ -17,7 +17,7 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
             )}
 
             {section.items?.map((item: any, i: number) => {
-              // 단순 텍스트
+              // 1) 일반 텍스트
               if (typeof item === 'string') {
                 return (
                   <p
@@ -28,32 +28,14 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
                 );
               }
 
-              // 표
-              // 표 렌더링 개선 버전
-              if (item.type === 'table') {
-                const rows = item.data;
-
+              // 2) HTML TABLE 원본 출력
+              if (item.type === 'html-table') {
                 return (
-                  <table
+                  <div
                     key={i}
-                    className="border border-gray-300 text-sm w-full border-collapse"
-                  >
-                    <tbody>
-                      {rows.map((row, rIdx) => (
-                        <tr key={rIdx}>
-                          {row.map((cell, cIdx) => (
-                            <td
-                              key={cIdx}
-                              rowSpan={cell.rowspan}
-                              colSpan={cell.colspan}
-                              className="border border-gray-300 px-2 py-2 align-top"
-                              dangerouslySetInnerHTML={{ __html: cell.html }}
-                            />
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                    className="overflow-x-auto my-4"
+                    dangerouslySetInnerHTML={{ __html: item.html }}
+                  />
                 );
               }
 
