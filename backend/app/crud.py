@@ -43,31 +43,31 @@ def parse_xml_to_json(xml_string: str):
 
                 # --------------------------
                 # 1) 표(table) 처리
-                # --------------------------
                 if tag_name == "table":
-                    inner_html = p.text or p.decode_contents() or ""
+                    inner_html = p.decode_contents()
+
                     table_soup = BeautifulSoup(inner_html, "html.parser")
 
                     rows = []
-
                     for tr in table_soup.find_all("tr"):
-                        row_cells = []
+                        cols = []
+                        for td in tr.find_all(["td", "th"]):
 
-                        for cell in tr.find_all(["td", "th"]):
-                            cell_obj = {
-                                "html": cell.decode_contents(),
-                                "rowspan": int(cell.get("rowspan", 1)),
-                                "colspan": int(cell.get("colspan", 1))
-                            }
-                            row_cells.append(cell_obj)
+                            html = td.decode_contents()
+                            rowspan = td.get("rowspan")
+                            colspan = td.get("colspan")
 
-                        rows.append(row_cells)
+                            cols.append({
+                                "html": html,
+                                "rowspan": int(rowspan) if rowspan else 1,
+                                "colspan": int(colspan) if colspan else 1,
+                            })
 
-                    items.append({
-                        "type": "table",
-                        "data": rows
-                    })
+                        rows.append(cols)
+
+                    items.append({ "type": "table", "data": rows })
                     continue
+
 
                 # --------------------------
                 # 2) 일반 텍스트
