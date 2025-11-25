@@ -43,7 +43,7 @@ export default function FloatingNavigation({
 
     return [
       { id: 'detail', label: '의약품 상세정보', children: detailChildren },
-      ...(hasDur ? [{ id: 'dur', label: 'DUR' }] : []),
+      ...(hasDur ? [{ id: 'dur', label: '의약품안전사용(DUR)' }] : []),
       { id: 'letters', label: '안전성 서한 및 실마리' },
       { id: 'adrs', label: '부작용 보고자료' },
     ];
