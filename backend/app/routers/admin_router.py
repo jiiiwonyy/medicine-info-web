@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, Form, Header, HTTPException
 from pydantic import BaseModel
 import secrets
 import os
-from backend.app.database import get_connection
+from ..database import get_connection
 from ..crud import insert_xml_detail, update_json_parsed
 
 admin_router = APIRouter(prefix="/admin")
