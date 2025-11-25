@@ -36,33 +36,49 @@ def parse_xml_to_json(xml_string: str):
     for sec in sections:
         for art in sec.find_all("ARTICLE"):
             title = art.get("title", "")
-
             items = []
+
             for p in art.find_all("PARAGRAPH"):
                 tag_name = p.get("tagName")
 
-                # 1) 표(table)
+                # --------------------------
+                # 1) 표(table) 처리
+                # --------------------------
                 if tag_name == "table":
-                    # HTML table 내부 내용을 BeautifulSoup으로 다시 파싱
                     inner_html = p.text or p.decode_contents() or ""
                     table_soup = BeautifulSoup(inner_html, "html.parser")
 
                     rows = []
-                    for tr in table_soup.find_all("tr"):
-                        cols = []
-                        for td in tr.find_all("td"):
-                            # HTML 유지 (sup 태그 등)
-                            cols.append(td.decode_contents())
-                        rows.append(cols)
 
-                    items.append({"type": "table", "data": rows})
+                    for tr in table_soup.find_all("tr"):
+                        row_cells = []
+
+                        for cell in tr.find_all(["td", "th"]):
+                            cell_obj = {
+                                "html": cell.decode_contents(),
+                                "rowspan": int(cell.get("rowspan", 1)),
+                                "colspan": int(cell.get("colspan", 1))
+                            }
+                            row_cells.append(cell_obj)
+
+                        rows.append(row_cells)
+
+                    items.append({
+                        "type": "table",
+                        "data": rows
+                    })
                     continue
 
-                # 2) 일반 텍스트 (HTML 유지)
+                # --------------------------
+                # 2) 일반 텍스트
+                # --------------------------
                 text_html = p.decode_contents()
                 items.append(text_html)
 
-            result.append({"title": title, "items": items})
+            result.append({
+                "title": title,
+                "items": items
+            })
 
     return result
 
