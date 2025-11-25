@@ -1,23 +1,38 @@
-from fastapi import APIRouter, UploadFile, Form, Header, HTTPException
+from fastapi import APIRouter, UploadFile, Form, Header, HTTPException, Request
 from pydantic import BaseModel
 import secrets
 import os
+
 from ..database import get_connection
 from ..crud import insert_xml_detail, update_json_parsed
+
+from psycopg2.extras import RealDictCursor
 
 admin_router = APIRouter(prefix="/admin")
 
 SESSIONS = {}  # {token: True}
 
+
 def get_admin_password():
     """항상 .env에서 최신 값을 읽어오도록 한다"""
     return os.getenv("ADMIN_PASSWORD")
 
-# ----------------------------
+
+# --------------------------------------------------------
+# 공통: 관리자 인증
+# --------------------------------------------------------
+def check_admin(request: Request):
+    token = request.headers.get("x-admin-token")
+    if not token or token not in SESSIONS:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+
+# --------------------------------------------------------
 # 1) 관리자 로그인
-# ----------------------------
+# --------------------------------------------------------
 class LoginRequest(BaseModel):
     password: str
+
 
 @admin_router.post("/login")
 def admin_login(req: LoginRequest):
@@ -35,9 +50,9 @@ def admin_login(req: LoginRequest):
     return {"success": True, "token": token}
 
 
-# ----------------------------
+# --------------------------------------------------------
 # 2) XML 업로드
-# ----------------------------
+# --------------------------------------------------------
 @admin_router.post("/upload-xml")
 async def upload_xml(
     medicine_id: int = Form(...),
@@ -63,19 +78,24 @@ async def upload_xml(
         "category": category
     }
 
+
+# --------------------------------------------------------
+# 3) 전체 XML 재파싱
+# --------------------------------------------------------
 @admin_router.post("/reparse-all")
-def reparse_all(token: str = Header(None, alias="x-admin-token")):
-    if token not in SESSIONS:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+def reparse_all(request: Request):
+    check_admin(request)
 
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
     cur.execute("SELECT DISTINCT medicine_id FROM medicine_detail")
-    ids = [row[0] for row in cur.fetchall()]
-    cur.close()
-    conn.close()
+    ids = [row["medicine_id"] for row in cur.fetchall()]  # ✔ FIXED
 
     for mid in ids:
         update_json_parsed(mid)
 
-    return {"status": "done", "count": len(ids)}
+    cur.close()
+    conn.close()
+
+    return {"ok": True, "updated": len(ids)}
