@@ -6,8 +6,6 @@ from .database import get_connection
 from bs4 import BeautifulSoup
 import json
 
-from bs4 import BeautifulSoup
-
 def insert_xml_detail(medicine_id: int, category: str, xml_raw: str):
     conn = get_connection()
     cur = conn.cursor()
@@ -36,43 +34,31 @@ def parse_xml_to_json(xml_string: str):
     for sec in sections:
         for art in sec.find_all("ARTICLE"):
             title = art.get("title", "")
-            items = []
 
+            items = []
             for p in art.find_all("PARAGRAPH"):
                 tag_name = p.get("tagName")
 
-                # --------------------------
-                # 1) 표(table) 처리
+                # -----------------------------
+                # 1) 표 처리 (HTML 그대로 유지)
+                # -----------------------------
                 if tag_name == "table":
                     inner_html = p.decode_contents()
 
                     table_soup = BeautifulSoup(inner_html, "html.parser")
+                    table_tag = table_soup.find("table")
 
-                    rows = []
-                    for tr in table_soup.find_all("tr"):
-                        cols = []
-                        for td in tr.find_all(["td", "th"]):
-
-                            html = td.decode_contents()
-                            rowspan = td.get("rowspan")
-                            colspan = td.get("colspan")
-
-                            cols.append({
-                                "html": html,
-                                "rowspan": int(rowspan) if rowspan else 1,
-                                "colspan": int(colspan) if colspan else 1,
-                            })
-
-                        rows.append(cols)
-
-                    items.append({ "type": "table", "data": rows })
+                    if table_tag:
+                        items.append({
+                            "type": "html-table",
+                            "html": str(table_tag)
+                        })
                     continue
 
-
-                # --------------------------
-                # 2) 일반 텍스트
-                # --------------------------
-                text_html = p.decode_contents()
+                # -----------------------------
+                # 2) 일반 텍스트 (HTML 유지)
+                # -----------------------------
+                text_html = p.decode_contents().strip()
                 items.append(text_html)
 
             result.append({
@@ -82,10 +68,6 @@ def parse_xml_to_json(xml_string: str):
 
     return result
 
-
-import json
-from psycopg2.extras import RealDictCursor
-from .database import get_connection
 
 def update_json_parsed(medicine_id: int):
     conn = get_connection()
