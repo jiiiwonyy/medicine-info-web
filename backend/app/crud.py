@@ -34,20 +34,17 @@ def parse_xml_to_json(xml_string: str):
     for sec in sections:
         for art in sec.find_all("ARTICLE"):
             title = art.get("title", "")
-
             items = []
-            for p in art.find_all("PARAGRAPH"):
+
+            # 1) 먼저 PARAGRAPH 모두 처리
+            for p in art.find_all("PARAGRAPH", recursive=False):
                 tag_name = p.get("tagName")
 
-                # -----------------------------
-                # 1) 표 처리 (HTML 그대로 유지)
-                # -----------------------------
+                # 표가 PARAGRAPH 안에 있는 경우
                 if tag_name == "table":
                     inner_html = p.decode_contents()
-
                     table_soup = BeautifulSoup(inner_html, "html.parser")
                     table_tag = table_soup.find("table")
-
                     if table_tag:
                         items.append({
                             "type": "html-table",
@@ -55,11 +52,17 @@ def parse_xml_to_json(xml_string: str):
                         })
                     continue
 
-                # -----------------------------
-                # 2) 일반 텍스트 (HTML 유지)
-                # -----------------------------
+                # 일반 텍스트
                 text_html = p.decode_contents().strip()
-                items.append(text_html)
+                if text_html:
+                    items.append(text_html)
+
+            # 2) PARAGRAPH 밖에 있는 TABLE도 처리 (중요)
+            for table in art.find_all("TABLE", recursive=False):
+                items.append({
+                    "type": "html-table",
+                    "html": str(table)
+                })
 
             result.append({
                 "title": title,
@@ -67,6 +70,7 @@ def parse_xml_to_json(xml_string: str):
             })
 
     return result
+
 
 
 def update_json_parsed(medicine_id: int):
