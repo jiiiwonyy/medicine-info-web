@@ -30,52 +30,25 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
 
               // 표
               // 표 렌더링 개선 버전
+              // 표 렌더링
               if (item.type === 'table') {
                 const rows = item.data;
-
-                const headerTop = rows[0]; // ["체중 (kg)", "키 (cm)"]
-                const headerBottom = rows[1]; // ["150", "160", ...]
-                const bodyRows = rows.slice(2);
 
                 return (
                   <table
                     key={i}
-                    className="border border-gray-300 text-sm w-full"
+                    className="border border-gray-300 text-sm w-full border-collapse"
                   >
-                    <thead>
-                      <tr>
-                        <th
-                          rowSpan={2}
-                          className="border border-gray-300 px-2 py-1 bg-gray-50"
-                          dangerouslySetInnerHTML={{ __html: headerTop[0] }}
-                        />
-
-                        <th
-                          colSpan={headerBottom.length}
-                          className="border border-gray-300 px-2 py-1 bg-gray-50 text-center"
-                          dangerouslySetInnerHTML={{ __html: headerTop[1] }}
-                        />
-                      </tr>
-
-                      <tr>
-                        {headerBottom.map((h, idx) => (
-                          <th
-                            key={idx}
-                            className="border border-gray-300 px-2 py-1 bg-gray-50 text-center"
-                            dangerouslySetInnerHTML={{ __html: h }}
-                          />
-                        ))}
-                      </tr>
-                    </thead>
-
                     <tbody>
-                      {bodyRows.map((row, rIdx) => (
+                      {rows.map((row: any[], rIdx: number) => (
                         <tr key={rIdx}>
-                          {row.map((cell, cIdx) => (
+                          {row.map((cell: any, cIdx: number) => (
                             <td
                               key={cIdx}
-                              className="border border-gray-300 px-2 py-1 text-center"
-                              dangerouslySetInnerHTML={{ __html: cell }}
+                              rowSpan={cell.rowspan ?? 1}
+                              colSpan={cell.colspan ?? 1}
+                              className="border border-gray-300 px-2 py-2 align-top"
+                              dangerouslySetInnerHTML={{ __html: cell.html }}
                             />
                           ))}
                         </tr>
