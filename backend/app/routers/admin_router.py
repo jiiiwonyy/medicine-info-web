@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, Form, Header, HTTPException
 from pydantic import BaseModel
 import secrets
 import os
-
+from backend.app.database import get_connection
 from ..crud import insert_xml_detail, update_json_parsed
 
 admin_router = APIRouter(prefix="/admin")
@@ -62,3 +62,20 @@ async def upload_xml(
         "medicine_id": medicine_id,
         "category": category
     }
+
+@admin_router.post("/reparse-all")
+def reparse_all(token: str = Header(None, alias="x-admin-token")):
+    if token not in SESSIONS:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT DISTINCT medicine_id FROM medicine_detail")
+    ids = [row[0] for row in cur.fetchall()]
+    cur.close()
+    conn.close()
+
+    for mid in ids:
+        update_json_parsed(mid)
+
+    return {"status": "done", "count": len(ids)}

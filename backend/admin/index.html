@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
@@ -46,6 +46,7 @@
       </form>
 
       <p id="upload-msg"></p>
+      <button onclick="reparseAll()">전체 재파싱</button>
     </div>
 
     <script>
@@ -70,6 +71,16 @@
           document.getElementById('login-msg').innerText =
             '비밀번호가 틀렸습니다.';
         }
+      }
+
+      async function reparseAll() {
+        const res = await fetch('/admin/reparse-all', {
+          method: 'POST',
+          headers: { 'x-admin-token': token },
+        });
+
+        const data = await res.json();
+        alert('재파싱 완료. 총 ' + data.count + '개 업데이트');
       }
 
       document
