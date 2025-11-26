@@ -75,10 +75,14 @@ def parse_xml_to_json(xml_string: str):
                 # ---------------------------
                 # 1-2) 일반 텍스트 문단
                 # ---------------------------
-                raw_html = p.decode_contents()
+                if p.string:
+                    raw_html = p.string
+                else:
+                    # CDATA가 아닌 일반 문단
+                    raw_html = p.decode_contents()
 
+                # HTML parser로 파싱하여 sup, br, strong 등 유지
                 html_soup = BeautifulSoup(raw_html, "html.parser")
-
                 paragraph_html = str(html_soup).strip()
 
                 items.append({
