@@ -75,13 +75,16 @@ def parse_xml_to_json(xml_string: str):
                 # ---------------------------
                 # 1-2) 일반 텍스트 문단
                 # ---------------------------
-                paragraph_html = p.decode_contents().strip()
+                raw_html = p.decode_contents()
 
-                if paragraph_html:
-                    items.append({
-                        "type": "text",
-                        "html": paragraph_html
-                    })
+                html_soup = BeautifulSoup(raw_html, "html.parser")
+
+                paragraph_html = str(html_soup).strip()
+
+                items.append({
+                    "type": "text",
+                    "html": paragraph_html
+                })
 
             # ----------------------------------------
             # 2) ARTICLE 내부에 직접 TABLE 태그 존재하는 경우도 처리
