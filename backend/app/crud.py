@@ -32,33 +32,49 @@ def parse_xml_to_json(xml_string: str):
 
     sections = soup.find_all("SECTION")
     for sec in sections:
-        for art in sec.find_all("ARTICLE"):
-            title = art.get("title", "")
+        articles = sec.find_all("ARTICLE")
+        for art in articles:
+            title = art.get("title", "") or ""
             items = []
 
-            # -----------------------------
-            # 1) PARAGRAPH 처리
-            # -----------------------------
-            for p in art.find_all("PARAGRAPH", recursive=False):
-                tag_name = p.get("tagName", "").lower()
+            # ----------------------------------------
+            # 1) ARTICLE 하위 모든 PARAGRAPH 처리 (recursive=True)
+            # ----------------------------------------
+            for p in art.find_all("PARAGRAPH"):
+                tag_name = (p.get("tagName", "") or "").strip().lower()
 
-                # ---------- 표 처리 ----------
+                # ---------------------------
+                # 1-1) 표 (tagName="table")
+                # ---------------------------
                 if tag_name == "table":
-                    # CDATA 전체 읽기
-                    cdata_raw = p.string or ""  # <![CDATA[ ... ]]>
+                    cdata_raw = p.string or ""
                     cdata_raw = cdata_raw.strip()
 
                     if cdata_raw:
                         table_soup = BeautifulSoup(cdata_raw, "html.parser")
+
+                        # HTML 안에 <table>이 없으면 직접 wrapping
                         table_tag = table_soup.find("table")
-                        if table_tag:
-                            items.append({
-                                "type": "table",
-                                "html": str(table_tag)
-                            })
+                        if not table_tag:
+                            tbody = table_soup.find("tbody")
+                            if tbody:
+                                # 테이블 생성 후 tbody 삽입
+                                wrapper = BeautifulSoup("<table></table>", "html.parser")
+                                wrapper.table.append(tbody)
+                                table_tag = wrapper.table
+                            else:
+                                # tbody조차 없으면 raw를 그대로 저장(거의 없음)
+                                table_tag = table_soup
+
+                        items.append({
+                            "type": "table",
+                            "html": str(table_tag)
+                        })
                     continue
 
-                # ---------- 일반 텍스트 ----------
+                # ---------------------------
+                # 1-2) 일반 텍스트 문단
+                # ---------------------------
                 text_content = p.get_text(separator=" ", strip=True)
                 if text_content:
                     items.append({
@@ -66,25 +82,24 @@ def parse_xml_to_json(xml_string: str):
                         "text": text_content
                     })
 
-            # -----------------------------
-            # 2) ARTICLE 내부의 독립 TABLE 태그 처리
-            # -----------------------------
-            for table in art.find_all("TABLE", recursive=False):
+            # ----------------------------------------
+            # 2) ARTICLE 내부에 직접 TABLE 태그 존재하는 경우도 처리
+            # ----------------------------------------
+            for table in art.find_all("TABLE"):
                 items.append({
                     "type": "table",
                     "html": str(table)
                 })
 
-            # -----------------------------
-            # 3) ARTICLE 결과 push
-            # -----------------------------
+            # ----------------------------------------
+            # 3) ARTICLE 결과 저장
+            # ----------------------------------------
             result.append({
                 "title": title,
                 "items": items
             })
 
     return result
-
 
 
 
