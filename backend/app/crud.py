@@ -75,11 +75,12 @@ def parse_xml_to_json(xml_string: str):
                 # ---------------------------
                 # 1-2) 일반 텍스트 문단
                 # ---------------------------
-                text_content = p.get_text(separator=" ", strip=True)
-                if text_content:
+                paragraph_html = p.decode_contents().strip()
+
+                if paragraph_html:
                     items.append({
                         "type": "text",
-                        "text": text_content
+                        "html": paragraph_html
                     })
 
             # ----------------------------------------

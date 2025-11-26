@@ -1,12 +1,10 @@
 export default function MedicineDetailRenderer({ data }: { data: any }) {
   if (!data) return null;
 
-  // 문자열일 경우
   if (typeof data === 'string') {
     return <p className="whitespace-pre-line">{data}</p>;
   }
 
-  // JSON 배열일 경우
   if (Array.isArray(data)) {
     return (
       <div className="space-y-6">
@@ -17,16 +15,16 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
             )}
 
             {section.items?.map((item: any, i: number) => {
-              // 일반 텍스트
               if (item.type === 'text') {
                 return (
-                  <p key={i} className="leading-relaxed whitespace-pre-line">
-                    {item.text}
-                  </p>
+                  <p
+                    key={i}
+                    className="leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: item.html }}
+                  />
                 );
               }
 
-              // 표 처리
               if (item.type === 'table') {
                 return (
                   <div
