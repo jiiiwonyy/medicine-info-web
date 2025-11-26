@@ -29,7 +29,7 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
                 return (
                   <div
                     key={i}
-                    className="overflow-x-auto my-4 border rounded-md"
+                    className="overflow-x-auto my-4 table-wrapper rounded-md"
                     dangerouslySetInnerHTML={{ __html: item.html }}
                   />
                 );
