@@ -36,40 +36,55 @@ def parse_xml_to_json(xml_string: str):
             title = art.get("title", "")
             items = []
 
-            # 1) 먼저 PARAGRAPH 모두 처리
+            # -----------------------------
+            # 1) PARAGRAPH 처리
+            # -----------------------------
             for p in art.find_all("PARAGRAPH", recursive=False):
-                tag_name = p.get("tagName")
+                tag_name = p.get("tagName", "").lower()
 
-                # 표가 PARAGRAPH 안에 있는 경우
+                # ---------- 표 처리 ----------
                 if tag_name == "table":
-                    inner_html = p.decode_contents()
-                    table_soup = BeautifulSoup(inner_html, "html.parser")
-                    table_tag = table_soup.find("table")
-                    if table_tag:
-                        items.append({
-                            "type": "html-table",
-                            "html": str(table_tag)
-                        })
+                    # CDATA 전체 읽기
+                    cdata_raw = p.string or ""  # <![CDATA[ ... ]]>
+                    cdata_raw = cdata_raw.strip()
+
+                    if cdata_raw:
+                        table_soup = BeautifulSoup(cdata_raw, "html.parser")
+                        table_tag = table_soup.find("table")
+                        if table_tag:
+                            items.append({
+                                "type": "table",
+                                "html": str(table_tag)
+                            })
                     continue
 
-                # 일반 텍스트
-                text_html = p.decode_contents().strip()
-                if text_html:
-                    items.append(text_html)
+                # ---------- 일반 텍스트 ----------
+                text_content = p.get_text(separator=" ", strip=True)
+                if text_content:
+                    items.append({
+                        "type": "text",
+                        "text": text_content
+                    })
 
-            # 2) PARAGRAPH 밖에 있는 TABLE도 처리 (중요)
+            # -----------------------------
+            # 2) ARTICLE 내부의 독립 TABLE 태그 처리
+            # -----------------------------
             for table in art.find_all("TABLE", recursive=False):
                 items.append({
-                    "type": "html-table",
+                    "type": "table",
                     "html": str(table)
                 })
 
+            # -----------------------------
+            # 3) ARTICLE 결과 push
+            # -----------------------------
             result.append({
                 "title": title,
                 "items": items
             })
 
     return result
+
 
 
 
