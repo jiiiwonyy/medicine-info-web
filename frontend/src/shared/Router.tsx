@@ -14,6 +14,7 @@ import KopsPage from '@/Pages/Kops';
 import NimsPage from '@/Pages/NimsPage';
 import AdverseReliefPage from '@/Pages/AdverseReliefPage';
 import LawInfoPage from '@/Pages/LawInfo';
+import AdminPage from '@/Pages/AdminPage';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -67,6 +68,7 @@ const Router = () => {
         {/* 잘못된 경로 → 홈 리다이렉트 */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
+      <Route path="/admin" element={<AdminPage />} />
     </Routes>
   );
 };
