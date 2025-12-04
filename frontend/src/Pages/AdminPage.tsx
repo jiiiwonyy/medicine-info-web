@@ -19,6 +19,7 @@ export default function AdminPage() {
   const [file, setFile] = useState<File | null>(null);
 
   const [uploadMsg, setUploadMsg] = useState('');
+  const [lastUploadInfo, setLastUploadInfo] = useState<any>(null);
 
   // --------------------------
   // 로그인
@@ -61,6 +62,19 @@ export default function AdminPage() {
   };
 
   // --------------------------
+  // ✨ 업데이트 된 것만 재파싱
+  // --------------------------
+  const reparseUpdated = async () => {
+    const res = await fetch(`${API_BASE}/admin/reparse-updated`, {
+      method: 'POST',
+      headers: { 'x-admin-token': token },
+    });
+
+    const data = await res.json();
+    alert(`업데이트된 XML만 재파싱 완료! 총 ${data.updated}개 업데이트`);
+  };
+
+  // --------------------------
   // XML 업로드
   // --------------------------
   const uploadXML = async (e: React.FormEvent) => {
@@ -79,7 +93,17 @@ export default function AdminPage() {
     });
 
     const data = await res.json();
-    setUploadMsg(data.status === 'success' ? '업로드 완료!' : '오류 발생 ❌');
+
+    if (data.status === 'success') {
+      setUploadMsg('업로드 완료!');
+      setLastUploadInfo({
+        medicineId,
+        category,
+        fileName: file.name, // ✨ 파일 이름 저장
+      });
+    } else {
+      setUploadMsg('오류 발생 ❌');
+    }
   };
 
   return (
@@ -179,14 +203,41 @@ export default function AdminPage() {
             </button>
           </form>
 
-          {uploadMsg && <p className="mt-3 font-medium">{uploadMsg}</p>}
+          {uploadMsg && (
+            <div className="mt-4 p-3 bg-green-50 border rounded">
+              <p className="font-medium">{uploadMsg}</p>
 
-          <button
-            onClick={reparseAll}
-            className="mt-6 bg-gray-700 text-white px-4 py-2 rounded"
-          >
-            전체 재파싱
-          </button>
+              {lastUploadInfo && (
+                <div className="mt-2 text-sm text-gray-800">
+                  <p>
+                    📄 파일명: <b>{lastUploadInfo.fileName}</b>
+                  </p>
+                  <p>
+                    💊 Medicine ID: <b>{lastUploadInfo.medicineId}</b>
+                  </p>
+                  <p>
+                    📚 Category: <b>{lastUploadInfo.category}</b>
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="mt-6 space-y-3">
+            <button
+              onClick={reparseAll}
+              className="bg-gray-700 text-white px-4 py-2 rounded w-full"
+            >
+              전체 재파싱
+            </button>
+
+            <button
+              onClick={reparseUpdated}
+              className="bg-green-700 text-white px-4 py-2 rounded w-full"
+            >
+              ✨ 업데이트 된 것만 재파싱
+            </button>
+          </div>
         </div>
       )}
     </div>

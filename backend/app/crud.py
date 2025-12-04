@@ -12,10 +12,12 @@ def insert_xml_detail(medicine_id: int, category: str, xml_raw: str):
 
     cur.execute(
         """
-        INSERT INTO medicine_detail (medicine_id, category, xml_raw)
-        VALUES (%s, %s, %s)
+        INSERT INTO medicine_detail (medicine_id, category, xml_raw, updated_at)
+        VALUES (%s, %s, %s, NOW())
         ON CONFLICT (medicine_id, category)
-        DO UPDATE SET xml_raw = EXCLUDED.xml_raw;
+        DO UPDATE SET 
+            xml_raw = EXCLUDED.xml_raw,
+            updated_at = NOW();   -- ⭐ 중요!
         """,
         (medicine_id, category, xml_raw)
     )
@@ -23,6 +25,7 @@ def insert_xml_detail(medicine_id: int, category: str, xml_raw: str):
     conn.commit()
     cur.close()
     conn.close()
+
 
 
 def parse_xml_to_json(xml_string: str):
@@ -131,13 +134,16 @@ def update_json_parsed(medicine_id: int):
 
         cur.execute("""
             UPDATE medicine_detail
-            SET json_parsed = %s
+            SET 
+                json_parsed = %s,
+                parsed_at = NOW()
             WHERE medicine_id = %s AND category = %s
         """, (json.dumps(parsed, ensure_ascii=False), medicine_id, cat))
 
     conn.commit()
     cur.close()
     conn.close()
+
 
 
 

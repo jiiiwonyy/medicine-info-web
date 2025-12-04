@@ -47,8 +47,6 @@ async def upload_xml(
 
     xml_text = (await file.read()).decode("utf-8")
     insert_xml_detail(medicine_id, category, xml_text)
-    update_json_parsed(medicine_id)
-
     return {"status": "success"}
 
 
@@ -63,6 +61,31 @@ def reparse_all(request: Request):
     cur.execute("SELECT DISTINCT medicine_id FROM medicine_detail")
     ids = [row["medicine_id"] for row in cur.fetchall()]
 
+    for mid in ids:
+        update_json_parsed(mid)
+
+    cur.close()
+    conn.close()
+
+    return {"ok": True, "updated": len(ids)}
+
+@admin_router.post("/reparse-updated")
+def reparse_updated(request: Request):
+    check_admin(request)
+
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    # updated_at > parsed_at 인 XML만 선택
+    cur.execute("""
+        SELECT DISTINCT medicine_id
+        FROM medicine_detail
+        WHERE parsed_at IS NULL OR updated_at > parsed_at
+    """)
+
+    ids = [row["medicine_id"] for row in cur.fetchall()]
+
+    # 해당 medicine만 JSON 재파싱
     for mid in ids:
         update_json_parsed(mid)
 
