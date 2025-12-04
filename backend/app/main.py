@@ -23,10 +23,6 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-app.include_router(admin_router)
-
-app.mount("/admin-page", StaticFiles(directory="admin"), name="admin-html")
-
 allow_origins = [
     "http://localhost:5173",
     "http://localhost:5174",
@@ -45,6 +41,9 @@ app.add_middleware(
     allow_headers=["content-type", "authorization", "x-admin-Token", "origin"],
 )
 
+app.include_router(admin_router)
+
+app.mount("/admin-page", StaticFiles(directory="admin"), name="admin-html")
 
 router = APIRouter()
 
