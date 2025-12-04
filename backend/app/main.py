@@ -43,8 +43,6 @@ app.add_middleware(
 
 app.include_router(admin_router)
 
-app.mount("/admin-page", StaticFiles(directory="admin"), name="admin-html")
-
 router = APIRouter()
 
 @router.get("/test-db-connection")
