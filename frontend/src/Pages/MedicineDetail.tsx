@@ -110,7 +110,7 @@ export default function Detail() {
       {/* 본문 내용 */}
       <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
         <section id="effect" ref={effectRef} className="scroll-mt-24 pt-4">
-          <h2 className="text-sky-700 font-bold text-lg mb-2">📌 효능·효과</h2>
+          <h2 className="text-sky-700 font-bold text-xl mb-2">📌 효능·효과</h2>
           <MedicineDetailRenderer data={med.efficacy} />
         </section>
 
@@ -119,7 +119,7 @@ export default function Detail() {
           ref={usageRef}
           className="scroll-mt-24 pt-4 border-t border-gray-300"
         >
-          <h2 className="text-sky-700 font-bold text-lg mb-2">📌 용법·용량</h2>
+          <h2 className="text-sky-700 font-bold text-xl mb-2">📌 용법·용량</h2>
           <MedicineDetailRenderer data={med.dosage_and_administration} />
         </section>
 
@@ -128,13 +128,16 @@ export default function Detail() {
           ref={cautionRef}
           className="pt-4 border-t border-gray-300 scroll-mt-24"
         >
-          <h2 className="text-sky-700 font-bold text-lg mb-2">
+          <h2 className="text-sky-700 font-bold text-xl mb-2">
             📌 사용상의 주의사항
           </h2>
           <MedicineDetailRenderer data={med.precautions} />
         </section>
 
         <section id="dur" className="scroll-mt-24">
+          <h2 className="text-sky-700 font-bold text-xl mb-2">
+            📌 의약품안전사용(DUR)
+          </h2>
           {med.dur && <DurSection dur={med.dur} />}
         </section>
       </section>
