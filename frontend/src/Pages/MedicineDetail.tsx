@@ -31,11 +31,12 @@ export default function Detail() {
     enabled: !!numericId,
   });
 
-  const dur = med?.dur ?? {
-    interactions: [],
-    age: [],
-    pregnancy: [],
-  };
+  const dur = med?.dur ?? { interactions: [], age: [], pregnancy: [] };
+
+  const hasDur =
+    (dur.interactions?.length ?? 0) > 0 ||
+    (dur.age?.length ?? 0) > 0 ||
+    (dur.pregnancy?.length ?? 0) > 0;
 
   if (isLoading) return <Spinner />;
   if (isError) return <p className="text-red-600">❗ 오류: {error?.message}</p>;
@@ -135,10 +136,14 @@ export default function Detail() {
         </section>
 
         <section id="dur" className="scroll-mt-24">
-          <h2 className="text-sky-700 font-bold text-xl mb-2">
-            📌 의약품안전사용(DUR)
-          </h2>
-          {med.dur && <DurSection dur={med.dur} />}
+          {hasDur && (
+            <>
+              <h2 className="text-sky-700 font-bold text-xl mb-2">
+                📌 의약품안전사용(DUR)
+              </h2>
+              <DurSection dur={dur} />
+            </>
+          )}
         </section>
       </section>
 

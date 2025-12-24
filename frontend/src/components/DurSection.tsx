@@ -11,12 +11,6 @@ const LABEL_MAP: Record<keyof DurData, string> = {
   pregnancy: '임부금기',
 };
 
-const VARIANT_MAP: Record<keyof DurData, 'info' | 'note' | 'warning'> = {
-  interactions: 'info',
-  age: 'info',
-  pregnancy: 'info',
-};
-
 const HIDDEN_KEYS = ['id'];
 
 const COLUMN_LABELS: Record<string, string> = {
@@ -33,6 +27,42 @@ const COLUMN_LABELS: Record<string, string> = {
 };
 
 type DurRow = DurData[keyof DurData][number];
+
+// ✅ 2번 방식: 섹션별 패널 테마(왼쪽 바 + 배경 + 타이틀색 + callout variant)
+type DurKey = keyof DurData;
+
+const SECTION_THEME: Record<
+  DurKey,
+  {
+    bar: string;
+    bg: string;
+    title: string;
+    calloutVariant: 'info' | 'note' | 'warning';
+    theadBg: string;
+  }
+> = {
+  interactions: {
+    bar: 'bg-sky-500',
+    bg: 'bg-sky-50/40',
+    title: 'text-sky-800',
+    calloutVariant: 'info',
+    theadBg: 'bg-sky-50',
+  },
+  age: {
+    bar: 'bg-amber-500',
+    bg: 'bg-amber-50/40',
+    title: 'text-amber-800',
+    calloutVariant: 'note',
+    theadBg: 'bg-amber-50',
+  },
+  pregnancy: {
+    bar: 'bg-rose-500',
+    bg: 'bg-rose-50/40',
+    title: 'text-rose-800',
+    calloutVariant: 'warning',
+    theadBg: 'bg-rose-50',
+  },
+};
 
 // 각 DUR 섹션 설명 텍스트
 const INFO_MAP: Record<keyof DurData, React.ReactNode> = {
@@ -93,62 +123,75 @@ export default function DurSection({ dur }: Props) {
               ? 'dur-age'
               : 'dur-pregnancy';
 
+        const theme = SECTION_THEME[key];
+
         const columns = Object.keys(list[0] as Record<string, unknown>).filter(
           (k) => !HIDDEN_KEYS.includes(k),
         );
 
         return (
-          <div key={key}>
-            <h2
-              id={sectionId}
-              className="scroll-mt-24 text-sky-700 font-bold text-lg mb-3"
-            >
-              📌 {LABEL_MAP[key]}
-            </h2>
+          // ✅ 섹션 패널 래퍼 + 왼쪽 컬러바
+          <section key={key} className={`rounded-2xl ${theme.bg}`}>
+            <div className="flex gap-4">
+              <div className={`w-1.5 rounded-l-2xl ${theme.bar}`} />
+              <div className="flex-1 py-4 pr-4">
+                <h2
+                  id={sectionId}
+                  className={`scroll-mt-24 font-bold text-lg mb-3 ${theme.title}`}
+                >
+                  {LABEL_MAP[key]}
+                </h2>
 
-            <Callout variant={VARIANT_MAP[key]} title={`${LABEL_MAP[key]}란?`}>
-              {INFO_MAP[key]}
-            </Callout>
+                <Callout
+                  variant={theme.calloutVariant}
+                  title={`${LABEL_MAP[key]}란?`}
+                >
+                  {INFO_MAP[key]}
+                </Callout>
 
-            <div className="overflow-x-auto mt-3">
-              <table className="table-auto w-full text-sm border border-gray-200">
-                <thead className="bg-gray-100">
-                  <tr>
-                    {columns.map((col) => (
-                      <th
-                        key={col}
-                        className="border border-gray-200 px-3 py-2 text-left font-medium"
-                      >
-                        {/* ✅ 한글 라벨로 표시 */}
-                        {COLUMN_LABELS[col] ?? col}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {list.map((item: DurRow, idx) => {
-                    const entries = Object.entries(item).filter(
-                      ([k]) => !HIDDEN_KEYS.includes(k),
-                    );
-                    return (
-                      <tr key={idx} className="odd:bg-white even:bg-gray-50">
-                        {entries.map(([k, value]) =>
-                          columns.includes(k) ? (
-                            <td
-                              key={k}
-                              className="border border-gray-200 px-3 py-2"
-                            >
-                              {String(value ?? '')}
-                            </td>
-                          ) : null,
-                        )}
+                <div className="overflow-x-auto mt-3">
+                  <table className="table-auto w-full text-sm border border-gray-200 bg-white rounded-xl overflow-hidden">
+                    <thead className={theme.theadBg}>
+                      <tr>
+                        {columns.map((col) => (
+                          <th
+                            key={col}
+                            className="border border-gray-200 px-3 py-2 text-left font-medium"
+                          >
+                            {COLUMN_LABELS[col] ?? col}
+                          </th>
+                        ))}
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                      {list.map((item: DurRow, idx) => {
+                        const entries = Object.entries(item).filter(
+                          ([k]) => !HIDDEN_KEYS.includes(k),
+                        );
+                        return (
+                          <tr
+                            key={idx}
+                            className="odd:bg-white even:bg-gray-50"
+                          >
+                            {entries.map(([k, value]) =>
+                              columns.includes(k) ? (
+                                <td
+                                  key={k}
+                                  className="border border-gray-200 px-3 py-2"
+                                >
+                                  {String(value ?? '')}
+                                </td>
+                              ) : null,
+                            )}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
         );
       })}
     </div>
