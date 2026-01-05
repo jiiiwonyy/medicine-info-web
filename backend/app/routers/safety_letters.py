@@ -12,18 +12,18 @@ from app.database import get_connection
 router = APIRouter(prefix="/api/safety-letters", tags=["SafetyLetters"])
 
 
-def _ensure_json_obj(v):
-    # jsonb가 dict/list로 오기도 하고, 문자열로 오기도 해서 안전 처리
+def _ensure_json_obj(v: Any):
     if v is None:
-        return []
+        return None
     if isinstance(v, (list, dict)):
         return v
     if isinstance(v, str):
         try:
             return json.loads(v)
         except Exception:
-            return []
-    return []
+            pass
+    raise ValueError("Invalid files metadata")
+
 
 
 def _get_s3_client():
