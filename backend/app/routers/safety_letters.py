@@ -136,10 +136,13 @@ def download_safety_letter_file(letter_id: int, file_index: int):
         raise HTTPException(status_code=400, detail="Invalid file index")
 
     f = files[file_index] or {}
-    name = f.get("name")
-    key = f.get("key")
+
+    name = f.get("original_name") or f.get("name")
+    key = f.get("s3_key") or f.get("key")
+
     if not name or not key:
         raise HTTPException(status_code=500, detail="Invalid files metadata")
 
     url = _presigned_url(key=key, filename=name)
     return {"url": url}
+
