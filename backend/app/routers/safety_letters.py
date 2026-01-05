@@ -11,9 +11,9 @@ from app.database import get_connection
 
 router = APIRouter(prefix="/api/safety-letters", tags=["SafetyLetters"])
 
+
 def _ensure_json_obj(v):
-    # psycopg2에서 jsonb가 dict/list로 바로 오기도 하고,
-    # 문자열로 오는 경우도 있어서 안전하게 처리
+    # jsonb가 dict/list로 오기도 하고, 문자열로 오기도 해서 안전 처리
     if v is None:
         return []
     if isinstance(v, (list, dict)):
@@ -24,6 +24,41 @@ def _ensure_json_obj(v):
         except Exception:
             return []
     return []
+
+
+def _get_s3_client():
+    region = os.getenv("AWS_REGION", "ap-northeast-2")
+    return boto3.client("s3", region_name=region)
+
+
+def _presigned_url(key: str, filename: str):
+    bucket = os.getenv("S3_BUCKET_NAME")
+    prefix = (os.getenv("S3_SAFETY_PREFIX", "safety-letters") or "").strip("/")
+    expires = int(os.getenv("PRESIGNED_EXPIRES_SECONDS", "300"))
+
+    if not bucket:
+        raise HTTPException(status_code=500, detail="S3_BUCKET_NAME is not set")
+
+    # key가 prefix 없이 저장된 경우도 대비
+    if prefix and not key.startswith(prefix + "/"):
+        key = f"{prefix}/{key.lstrip('/')}"
+    key = key.replace("//", "/")
+
+    s3 = _get_s3_client()
+
+    quoted = urllib.parse.quote(filename)
+    content_disp = f"attachment; filename*=UTF-8''{quoted}"
+
+    return s3.generate_presigned_url(
+        ClientMethod="get_object",
+        Params={
+            "Bucket": bucket,
+            "Key": key,
+            "ResponseContentDisposition": content_disp,
+        },
+        ExpiresIn=expires,
+    )
+
 
 @router.get("")
 def list_safety_letters(
@@ -42,8 +77,9 @@ def list_safety_letters(
         params.extend([f"%{q}%", f"%{q}%"])
 
     # total
-    cur.execute(f"SELECT COUNT(*) FROM safety_letter {where}", params)
-    total = cur.fetchone()[0]
+    cur.execute(f"SELECT COUNT(*) AS cnt FROM safety_letter {where}", params)
+    total_row = cur.fetchone()
+    total = total_row["cnt"] if total_row else 0
 
     # items
     cur.execute(
@@ -60,57 +96,23 @@ def list_safety_letters(
 
     items = []
     for r in rows:
-        # cursor_factory=RealDictCursor가 아니라면 tuple로 옴 -> 인덱스 기반
-        # id,title,summary,department,notice_date,files 순서
-        files = _ensure_json_obj(r[5])
+        files = _ensure_json_obj(r.get("files"))
+        nd = r.get("notice_date")
         items.append(
             {
-                "id": r[0],
-                "title": r[1],
-                "summary": r[2],
-                "department": r[3],
-                "notice_date": r[4].isoformat() if isinstance(r[4], date) and r[4] else None,
+                "id": r.get("id"),
+                "title": r.get("title"),
+                "summary": r.get("summary"),
+                "department": r.get("department"),
+                "notice_date": nd.isoformat() if isinstance(nd, date) and nd else None,
                 "files": files,
             }
         )
 
     cur.close()
     conn.close()
-
     return {"total": total, "items": items}
 
-def _get_s3_client():
-    region = os.getenv("AWS_REGION", "ap-northeast-2")
-    return boto3.client("s3", region_name=region)
-
-def _presigned_url(key: str, filename: str):
-    bucket = os.getenv("S3_BUCKET_NAME")
-    prefix = os.getenv("S3_SAFETY_PREFIX", "safety-letters").strip("/")
-    expires = int(os.getenv("PRESIGNED_EXPIRES_SECONDS", "300"))
-
-    if not bucket:
-        raise HTTPException(status_code=500, detail="S3_BUCKET_NAME is not set")
-
-    # key가 prefix 없이 저장된 경우도 대비해서 보정
-    if not key.startswith(prefix + "/"):
-        key = f"{prefix}/{key.lstrip('/')}"
-    key = key.replace("//", "/")
-
-    s3 = _get_s3_client()
-
-    # 파일명이 한글이면 Content-Disposition에서 깨질 수 있어서 RFC5987 방식으로 넣음
-    quoted = urllib.parse.quote(filename)
-    content_disp = f"attachment; filename*=UTF-8''{quoted}"
-
-    return s3.generate_presigned_url(
-        ClientMethod="get_object",
-        Params={
-            "Bucket": bucket,
-            "Key": key,
-            "ResponseContentDisposition": content_disp,
-        },
-        ExpiresIn=expires,
-    )
 
 @router.get("/{letter_id}/files/{file_index}/download")
 def download_safety_letter_file(letter_id: int, file_index: int):
@@ -126,14 +128,14 @@ def download_safety_letter_file(letter_id: int, file_index: int):
     if not row:
         raise HTTPException(status_code=404, detail="Safety letter not found")
 
-    files = _ensure_json_obj(row[0])
+    files = _ensure_json_obj(row.get("files"))
     if not isinstance(files, list) or len(files) == 0:
         raise HTTPException(status_code=404, detail="No files for this letter")
 
     if file_index < 0 or file_index >= len(files):
         raise HTTPException(status_code=400, detail="Invalid file index")
 
-    f = files[file_index]
+    f = files[file_index] or {}
     name = f.get("name")
     key = f.get("key")
     if not name or not key:
