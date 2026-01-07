@@ -7,8 +7,11 @@ import {
 } from '@/api/safetyLetters';
 import type { SafetyLetter as SafetyLetterType } from '@/types/safetyLetter';
 
+type TabKey = 'info' | 'publish';
+
 export default function SafetyLetter() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabKey>('info');
+
   const [qInput, setQInput] = useState('');
   const [q, setQ] = useState('');
   const [offset, setOffset] = useState(0);
@@ -18,17 +21,19 @@ export default function SafetyLetter() {
     queryKey: ['safetyLetters', { q, offset, limit }],
     queryFn: () => fetchSafetyLetters({ q, offset, limit }),
     placeholderData: (previousData) => previousData,
+    enabled: activeTab === 'publish',
   });
 
   const items = data?.items ?? [];
   const total = data?.total ?? 0;
 
   const rangeText = useMemo(() => {
+    if (activeTab !== 'publish') return '';
     if (total === 0) return '0 / 0';
     const start = offset + 1;
     const end = Math.min(offset + limit, total);
     return `${start} - ${end} / ${total}`;
-  }, [offset, limit, total]);
+  }, [activeTab, offset, limit, total]);
 
   const onSearch = () => {
     setOffset(0);
@@ -42,22 +47,45 @@ export default function SafetyLetter() {
 
   return (
     <PageLayout title="의약품 안전성서한(속보)">
-      {/* ✅ 접기/펼치기 설명 영역 */}
-      <div className="border border-gray-200 rounded-xl p-4 mb-6 bg-white">
-        <button
-          type="button"
-          onClick={() => setIsOpen((v) => !v)}
-          className="w-full flex items-center justify-between"
-        >
-          <div className="font-semibold text-base">
+      <div className="sticky top-0 z-40 -mx-4 px-4 pt-2 pb-4 bg-white/90 backdrop-blur">
+        <div className="w-full rounded-2xl bg-gray-100 p-1 flex gap-1">
+          <button
+            type="button"
+            onClick={() => setActiveTab('info')}
+            className={[
+              'flex-1 rounded-2xl py-2 text-sm font-semibold transition',
+              activeTab === 'info'
+                ? 'bg-white shadow text-gray-900'
+                : 'text-gray-600 hover:text-gray-900',
+            ].join(' ')}
+          >
+            ℹ️ 정보
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('publish')}
+            className={[
+              'flex-1 rounded-2xl py-2 text-sm font-semibold transition',
+              activeTab === 'publish'
+                ? 'bg-white shadow text-gray-900'
+                : 'text-gray-600 hover:text-gray-900',
+            ].join(' ')}
+          >
+            📰 발행 현황
+          </button>
+        </div>
+      </div>
+
+      {/* =========================
+          ℹ️ INFO TAB
+         ========================= */}
+      {activeTab === 'info' && (
+        <div className="border border-gray-200 rounded-xl p-4 bg-white">
+          <div className="font-semibold text-lg">
             의약품 안전성서한(속보)란?
           </div>
-          <span className="text-sm text-gray-500">
-            {isOpen ? '접기 ▲' : '펼치기 ▼'}
-          </span>
-        </button>
 
-        {isOpen && (
           <div className="mt-4">
             <p className="mb-6">
               식품의약품안전처가 의약품 사용 중 발생할 수 있는{' '}
@@ -138,71 +166,78 @@ export default function SafetyLetter() {
               </p>
             </div>
           </div>
-        )}
-      </div>
-
-      {/* ✅ 검색바 */}
-      <div className="flex gap-2 mb-4">
-        <input
-          value={qInput}
-          onChange={(e) => setQInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') onSearch();
-          }}
-          placeholder="제목/요약에서 검색 (예: 리도카인)"
-          className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-200"
-        />
-        <button
-          onClick={onSearch}
-          className="bg-sky-700 text-white font-semibold px-4 py-2 rounded-lg hover:bg-sky-900 transition"
-        >
-          검색
-        </button>
-      </div>
-
-      {/* ✅ 리스트 헤더 */}
-      <div className="flex items-center justify-between mb-3 text-sm text-gray-600">
-        <div>
-          검색어: {q ? <span className="font-semibold">{q}</span> : '-'}
         </div>
-        <div>{rangeText}</div>
-      </div>
+      )}
 
-      {/* ✅ 리스트 */}
-      <div className="space-y-3">
-        {isLoading && <div className="text-gray-600">불러오는 중...</div>}
-        {isError && (
-          <div className="text-red-600">목록을 불러오지 못했습니다.</div>
-        )}
-
-        {!isLoading && items.length === 0 && (
-          <div className="text-gray-500 border border-dashed border-gray-300 rounded-lg p-6 text-center">
-            검색 결과가 없습니다.
+      {/* =========================
+          📰 PUBLISH TAB
+         ========================= */}
+      {activeTab === 'publish' && (
+        <>
+          {/* ✅ 검색바 */}
+          <div className="flex gap-2 mb-4">
+            <input
+              value={qInput}
+              onChange={(e) => setQInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') onSearch();
+              }}
+              placeholder="제목/요약에서 검색 (예: 리도카인)"
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-sky-200"
+            />
+            <button
+              onClick={onSearch}
+              className="bg-sky-700 text-white font-semibold px-4 py-2 rounded-lg hover:bg-sky-900 transition"
+            >
+              검색
+            </button>
           </div>
-        )}
 
-        {items.map((it) => (
-          <SafetyLetterCard key={it.id} item={it} onDownload={onDownload} />
-        ))}
-      </div>
+          {/* ✅ 리스트 헤더 */}
+          <div className="flex items-center justify-between mb-3 text-sm text-gray-600">
+            <div>
+              검색어: {q ? <span className="font-semibold">{q}</span> : '-'}
+            </div>
+            <div>{rangeText}</div>
+          </div>
 
-      {/* ✅ 페이지네이션 */}
-      <div className="flex justify-between mt-6">
-        <button
-          disabled={offset === 0}
-          onClick={() => setOffset((v) => Math.max(0, v - limit))}
-          className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-40"
-        >
-          이전
-        </button>
-        <button
-          disabled={offset + limit >= total}
-          onClick={() => setOffset((v) => v + limit)}
-          className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-40"
-        >
-          다음
-        </button>
-      </div>
+          {/* ✅ 리스트 */}
+          <div className="space-y-3">
+            {isLoading && <div className="text-gray-600">불러오는 중...</div>}
+            {isError && (
+              <div className="text-red-600">목록을 불러오지 못했습니다.</div>
+            )}
+
+            {!isLoading && items.length === 0 && (
+              <div className="text-gray-500 border border-dashed border-gray-300 rounded-lg p-6 text-center">
+                검색 결과가 없습니다.
+              </div>
+            )}
+
+            {items.map((it) => (
+              <SafetyLetterCard key={it.id} item={it} onDownload={onDownload} />
+            ))}
+          </div>
+
+          {/* ✅ 페이지네이션 */}
+          <div className="flex justify-between mt-6">
+            <button
+              disabled={offset === 0}
+              onClick={() => setOffset((v) => Math.max(0, v - limit))}
+              className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-40"
+            >
+              이전
+            </button>
+            <button
+              disabled={offset + limit >= total}
+              onClick={() => setOffset((v) => v + limit)}
+              className="px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-40"
+            >
+              다음
+            </button>
+          </div>
+        </>
+      )}
     </PageLayout>
   );
 }
