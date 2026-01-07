@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from .routers.admin_router import admin_router
 from dotenv import load_dotenv
 from .routers.safety_letters import router as safety_letters_router
+from .routers.signal_info import router as signal_infos_router
 
 load_dotenv()
 
@@ -45,6 +46,7 @@ app.add_middleware(
 app.include_router(admin_router)
 
 app.include_router(safety_letters_router)
+app.include_router(signal_infos_router)
 
 router = APIRouter()
 
