@@ -3,6 +3,8 @@
 
 html {
   font-family: 'Pretendard', sans-serif;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
 }
 
 .table-wrapper table {
