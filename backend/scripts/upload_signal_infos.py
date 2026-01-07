@@ -2,6 +2,8 @@ import os
 import re
 import uuid
 import boto3
+import unicodedata
+
 from app.database import get_connection
 
 AWS_REGION = os.getenv("AWS_REGION", "ap-northeast-2")
@@ -16,11 +18,13 @@ if not LOCAL_DIR or not os.path.isdir(LOCAL_DIR):
 
 s3 = boto3.client("s3", region_name=AWS_REGION)
 
+
 def normalize_title(filename: str) -> str:
     name = re.sub(r"\.pdf$", "", filename, flags=re.IGNORECASE)
     name = name.replace("_", " ").replace("-", " ")
     name = re.sub(r"\s+", " ", name).strip()
     return name or "실마리정보"
+
 
 def main():
     pdfs = sorted([f for f in os.listdir(LOCAL_DIR) if f.lower().endswith(".pdf")])
@@ -32,9 +36,13 @@ def main():
     cur = conn.cursor()
 
     for raw in pdfs:
-        title = normalize_title(raw)
+        # ✅ 파일명/제목 먼저 만들기
+        raw_norm = unicodedata.normalize("NFC", raw)
+        title = normalize_title(raw_norm)
+        title_norm = unicodedata.normalize("NFC", title)
+
         key = f"{S3_PREFIX}/{uuid.uuid4()}.pdf".replace("//", "/")
-        path = os.path.join(LOCAL_DIR, raw)
+        path = os.path.join(LOCAL_DIR, raw)  # 실제 파일 경로는 원래 파일명으로 접근
 
         # S3 업로드
         s3.upload_file(
@@ -51,7 +59,7 @@ def main():
             VALUES (%s, %s, %s)
             ON CONFLICT (pdf_key) DO NOTHING
             """,
-            (title, key, raw),
+            (title_norm, key, raw_norm),
         )
 
         print(f"[OK] {raw} -> s3://{S3_BUCKET}/{key}")
@@ -60,6 +68,7 @@ def main():
     cur.close()
     conn.close()
     print("DONE")
+
 
 if __name__ == "__main__":
     main()
