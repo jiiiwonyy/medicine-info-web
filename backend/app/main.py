@@ -48,6 +48,7 @@ app.include_router(admin_router)
 
 app.include_router(safety_letters_router)
 app.include_router(signal_infos_router)
+app.include_router(faers_router)
 
 router = APIRouter()
 
