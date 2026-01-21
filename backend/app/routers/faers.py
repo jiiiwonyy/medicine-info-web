@@ -6,6 +6,8 @@ from ..database import get_connection
 
 router = APIRouter(prefix="/api/faers", tags=["FAERS"])
 
+REAC_ISR_COL = 'r."isr"' 
+
 
 def _validate_top(top: int) -> int:
     return max(1, min(10, top))
@@ -29,7 +31,7 @@ def build_role_filter_sql(role_filter: str) -> str:
     if role_filter == "dn":
         return "AND d2.\"ROLE_COD\" = 'DN'"
     if role_filter == "raw_all":
-        return ""  # DN 포함 전부
+        return ""
     return "AND d2.\"ROLE_COD\" IN ('PS','SS','I','C')"
 
 
@@ -47,77 +49,99 @@ def build_year_filter_sql(params: Dict[str, Any], year_from: Optional[int], year
         params["year_to"] = year_to
     return sql
 
-REAC_ISR_COL = 'r."isr"'
+
+def resolve_drug_norm(conn, drug: str) -> str:
+    """
+    public.faers_drug_dict에서 선택된 drug 표시값을 norm으로 변환.
+    """
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    try:
+        sql = """
+          SELECT drugname_norm
+          FROM public.faers_drug_dict
+          WHERE lower(trim(drugname_display)) = lower(trim(%(drug)s))
+          LIMIT 1;
+        """
+        cur.execute(sql, {"drug": drug})
+        row = cur.fetchone()
+        if not row:
+            # 혹시 display가 그대로 없으면 사용자가 넘긴 값을 norm으로 가정
+            return drug.strip().lower()
+        return row["drugname_norm"]
+    finally:
+        cur.close()
+
 
 @router.get("/summary")
-def faers_summary(
-    q: str = Query(..., min_length=1),
+def faers_summary_selected(
+    drug: str = Query(..., min_length=1, description="모달에서 선택한 약물명(표시값)"),
     role_filter: str = Query("all", description="all|suspect|ps|ss|c|i|dn|raw_all"),
     year_from: Optional[int] = Query(None, ge=1900, le=2100),
     year_to: Optional[int] = Query(None, ge=1900, le=2100),
 ):
-    params: Dict[str, Any] = {"q": q}
-    role_sql = build_role_filter_sql(role_filter)
-    year_sql = build_year_filter_sql(params, year_from, year_to)
-
-    # 8자리 날짜만 허용 (to_date 안전)
-    date_guard = """
-      AND d."FDA_DT" IS NOT NULL
-      AND d."FDA_DT"::text ~ '^[0-9]{8}$'
-    """
-
-    isr_count_sql = f"""
-        SELECT COUNT(DISTINCT d2."ISR") AS matched_isr_count
-        FROM "FAERS"."SD_FAERS_DRUG" d2
-        WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
-        {role_sql}
-    """
-
-    yearly_total_sql = f"""
-        WITH matched_isr AS (
-          SELECT DISTINCT d2."ISR"
-          FROM "FAERS"."SD_FAERS_DRUG" d2
-          WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
-          {role_sql}
-        )
-        SELECT
-          EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
-          COUNT(*) AS count
-        FROM matched_isr m
-        JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-        JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
-        WHERE 1=1
-          {date_guard}
-          {year_sql}
-        GROUP BY year
-        ORDER BY year;
-    """
-
-    top_pt_sql = f"""
-        WITH matched_isr AS (
-          SELECT DISTINCT d2."ISR"
-          FROM "FAERS"."SD_FAERS_DRUG" d2
-          WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
-          {role_sql}
-        )
-        SELECT
-          r."pt" AS pt,
-          COUNT(*) AS total
-        FROM matched_isr m
-        JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-        JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
-        WHERE 1=1
-          {date_guard}
-          {year_sql}
-        GROUP BY r."pt"
-        ORDER BY total DESC
-        LIMIT 10;
-    """
-
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
+        drug_norm = resolve_drug_norm(conn, drug)
+
+        params: Dict[str, Any] = {"drug_norm": drug_norm}
+        role_sql = build_role_filter_sql(role_filter)
+        year_sql = build_year_filter_sql(params, year_from, year_to)
+
+        date_guard = """
+          AND d."FDA_DT" IS NOT NULL
+          AND d."FDA_DT"::text ~ '^[0-9]{8}$'
+        """
+
+        isr_count_sql = f"""
+            SELECT COUNT(DISTINCT d2."ISR") AS matched_isr_count
+            FROM "FAERS"."SD_FAERS_DRUG" d2
+            WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+            {role_sql}
+        """
+
+        yearly_total_sql = f"""
+            WITH matched_isr AS (
+              SELECT DISTINCT d2."ISR"
+              FROM "FAERS"."SD_FAERS_DRUG" d2
+              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              {role_sql}
+            )
+            SELECT
+              EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
+              COUNT(*) AS count
+            FROM matched_isr m
+            JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+            JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
+            WHERE 1=1
+              {date_guard}
+              {year_sql}
+            GROUP BY year
+            ORDER BY year;
+        """
+
+        top_pt_sql = f"""
+            WITH matched_isr AS (
+              SELECT DISTINCT d2."ISR"
+              FROM "FAERS"."SD_FAERS_DRUG" d2
+              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              {role_sql}
+            )
+            SELECT
+              r."pt" AS pt,
+              COUNT(*) AS total
+            FROM matched_isr m
+            JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+            JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
+            WHERE 1=1
+              {date_guard}
+              {year_sql}
+            GROUP BY r."pt"
+            ORDER BY total DESC
+            LIMIT 10;
+        """
+
         cur.execute(isr_count_sql, params)
         isr_count = cur.fetchone()["matched_isr_count"]
 
@@ -128,7 +152,8 @@ def faers_summary(
         top_pts = cur.fetchall()
 
         return {
-            "query": q,
+            "drug": drug,
+            "drug_norm": drug_norm,
             "role_filter": role_filter,
             "year_from": year_from,
             "year_to": year_to,
@@ -138,68 +163,70 @@ def faers_summary(
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"FAERS summary failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"FAERS summary(selected) failed: {str(e)}")
     finally:
         cur.close()
         conn.close()
 
 
 @router.get("/timeseries")
-def faers_timeseries(
-    q: str = Query(..., min_length=1),
+def faers_timeseries_selected(
+    drug: str = Query(..., min_length=1),
     top: int = Query(5, ge=1, le=10),
-    role_filter: str = Query("all", description="all|suspect|ps|ss|c|i|dn|raw_all"),
+    role_filter: str = Query("all"),
     year_from: Optional[int] = Query(None, ge=1900, le=2100),
     year_to: Optional[int] = Query(None, ge=1900, le=2100),
 ):
     top = _validate_top(top)
 
-    params: Dict[str, Any] = {"q": q, "top": top}
-    role_sql = build_role_filter_sql(role_filter)
-    year_sql = build_year_filter_sql(params, year_from, year_to)
-
-    date_guard = """
-      AND d."FDA_DT" IS NOT NULL
-      AND d."FDA_DT"::text ~ '^[0-9]{8}$'
-    """
-
-    sql = f"""
-        WITH matched_isr AS (
-          SELECT DISTINCT d2."ISR"
-          FROM "FAERS"."SD_FAERS_DRUG" d2
-          WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
-          {role_sql}
-        ),
-        base AS (
-          SELECT
-            EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
-            r."pt" AS pt,
-            COUNT(*) AS cnt
-          FROM matched_isr m
-          JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-          JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
-          WHERE 1=1
-            {date_guard}
-            {year_sql}
-          GROUP BY year, r."pt"
-        ),
-        top_pt AS (
-          SELECT pt, SUM(cnt) AS total
-          FROM base
-          GROUP BY pt
-          ORDER BY total DESC
-          LIMIT %(top)s
-        )
-        SELECT b.year, b.pt, b.cnt
-        FROM base b
-        JOIN top_pt t ON t.pt = b.pt
-        ORDER BY b.year, t.total DESC, b.cnt DESC;
-    """
-
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
+        drug_norm = resolve_drug_norm(conn, drug)
+
+        params: Dict[str, Any] = {"drug_norm": drug_norm, "top": top}
+        role_sql = build_role_filter_sql(role_filter)
+        year_sql = build_year_filter_sql(params, year_from, year_to)
+
+        date_guard = """
+          AND d."FDA_DT" IS NOT NULL
+          AND d."FDA_DT"::text ~ '^[0-9]{8}$'
+        """
+
+        sql = f"""
+            WITH matched_isr AS (
+              SELECT DISTINCT d2."ISR"
+              FROM "FAERS"."SD_FAERS_DRUG" d2
+              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              {role_sql}
+            ),
+            base AS (
+              SELECT
+                EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
+                r."pt" AS pt,
+                COUNT(*) AS cnt
+              FROM matched_isr m
+              JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+              JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
+              WHERE 1=1
+                {date_guard}
+                {year_sql}
+              GROUP BY year, r."pt"
+            ),
+            top_pt AS (
+              SELECT pt, SUM(cnt) AS total
+              FROM base
+              GROUP BY pt
+              ORDER BY total DESC
+              LIMIT %(top)s
+            )
+            SELECT b.year, b.pt, b.cnt
+            FROM base b
+            JOIN top_pt t ON t.pt = b.pt
+            ORDER BY b.year, t.total DESC, b.cnt DESC;
+        """
+
         cur.execute(sql, params)
         rows = cur.fetchall()
 
@@ -217,21 +244,22 @@ def faers_timeseries(
             series.append({"pt": pt, "data": data})
 
         return {
-            "query": q,
+            "drug": drug,
+            "drug_norm": drug_norm,
             "top": top,
             "role_filter": role_filter,
             "year_from": year_from,
             "year_to": year_to,
             "years": years,
             "series": series,
-            "rows": [{"year": int(r["year"]), "pt": r["pt"], "count": int(r["cnt"])} for r in rows],
         }
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"FAERS timeseries failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"FAERS timeseries(selected) failed: {str(e)}")
     finally:
         cur.close()
         conn.close()
+
 
 @router.get("/suggest")
 def faers_suggest(
