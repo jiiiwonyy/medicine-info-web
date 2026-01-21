@@ -4,7 +4,7 @@ from typing import Optional, List, Dict, Any
 
 from ..database import get_connection
 
-router = APIRouter(prefix="/faers", tags=["FAERS"])
+router = APIRouter(prefix="/api/faers", tags=["FAERS"])
 
 
 def _validate_top(top: int) -> int:
