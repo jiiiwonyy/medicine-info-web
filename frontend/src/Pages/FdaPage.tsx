@@ -155,7 +155,7 @@ export default function FdaPage() {
 
       {error && (
         <div className="text-sm text-red-600">
-          데이터를 불러오지 못했어요. (검색어/서버 상태를 확인해줘)
+          데이터를 불러오는데 실패했습니다.
         </div>
       )}
 
