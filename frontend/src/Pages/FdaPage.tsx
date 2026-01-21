@@ -10,6 +10,7 @@ import YearlyTotalChart from '../components/fda/YearlyTotalChart';
 import TopPtTimeseriesChart from '../components/fda/TopPtTimeseriesChart';
 import FdaSuggestModal from '../components/fda/FdaSuggestModal';
 import { useEffect } from 'react';
+import Spinner from '@/components/Spinner';
 
 export default function FdaPage() {
   const [q, setQ] = useState('');
@@ -150,7 +151,7 @@ export default function FdaPage() {
         </div>
       )}
 
-      {loading && <div className="text-sm text-gray-600">불러오는 중…</div>}
+      {loading && <Spinner/>}
 
       {error && (
         <div className="text-sm text-red-600">
