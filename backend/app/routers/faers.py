@@ -12,17 +12,10 @@ def _validate_top(top: int) -> int:
 
 
 def build_role_filter_sql(role_filter: str) -> str:
-    """
-    role_filter:
-      - all: PS,SS,I,C (DN 제외)
-      - suspect: PS,SS
-      - ps / ss / c / i / dn
-      - raw_all: 전부 포함 (DN 포함)
-    """
     role_filter = (role_filter or "all").lower()
 
     if role_filter == "all":
-        return "AND d2.\"ROLE_COD\" IN ('PS','SS','I','C')"
+        return "AND d2.\"ROLE_COD\" IN ('PS','SS','I','C')"  # DN 제외
     if role_filter == "suspect":
         return "AND d2.\"ROLE_COD\" IN ('PS','SS')"
     if role_filter == "ps":
@@ -36,42 +29,30 @@ def build_role_filter_sql(role_filter: str) -> str:
     if role_filter == "dn":
         return "AND d2.\"ROLE_COD\" = 'DN'"
     if role_filter == "raw_all":
-        return ""
+        return ""  # DN 포함 전부
     return "AND d2.\"ROLE_COD\" IN ('PS','SS','I','C')"
 
 
-def build_year_filter_sql(
-    params: Dict[str, Any],
-    year_from: Optional[int],
-    year_to: Optional[int],
-) -> str:
+def build_year_filter_sql(params: Dict[str, Any], year_from: Optional[int], year_to: Optional[int]) -> str:
     sql = ""
     if year_from is not None:
         sql += """
-          AND EXTRACT(
-            YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD')
-          )::int >= %(year_from)s
+          AND EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int >= %(year_from)s
         """
         params["year_from"] = year_from
-
     if year_to is not None:
         sql += """
-          AND EXTRACT(
-            YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD')
-          )::int <= %(year_to)s
+          AND EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int <= %(year_to)s
         """
         params["year_to"] = year_to
-
     return sql
 
+REAC_ISR_COL = 'r."isr"'
 
 @router.get("/summary")
 def faers_summary(
     q: str = Query(..., min_length=1),
-    role_filter: str = Query(
-        "all",
-        description="all|suspect|ps|ss|c|i|dn|raw_all"
-    ),
+    role_filter: str = Query("all", description="all|suspect|ps|ss|c|i|dn|raw_all"),
     year_from: Optional[int] = Query(None, ge=1900, le=2100),
     year_to: Optional[int] = Query(None, ge=1900, le=2100),
 ):
@@ -79,7 +60,7 @@ def faers_summary(
     role_sql = build_role_filter_sql(role_filter)
     year_sql = build_year_filter_sql(params, year_from, year_to)
 
-    # FDA_DT 안전 가드 (8자리 숫자만)
+    # 8자리 날짜만 허용 (to_date 안전)
     date_guard = """
       AND d."FDA_DT" IS NOT NULL
       AND d."FDA_DT"::text ~ '^[0-9]{8}$'
@@ -87,7 +68,7 @@ def faers_summary(
 
     isr_count_sql = f"""
         SELECT COUNT(DISTINCT d2."ISR") AS matched_isr_count
-        FROM "SD_FAERS_DRUG" d2
+        FROM "FAERS"."SD_FAERS_DRUG" d2
         WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
         {role_sql}
     """
@@ -95,18 +76,16 @@ def faers_summary(
     yearly_total_sql = f"""
         WITH matched_isr AS (
           SELECT DISTINCT d2."ISR"
-          FROM "SD_FAERS_DRUG" d2
+          FROM "FAERS"."SD_FAERS_DRUG" d2
           WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
           {role_sql}
         )
         SELECT
-          EXTRACT(
-            YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD')
-          )::int AS year,
+          EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
           COUNT(*) AS count
         FROM matched_isr m
-        JOIN "SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-        JOIN "SD_FAERS_REAC" r ON r."isr" = m."ISR"
+        JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+        JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
         WHERE 1=1
           {date_guard}
           {year_sql}
@@ -117,7 +96,7 @@ def faers_summary(
     top_pt_sql = f"""
         WITH matched_isr AS (
           SELECT DISTINCT d2."ISR"
-          FROM "SD_FAERS_DRUG" d2
+          FROM "FAERS"."SD_FAERS_DRUG" d2
           WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
           {role_sql}
         )
@@ -125,8 +104,8 @@ def faers_summary(
           r."pt" AS pt,
           COUNT(*) AS total
         FROM matched_isr m
-        JOIN "SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-        JOIN "SD_FAERS_REAC" r ON r."isr" = m."ISR"
+        JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+        JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
         WHERE 1=1
           {date_guard}
           {year_sql}
@@ -154,21 +133,12 @@ def faers_summary(
             "year_from": year_from,
             "year_to": year_to,
             "matched_isr_count": int(isr_count),
-            "yearly_total": [
-                {"year": int(r["year"]), "count": int(r["count"])}
-                for r in yearly_total
-            ],
-            "top_pts": [
-                {"pt": r["pt"], "total": int(r["total"])}
-                for r in top_pts
-            ],
+            "yearly_total": [{"year": int(r["year"]), "count": int(r["count"])} for r in yearly_total],
+            "top_pts": [{"pt": r["pt"], "total": int(r["total"])} for r in top_pts],
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"FAERS summary failed: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"FAERS summary failed: {str(e)}")
     finally:
         cur.close()
         conn.close()
@@ -178,7 +148,7 @@ def faers_summary(
 def faers_timeseries(
     q: str = Query(..., min_length=1),
     top: int = Query(5, ge=1, le=10),
-    role_filter: str = Query("all"),
+    role_filter: str = Query("all", description="all|suspect|ps|ss|c|i|dn|raw_all"),
     year_from: Optional[int] = Query(None, ge=1900, le=2100),
     year_to: Optional[int] = Query(None, ge=1900, le=2100),
 ):
@@ -196,20 +166,18 @@ def faers_timeseries(
     sql = f"""
         WITH matched_isr AS (
           SELECT DISTINCT d2."ISR"
-          FROM "SD_FAERS_DRUG" d2
+          FROM "FAERS"."SD_FAERS_DRUG" d2
           WHERE d2."DRUGNAME" ILIKE '%%' || %(q)s || '%%'
           {role_sql}
         ),
         base AS (
           SELECT
-            EXTRACT(
-              YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD')
-            )::int AS year,
+            EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
             r."pt" AS pt,
             COUNT(*) AS cnt
           FROM matched_isr m
-          JOIN "SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-          JOIN "SD_FAERS_REAC" r ON r."isr" = m."ISR"
+          JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+          JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
           WHERE 1=1
             {date_guard}
             {year_sql}
@@ -236,7 +204,7 @@ def faers_timeseries(
         rows = cur.fetchall()
 
         years = sorted({int(r["year"]) for r in rows})
-        pts = []
+        pts: List[str] = []
         for r in rows:
             if r["pt"] not in pts:
                 pts.append(r["pt"])
@@ -256,17 +224,11 @@ def faers_timeseries(
             "year_to": year_to,
             "years": years,
             "series": series,
-            "rows": [
-                {"year": int(r["year"]), "pt": r["pt"], "count": int(r["cnt"])}
-                for r in rows
-            ],
+            "rows": [{"year": int(r["year"]), "pt": r["pt"], "count": int(r["cnt"])} for r in rows],
         }
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"FAERS timeseries failed: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"FAERS timeseries failed: {str(e)}")
     finally:
         cur.close()
         conn.close()
