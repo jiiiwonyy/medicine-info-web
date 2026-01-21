@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import PageLayout from '@/components/PageLayout';
-import { useFaersSummaryQuery, useFaersTimeseriesQuery } from '@/hooks/queries/useFaers';
+import { useFaersSummaryQuery, useFaersTimeseriesQuery } from '@/hooks/useFears';
 import FdaSearchBar from '../components/fda/FdaSearchBar';
 import YearRangeFilter from '../components/fda/YearRangeFilter';
 import TopPtList from '../components/fda/TopPtList';
