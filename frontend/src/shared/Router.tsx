@@ -15,6 +15,7 @@ import NimsPage from '@/Pages/NimsPage';
 import AdverseReliefPage from '@/Pages/AdverseReliefPage';
 import LawInfoPage from '@/Pages/LawInfo';
 import AdminPage from '@/Pages/AdminPage';
+import FdaPage from '@/Pages/FdaPage';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -47,7 +48,7 @@ const Router = () => {
         <Route path="/domestic" element={<AdverseEventDomestic />} />
         <Route
           path="/fda"
-          element={<PlaceholderPage title="미국 FDA 부작용 보고건수" />}
+          element={<FdaPage />}
         />
         <Route
           path="/who"
