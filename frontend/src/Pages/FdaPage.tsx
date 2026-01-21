@@ -1,35 +1,72 @@
 import { useMemo, useState } from 'react';
 import PageLayout from '@/components/PageLayout';
-import { useFaersSummaryQuery, useFaersTimeseriesQuery } from '@/hooks/useFears';
+import { useFaersSummaryQuery, useFaersTimeseriesQuery } from '@/hooks/useFaers';
+import { useFaersSuggestQuery } from '@/api/fda';
+import { useDebounce } from '@/hooks/useDebounce';
 import FdaSearchBar from '../components/fda/FdaSearchBar';
 import YearRangeFilter from '../components/fda/YearRangeFilter';
 import TopPtList from '../components/fda/TopPtList';
 import YearlyTotalChart from '../components/fda/YearlyTotalChart';
 import TopPtTimeseriesChart from '../components/fda/TopPtTimeseriesChart';
+import FdaSuggestModal from '../components/fda/FdaSuggestModal';
+import { useEffect } from 'react';
 
 export default function FdaPage() {
   const [q, setQ] = useState('');
-  const [submittedQ, setSubmittedQ] = useState('');
+  const debouncedQ = useDebounce(q, 300);
+
+  const [selectedDrug, setSelectedDrug] = useState<string>('');
   const [top, setTop] = useState(5);
   const [roleOnlySuspect, setRoleOnlySuspect] = useState(true);
   const [yearFrom, setYearFrom] = useState<number | undefined>(undefined);
   const [yearTo, setYearTo] = useState<number | undefined>(undefined);
 
-  const canSearch = submittedQ.trim().length > 0;
+  const roleFilter = roleOnlySuspect ? 'suspect' : 'all';
+
+  const canSuggest = debouncedQ.trim().length >= 2;
+  const [suggestOpen, setSuggestOpen] = useState(false);
+
+  const suggestQuery = useFaersSuggestQuery({
+    q: debouncedQ.trim(),
+    enabled: canSuggest,
+    limit: 30,
+  });
+
+  // 입력이 바뀌면(선택값과 달라지면) 다시 선택 해제
+  useEffect(() => {
+    if (!q.trim()) {
+      setSelectedDrug('');
+      setSuggestOpen(false);
+      return;
+    }
+    if (selectedDrug && q.trim().toLowerCase() !== selectedDrug.toLowerCase()) {
+      setSelectedDrug('');
+    }
+  }, [q]);
+
+  // 디바운스된 값이 있고 선택이 아직 없으면 모달 자동 오픈(원치 않으면 '검색' 버튼에서만 열도록 변경 가능)
+  useEffect(() => {
+    if (canSuggest && !selectedDrug) {
+      setSuggestOpen(true);
+    }
+  }, [canSuggest, selectedDrug]);
+
+  const canSearch = selectedDrug.trim().length > 0;
 
   const summaryQuery = useFaersSummaryQuery({
-    q: submittedQ,
+    drug: selectedDrug,
     enabled: canSearch,
-    role_only_suspect: roleOnlySuspect,
+    role_filter: roleFilter,
     year_from: yearFrom,
     year_to: yearTo,
   });
 
+
   const tsQuery = useFaersTimeseriesQuery({
-    q: submittedQ,
+    drug: selectedDrug,
     enabled: canSearch,
     top,
-    role_only_suspect: roleOnlySuspect,
+    role_filter: roleFilter,
     year_from: yearFrom,
     year_to: yearTo,
   });
@@ -49,8 +86,22 @@ export default function FdaPage() {
         <FdaSearchBar
           value={q}
           onChange={setQ}
-          onSubmit={() => setSubmittedQ(q)}
-          placeholder="약물명을 입력하세요 (예: bleomycin)"
+          onSubmit={() => setSuggestOpen(true)} // 검색 버튼은 '후보 보기'로
+          placeholder="약물명을 입력하세요 (예: bleo)"
+        />
+
+        <FdaSuggestModal
+          open={suggestOpen}
+          query={debouncedQ.trim()}
+          items={suggestQuery.data?.items ?? []}
+          loading={suggestQuery.isLoading}
+          error={!!suggestQuery.error}
+          onClose={() => setSuggestOpen(false)}
+          onSelect={(drug) => {
+            setSelectedDrug(drug);
+            setQ(drug); // 입력창도 선택값으로 고정
+            setSuggestOpen(false);
+          }}
         />
 
         <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
@@ -93,15 +144,13 @@ export default function FdaPage() {
       </div>
 
       {/* 상태 */}
-      {!submittedQ && (
+      {!selectedDrug && (
         <div className="text-sm text-gray-600">
-          약물명을 검색하면 연도별 FDA(FAERS) 부작용 보고 건수와 주요 PT(Preferred Term) 추이를 볼 수 있어요.
+          약물명을 입력하면 후보를 선택할 수 있어요. 선택 후 연도별 보고 건수와 주요 PT 추이를 볼 수 있어요.
         </div>
       )}
 
-      {loading && (
-        <div className="text-sm text-gray-600">불러오는 중…</div>
-      )}
+      {loading && <div className="text-sm text-gray-600">불러오는 중…</div>}
 
       {error && (
         <div className="text-sm text-red-600">
@@ -112,15 +161,16 @@ export default function FdaPage() {
       {/* 결과 */}
       {summary && timeseries && (
         <div className="space-y-8">
-          {/* 요약 카드 */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="rounded-xl border p-4">
-              <div className="text-xs text-gray-500">검색어</div>
-              <div className="text-lg font-semibold">{summary.query}</div>
+              <div className="text-xs text-gray-500">선택 약물</div>
+              <div className="text-lg font-semibold">{summary.drug}</div>
             </div>
             <div className="rounded-xl border p-4">
               <div className="text-xs text-gray-500">매칭 ISR 수</div>
-              <div className="text-lg font-semibold">{summary.matched_isr_count.toLocaleString()}</div>
+              <div className="text-lg font-semibold">
+                {summary.matched_isr_count.toLocaleString()}
+              </div>
             </div>
             <div className="rounded-xl border p-4">
               <div className="text-xs text-gray-500">Top PT 개수</div>
@@ -128,18 +178,14 @@ export default function FdaPage() {
             </div>
           </div>
 
-          {/* 연도별 총 보고건수 */}
           <div className="rounded-xl border p-4">
             <div className="flex items-center justify-between mb-3">
               <h2 className="font-semibold">연도별 총 보고 건수</h2>
-              <div className="text-xs text-gray-500">
-                기준: DEMO.FDA_DT
-              </div>
+              <div className="text-xs text-gray-500">기준: DEMO.FDA_DT</div>
             </div>
             <YearlyTotalChart data={summary.yearly_total} />
           </div>
 
-          {/* Top PT 리스트 + 차트 */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="rounded-xl border p-4">
               <h2 className="font-semibold mb-3">Top PT</h2>
@@ -152,7 +198,6 @@ export default function FdaPage() {
             </div>
           </div>
 
-          {/* 안내/주의 */}
           <div className="rounded-xl border p-4 text-sm text-gray-700 leading-relaxed">
             <div className="font-semibold mb-2">해석 시 주의</div>
             <ul className="list-disc pl-5 space-y-1">
@@ -166,3 +211,4 @@ export default function FdaPage() {
     </PageLayout>
   );
 }
+
