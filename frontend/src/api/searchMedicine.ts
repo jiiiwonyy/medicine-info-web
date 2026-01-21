@@ -1,10 +1,5 @@
-import axios from 'axios';
+import api from '@/api/axiosInstance';
 import type { Medicine } from '../types/medicine';
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  timeout: 5000,
-});
 
 export interface SearchResponse {
   items: Medicine[];
@@ -25,11 +20,11 @@ export const searchMedicines = async (
     params.q = q.trim();
   }
 
-  const res = await api.get<SearchResponse>('/api/medicines', { params });
+  const res = await api.get<SearchResponse>('/medicines', { params });
   return res.data;
 };
 
 export async function getMedicineById(id: number): Promise<Medicine> {
-  const res = await api.get<Medicine>(`/api/medicines/${id}`);
+  const res = await api.get<Medicine>(`/medicines/${id}`);
   return res.data;
 }
