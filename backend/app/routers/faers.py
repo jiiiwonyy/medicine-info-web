@@ -232,3 +232,44 @@ def faers_timeseries(
     finally:
         cur.close()
         conn.close()
+
+@router.get("/suggest")
+def faers_suggest(
+    q: str = Query(..., min_length=1, max_length=50, description="약물명 prefix (예: bleo)"),
+    limit: int = Query(30, ge=1, le=100),
+):
+    """
+    public.faers_drug_dict에서 prefix 기반 후보 리스트 반환.
+    - fast: drugname_norm LIKE 'q%'
+    """
+    q_norm = q.strip().lower()
+    if not q_norm:
+        return {"query": q, "items": []}
+
+    sql = """
+        SELECT drugname_display
+        FROM public.faers_drug_dict
+        WHERE drugname_norm LIKE %(prefix)s
+        ORDER BY drugname_norm
+        LIMIT %(limit)s;
+    """
+
+    params: Dict[str, Any] = {
+        "prefix": q_norm + "%",
+        "limit": limit,
+    }
+
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    try:
+        cur.execute(sql, params)
+        rows = cur.fetchall()
+        items: List[str] = [r["drugname_display"] for r in rows]
+        return {"query": q, "items": items}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"FAERS suggest failed: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
