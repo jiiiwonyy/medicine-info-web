@@ -13,6 +13,7 @@ from .routers.admin_router import admin_router
 from dotenv import load_dotenv
 from .routers.safety_letters import router as safety_letters_router
 from .routers.signal_info import router as signal_infos_router
+from .routers.faers import router as faers_router
 
 load_dotenv()
 
