@@ -49,7 +49,7 @@ export default function AdverseEventDomestic() {
         <li>상단 메뉴 → 전자민원/보고 → 이상사례 → 이상사례보고 동향</li>
       </ol>
       <a
-        href="https://nedrug.mfds.go.kr/pbp/CCBCB01"
+        href="https://nedrug.mfds.go.kr/bbs/2"
         target="_blank"
         rel="noopener noreferrer"
         className="bg-sky-700 text-white font-semibold px-5 py-2 rounded hover:bg-sky-900 transition"
