@@ -137,16 +137,8 @@ export default function Home() {
                   },
                   {
                     title: '4. 이상반응(부작용)',
-                    contentHTML: (
-                      <>
-                        임상시험, 시판 후 조사, 자발적 보고 등을 통해 확인된{' '}
-                        <strong className="text-rose-600">
-                          유해반응(Adverse Drug Reaction)
-                        </strong>
-                        을 기술한다. 발생 빈도, 중증도, 인과관계 등을 기준으로
-                        분류되며, 약물감시(PV)의 근거 자료로 활용된다.
-                      </>
-                    ),
+                    content:
+                      '임상시험, 시판 후 조사, 자발적 보고 등을 통해 확인된 유해반응(Adverse Drug Reaction)을 기술한다. 발생 빈도, 중증도, 인과관계 등을 기준으로 분류되며, 약물감시(PV)의 근거 자료로 활용된다.',
                   },
                   {
                     title: '5. 일반적 주의',
@@ -186,13 +178,13 @@ export default function Home() {
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="group hover:bg-gray-50 p-4 rounded-xl transition-colors border-l-4 border-gray-200 hover:border-sky-500"
+                    className="group hover:bg-gray-50 p-4 rounded-xl border-l-4 border-gray-200"
                   >
-                    <h4 className="font-bold text-gray-900 mb-1 group-hover:text-sky-700 transition-colors">
+                    <h4 className="font-bold text-gray-900 mb-1">
                       {item.title}
                     </h4>
                     <p className="text-sm text-gray-600 leading-relaxed">
-                      {item.content || item.contentHTML}
+                      {item.content}
                     </p>
                   </div>
                 ))}
