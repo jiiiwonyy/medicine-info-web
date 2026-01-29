@@ -293,8 +293,8 @@ export default function AdverseEventDomestic() {
           🧑‍⚕️ 최초 원보고자 자격별 보고 현황
         </h4>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 md:col-span-2 overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-600 border-collapse min-w-[700px]">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+          <table className="w-full text-left text-gray-600 border-collapse min-w-[700px]">
+            <thead className="text-gray-700 uppercase bg-gray-50 border-b">
               <tr>
                 <th className="px-4 py-3 border-r text-center font-bold">
                   연도
@@ -369,8 +369,8 @@ export default function AdverseEventDomestic() {
           📋 보고 구분별 의약품등 이상사례 보고 현황
         </h4>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 md:col-span-2 overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-600 border-collapse min-w-[700px]">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+          <table className="w-full text-left text-gray-600 border-collapse min-w-[700px]">
+            <thead className="text-gray-700 uppercase bg-gray-50 border-b">
               <tr>
                 <th
                   rowSpan={2}
@@ -411,24 +411,24 @@ export default function AdverseEventDomestic() {
                 </th>
               </tr>
               <tr className="bg-violet-50">
-                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500 text-xs">
+                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500">
                   임상시험
                 </th>
-                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500 text-xs">
+                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500">
                   개별환자
                 </th>
-                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500 text-xs">
+                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500">
                   재심사
                 </th>
-                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500 text-xs">
+                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500">
                   시판후
                   <br />
                   임상
                 </th>
-                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500 text-xs">
+                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500">
                   특별조사
                 </th>
-                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500 text-xs">
+                <th className="px-2 py-2 border-r text-center font-semibold text-gray-500">
                   기타*
                 </th>
               </tr>
