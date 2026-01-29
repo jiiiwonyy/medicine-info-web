@@ -192,7 +192,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-6 sticky top-8">
+          <div className="flex flex-col gap-6">
             <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
               <div className="grid grid-cols-1 gap-4">
                 {quickLinks.map((card) => (
