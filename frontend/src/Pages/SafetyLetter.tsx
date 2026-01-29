@@ -72,7 +72,7 @@ export default function SafetyLetter() {
                 : 'text-gray-600 hover:text-gray-900',
             ].join(' ')}
           >
-            📰 발행 현황
+            📰 안전성 서한 확인
           </button>
         </div>
       </div>
@@ -136,7 +136,8 @@ export default function SafetyLetter() {
               <li>
                 메뉴 경로:{' '}
                 <span className="font-semibold">
-                  고시/공고/알림 → 안전성 정보 → 안전성 서한(속보)
+                  의약품안전나라 홈페이지 → 고시/공고/알림 → 안전성 정보 →
+                  안전성 서한(속보)
                 </span>
               </li>
             </ul>
