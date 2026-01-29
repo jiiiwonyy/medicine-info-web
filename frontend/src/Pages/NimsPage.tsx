@@ -55,62 +55,6 @@ export default function NimsPage() {
       >
         🔗 마약류통합관리시스템(NIMS) 바로가기
       </a>
-
-      <h3 className="text-xl font-semibold mb-2">국가법령정보센터</h3>
-      <table className="w-full border-collapse border border-gray-300 mb-6 text-center">
-        <thead>
-          <tr className="bg-blue-50">
-            <th className="border border-gray-300 py-2 px-4">법령명</th>
-            <th className="border border-gray-300 py-2 px-4">바로가기</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border border-gray-300 py-2 px-4">간호법</td>
-            <td className="border border-gray-300 py-2 px-4">
-              <a
-                href="#"
-                className="text-sky-700 font-semibold hover:underline"
-              >
-                삼단비교 보기 / 다운로드
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 py-2 px-4">환자안전법</td>
-            <td className="border border-gray-300 py-2 px-4">
-              <a
-                href="#"
-                className="text-sky-700 font-semibold hover:underline"
-              >
-                바로가기
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 py-2 px-4">의료법</td>
-            <td className="border border-gray-300 py-2 px-4">
-              <a
-                href="#"
-                className="text-sky-700 font-semibold hover:underline"
-              >
-                바로가기
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td className="border border-gray-300 py-2 px-4">약사법</td>
-            <td className="border border-gray-300 py-2 px-4">
-              <a
-                href="#"
-                className="text-sky-700 font-semibold hover:underline"
-              >
-                바로가기
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </PageLayout>
   );
 }
