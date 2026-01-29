@@ -20,7 +20,7 @@ export default function Header() {
       '의약품 안전정보',
       '안전한 투약 관리',
       '부작용 보고자료',
-      '부작용보고',
+      '부작용보고 및 피해구제',
       '의약품 관련 사이트',
     ],
     [],
@@ -41,7 +41,7 @@ export default function Header() {
       { label: 'WHO 부작용 보고건수', path: '/who' },
     ],
 
-    부작용보고: [
+    '부작용보고 및 피해구제': [
       { label: '부작용(이상사례) 보고', path: '/relief' },
       { label: '부작용 피해 구제', path: '/drug-adverse-relief' },
       { label: '지역의약품안전센터', path: '/local-center' },
