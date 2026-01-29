@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 import PageLayout from '@/components/PageLayout';
-import { useFaersSummaryQuery, useFaersTimeseriesQuery } from '@/hooks/useFaers';
+import {
+  useFaersSummaryQuery,
+  useFaersTimeseriesQuery,
+} from '@/hooks/useFaers';
 import { useFaersSuggestQuery } from '@/api/fda';
 import { useDebounce } from '@/hooks/useDebounce';
 import FdaSearchBar from '../components/fda/FdaSearchBar';
@@ -33,7 +36,6 @@ export default function FdaPage() {
     limit: 30,
   });
 
-  // 입력이 바뀌면(선택값과 달라지면) 다시 선택 해제
   useEffect(() => {
     if (!q.trim()) {
       setSelectedDrug('');
@@ -43,9 +45,8 @@ export default function FdaPage() {
     if (selectedDrug && q.trim().toLowerCase() !== selectedDrug.toLowerCase()) {
       setSelectedDrug('');
     }
-  }, [q]);
+  }, [q, selectedDrug]);
 
-  // 디바운스된 값이 있고 선택이 아직 없으면 모달 자동 오픈(원치 않으면 '검색' 버튼에서만 열도록 변경 가능)
   useEffect(() => {
     if (canSuggest && !selectedDrug) {
       setSuggestOpen(true);
@@ -61,7 +62,6 @@ export default function FdaPage() {
     year_from: yearFrom,
     year_to: yearTo,
   });
-
 
   const tsQuery = useFaersTimeseriesQuery({
     drug: selectedDrug,
@@ -87,7 +87,7 @@ export default function FdaPage() {
         <FdaSearchBar
           value={q}
           onChange={setQ}
-          onSubmit={() => setSuggestOpen(true)} // 검색 버튼은 '후보 보기'로
+          onSubmit={() => setSuggestOpen(true)}
           placeholder="약물명을 입력하세요 (예: bleo)"
         />
 
@@ -100,7 +100,7 @@ export default function FdaPage() {
           onClose={() => setSuggestOpen(false)}
           onSelect={(drug) => {
             setSelectedDrug(drug);
-            setQ(drug); // 입력창도 선택값으로 고정
+            setQ(drug);
             setSuggestOpen(false);
           }}
         />
@@ -147,11 +147,12 @@ export default function FdaPage() {
       {/* 상태 */}
       {!selectedDrug && (
         <div className="text-sm text-gray-600">
-          약물명을 입력하면 후보를 선택할 수 있어요. 선택 후 연도별 보고 건수와 주요 PT 추이를 볼 수 있어요.
+          약물명을 입력하면 후보를 선택할 수 있어요. 선택 후 연도별 보고 건수와
+          주요 PT 추이를 볼 수 있어요.
         </div>
       )}
 
-      {loading && <Spinner/>}
+      {loading && <Spinner />}
 
       {error && (
         <div className="text-sm text-red-600">
@@ -195,16 +196,27 @@ export default function FdaPage() {
 
             <div className="lg:col-span-2 rounded-xl border p-4">
               <h2 className="font-semibold mb-3">Top PT 연도별 추이</h2>
-              <TopPtTimeseriesChart years={timeseries.years} series={timeseries.series} />
+              <TopPtTimeseriesChart
+                years={timeseries.years}
+                series={timeseries.series}
+              />
             </div>
           </div>
 
           <div className="rounded-xl border p-4 text-sm text-gray-700 leading-relaxed">
             <div className="font-semibold mb-2">해석 시 주의</div>
             <ul className="list-disc pl-5 space-y-1">
-              <li>FAERS는 자발적 보고 데이터라 인과관계를 확정하지 않으며, 보고 편향이 존재할 수 있어요.</li>
-              <li>의심약(PS/SS) 필터를 끄면 병용약(C)까지 포함되어 보고 건수가 증가할 수 있어요.</li>
-              <li>동일 ISR에서 여러 PT가 함께 보고되면 각각 카운트에 포함됩니다.</li>
+              <li>
+                FAERS는 자발적 보고 데이터라 인과관계를 확정하지 않으며, 보고
+                편향이 존재할 수 있어요.
+              </li>
+              <li>
+                의심약(PS/SS) 필터를 끄면 병용약(C)까지 포함되어 보고 건수가
+                증가할 수 있어요.
+              </li>
+              <li>
+                동일 ISR에서 여러 PT가 함께 보고되면 각각 카운트에 포함됩니다.
+              </li>
             </ul>
           </div>
         </div>
@@ -212,4 +224,3 @@ export default function FdaPage() {
     </PageLayout>
   );
 }
-
