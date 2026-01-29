@@ -6,6 +6,7 @@ import {
   fetchSignalInfoViewUrl,
 } from '@/api/signalInfo';
 import type { SignalInfoItem } from '@/types/signalInfo';
+import Spinner from '@/components/Spinner';
 
 const LIMIT = 20;
 
@@ -121,7 +122,6 @@ export default function SignalInfo() {
 
   return (
     <PageLayout title="의약품 이상반응(실마리) 정보">
-      {/* ✅ 토스 느낌: 알약형 탭 (탭 전환 = 화면 전환) */}
       <div className="sticky top-0 z-40 -mx-4 px-4 pt-2 pb-4 bg-white/90 backdrop-blur">
         <div className="w-full rounded-2xl bg-gray-100 p-1 flex gap-1">
           <button
@@ -359,11 +359,11 @@ export default function SignalInfo() {
                 disabled={loading}
                 className="bg-sky-700 text-white font-semibold px-5 py-2 rounded hover:bg-sky-900 transition disabled:opacity-60"
               >
-                {loading ? '불러오는 중…' : '더 보기'}
+                {loading ? <Spinner /> : '더 보기'}
               </button>
             ) : (
               <p className="text-sm text-gray-500">
-                {loading ? '불러오는 중…' : '마지막 항목이에요.'}
+                {loading ? <Spinner /> : '마지막 항목이에요.'}
               </p>
             )}
           </div>
