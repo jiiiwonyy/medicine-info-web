@@ -103,7 +103,7 @@ export default function Header() {
             <button
               key={tab}
               onMouseEnter={() => setOpenMain(tab)}
-              className={`px-4 py-3 text-sm font-medium cursor-pointer transition
+              className={`px-4 py-3 font-medium cursor-pointer transition
               ${
                 openMain === tab
                   ? 'bg-primary-100 text-fg'
@@ -119,7 +119,7 @@ export default function Header() {
         {openMain && subTabsMap[openMain] && (
           <div className="absolute left-0 top-full w-full bg-surface shadow-md z-20 border-b border-border">
             <div className="mx-auto w-full max-w-6xl px-8 py-6">
-              <h3 className="text-lg font-semibold text-fg mb-4 border-b border-border pb-2">
+              <h3 className="font-semibold text-fg mb-4 border-b border-border pb-2">
                 {openMain}
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
@@ -132,7 +132,7 @@ export default function Header() {
                         navigate(sub.path);
                         setOpenMain(null);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-md transition text-sm
+                      className={`w-full text-left px-3 py-2 rounded-md transition
                       ${
                         isActive
                           ? 'bg-primary-50 text-primary font-semibold'
