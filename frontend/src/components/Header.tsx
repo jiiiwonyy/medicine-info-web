@@ -69,7 +69,8 @@ export default function Header() {
 
   return (
     <div className="w-full flex flex-col items-center mb-7">
-      <div className="w-full bg-white shadow p-10 flex xl:px-72 flex-col items-center">
+      {/* 상단: 로고+검색 */}
+      <div className="w-full bg-surface shadow-sm p-10 flex xl:px-72 flex-col items-center border-b border-border">
         <img
           src={logo}
           alt="로고"
@@ -92,8 +93,9 @@ export default function Header() {
         </div>
       </div>
 
+      {/* 메인 네비 */}
       <div
-        className="w-full xl:px-72 bg-sky-700 relative"
+        className="w-full xl:px-72 bg-primary relative"
         onMouseLeave={() => setOpenMain(null)}
       >
         <div className="w-full flex items-center justify-center space-x-3">
@@ -101,8 +103,11 @@ export default function Header() {
             <button
               key={tab}
               onMouseEnter={() => setOpenMain(tab)}
-              className={`px-4 py-3 font-medium cursor-pointer transition ${
-                openMain === tab ? 'bg-sky-200 text-gray-800' : 'text-white'
+              className={`px-4 py-3 font-medium cursor-pointer transition
+              ${
+                openMain === tab
+                  ? 'bg-primary-100 text-fg'
+                  : 'text-primary-fg hover:bg-primary-700'
               }`}
             >
               {tab}
@@ -110,10 +115,11 @@ export default function Header() {
           ))}
         </div>
 
+        {/* 드롭다운 */}
         {openMain && subTabsMap[openMain] && (
-          <div className="absolute left-0 top-full w-full bg-white shadow-lg z-20">
+          <div className="absolute left-0 top-full w-full bg-surface shadow-md z-20 border-b border-border">
             <div className="mx-auto w-full max-w-6xl px-8 py-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
+              <h3 className="font-semibold text-fg mb-4 border-b border-border pb-2">
                 {openMain}
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
@@ -126,10 +132,11 @@ export default function Header() {
                         navigate(sub.path);
                         setOpenMain(null);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-md transition ${
+                      className={`w-full text-left px-3 py-2 rounded-md transition
+                      ${
                         isActive
-                          ? 'bg-sky-100 text-sky-700 font-semibold'
-                          : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                          ? 'bg-primary-50 text-primary font-semibold'
+                          : 'text-muted-fg hover:bg-muted hover:text-fg'
                       }`}
                     >
                       {sub.label}
