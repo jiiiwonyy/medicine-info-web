@@ -11,8 +11,13 @@
 
   --color-primary: rgb(var(--primary));
   --color-primary-fg: rgb(var(--primary-fg));
+
+  --color-primary-700: rgb(var(--primary-700));
+  --color-primary-200: rgb(var(--primary-200));
+  --color-primary-100: rgb(var(--primary-100));
+  --color-primary-50: rgb(var(--primary-50));
+
   --color-surface: rgb(var(--surface));
-  --color-primary-weak: rgb(var(--primary-weak));
 
   --color-success: rgb(var(--success));
   --color-warning: rgb(var(--warning));
@@ -28,8 +33,13 @@
   --muted-fg: 100 116 139;
   --border: 226 232 240;
 
-  --primary: 2 132 199;
+  --primary: 2 132 199; /* 600 */
   --primary-fg: 255 255 255;
+
+  --primary-700: 3 105 161; /* 700 (hover/active) */
+  --primary-200: 186 230 253; /* 200 (border/underline) */
+  --primary-100: 224 242 254; /* 100 (selected/hover bg) */
+  --primary-50: 240 249 255; /* 50  (very subtle bg) */
 
   --success: 34 197 94;
   --warning: 245 158 11;
@@ -37,7 +47,6 @@
   --info: 59 130 246;
 
   --surface: 255 255 255;
-  --primary-weak: 186 230 253;
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -47,16 +56,23 @@
   --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* ✅ 더 안정적인 다크 적용 */
+/* 다크모드 보류
 :root.dark {
   --bg: 2 6 23;
   --fg: 226 232 240;
   --muted: 15 23 42;
   --muted-fg: 148 163 184;
   --border: 30 41 59;
+
   --surface: 15 23 42;
-  --primary-weak: 30 41 59;
-}
+  --primary: 56 189 248;
+  --primary-fg: 2 6 23;
+
+  --primary-700: 14 165 233; 
+  --primary-200: 30 64 175; 
+  --primary-100: 30 41 59; 
+  --primary-50: 15 23 42;
+} */
 
 /* 3) Base */
 html {

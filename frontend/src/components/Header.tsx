@@ -103,10 +103,11 @@ export default function Header() {
             <button
               key={tab}
               onMouseEnter={() => setOpenMain(tab)}
-              className={`px-4 py-3 font-medium cursor-pointer transition ${
+              className={`px-4 py-3 text-sm font-medium cursor-pointer transition
+              ${
                 openMain === tab
-                  ? 'bg-primary-weak text-fg'
-                  : 'text-primary-fg hover:bg-primary-weak hover:text-fg'
+                  ? 'bg-primary-100 text-fg'
+                  : 'text-primary-fg hover:bg-primary-700'
               }`}
             >
               {tab}
@@ -131,9 +132,10 @@ export default function Header() {
                         navigate(sub.path);
                         setOpenMain(null);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-md transition ${
+                      className={`w-full text-left px-3 py-2 rounded-md transition text-sm
+                      ${
                         isActive
-                          ? 'bg-primary-weak text-fg font-semibold'
+                          ? 'bg-primary-50 text-primary font-semibold'
                           : 'text-muted-fg hover:bg-muted hover:text-fg'
                       }`}
                     >
