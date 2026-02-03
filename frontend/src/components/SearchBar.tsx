@@ -1,4 +1,5 @@
 import type { ChangeEvent } from 'react';
+import Button from '@/components/ui/Button';
 
 interface SearchBarProps {
   id: string;
@@ -38,13 +39,7 @@ export default function SearchBar({
         className="flex-1 p-2 border rounded border-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
       />
 
-      <button
-        type="button"
-        onClick={onSearch}
-        className="px-4 py-2 bg-sky-600 text-white rounded cursor-pointer hover:bg-sky-700 transition-colors"
-      >
-        검색
-      </button>
+      <Button onClick={onSearch}>검색</Button>
     </div>
   );
 }
