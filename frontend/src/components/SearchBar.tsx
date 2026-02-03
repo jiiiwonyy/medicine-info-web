@@ -36,7 +36,9 @@ export default function SearchBar({
         placeholder={placeholder}
       />
 
-      <Button onClick={onSearch}>검색</Button>
+      <Button type="button" onClick={onSearch}>
+        검색
+      </Button>
     </div>
   );
 }
