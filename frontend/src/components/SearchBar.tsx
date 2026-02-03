@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
 
 interface SearchBarProps {
   id: string;
@@ -29,14 +30,12 @@ export default function SearchBar({
 
   return (
     <div className="flex w-full max-w-xl gap-2">
-      <input
+      <Input
         id={id}
-        type="text"
         value={value}
         onChange={handleInput}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="flex-1 p-2 border rounded border-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
       />
 
       <Button onClick={onSearch}>검색</Button>
