@@ -7,8 +7,6 @@ interface SearchBarProps {
   value: string;
   onChange: (value: string) => void;
   onSearch: () => void;
-  onFilterChange: (type: 'product' | 'ingredient') => void;
-  filterType: 'product' | 'ingredient';
   placeholder?: string;
 }
 export default function SearchBar({
