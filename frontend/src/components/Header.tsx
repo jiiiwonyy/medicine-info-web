@@ -88,8 +88,6 @@ export default function Header() {
             value={q}
             onChange={setQ}
             onSearch={handleSearch}
-            filterType={filterType}
-            onFilterChange={setFilterType}
             placeholder="검색어를 입력하세요 (최소 2글자)"
           />
         </div>
