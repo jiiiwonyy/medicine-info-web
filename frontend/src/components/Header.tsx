@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SearchBar from '@/components/SearchBar';
 import logo from '@/assets/logo.png';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 export default function Header() {
   const location = useLocation();
@@ -103,12 +105,13 @@ export default function Header() {
             <button
               key={tab}
               onMouseEnter={() => setOpenMain(tab)}
-              className={`px-4 py-3 font-medium cursor-pointer transition
-              ${
+              className={cn(
+                'px-4 py-3 cursor-pointer transition',
+                textStyles.nav,
                 openMain === tab
                   ? 'bg-primary-100 text-fg'
-                  : 'text-primary-fg hover:bg-primary-700'
-              }`}
+                  : 'text-primary-fg hover:bg-primary-700',
+              )}
             >
               {tab}
             </button>
@@ -119,7 +122,12 @@ export default function Header() {
         {openMain && subTabsMap[openMain] && (
           <div className="absolute left-0 top-full w-full bg-surface shadow-md z-20 border-b border-border">
             <div className="mx-auto w-full max-w-6xl px-8 py-6">
-              <h3 className="font-semibold text-fg mb-4 border-b border-border pb-2">
+              <h3
+                className={cn(
+                  textStyles.sectionTitle,
+                  'text-fg mb-4 border-b border-border pb-2',
+                )}
+              >
                 {openMain}
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
@@ -132,12 +140,13 @@ export default function Header() {
                         navigate(sub.path);
                         setOpenMain(null);
                       }}
-                      className={`w-full text-left px-3 py-2 rounded-md transition
-                      ${
+                      className={cn(
+                        'w-full text-left px-3 py-2 rounded-md transition',
+                        textStyles.nav,
                         isActive
                           ? 'bg-primary-50 text-primary font-semibold'
-                          : 'text-muted-fg hover:bg-muted hover:text-fg'
-                      }`}
+                          : 'text-muted-fg hover:bg-muted hover:text-fg',
+                      )}
                     >
                       {sub.label}
                     </button>
