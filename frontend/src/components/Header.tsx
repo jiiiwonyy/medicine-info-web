@@ -10,9 +10,6 @@ export default function Header() {
   const navigate = useNavigate();
 
   const [q, setQ] = useState('');
-  const [filterType, setFilterType] = useState<'product' | 'ingredient'>(
-    'product',
-  );
 
   const [openMain, setOpenMain] = useState<string | null>(null);
 
@@ -66,7 +63,7 @@ export default function Header() {
       return;
     }
 
-    navigate(`/search?query=${encodeURIComponent(trimmed)}&type=${filterType}`);
+    navigate(`/search?query=${encodeURIComponent(trimmed)}`);
   };
 
   return (
