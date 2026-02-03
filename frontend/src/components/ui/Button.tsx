@@ -13,7 +13,7 @@ export interface ButtonProps
 }
 
 const base = cn(
-  'inline-flex items-center justify-center gap-2 rounded transition-colors',
+  'inline-flex items-center justify-center gap-2 rounded transition-colors whitespace-nowrap',
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200',
   'disabled:pointer-events-none disabled:opacity-50',
 );
