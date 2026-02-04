@@ -88,5 +88,3 @@ jobs:
           DB_PASSWORD: ""
           DB_PORT: "5432"
         run: python -m pytest -q backend
-
-
