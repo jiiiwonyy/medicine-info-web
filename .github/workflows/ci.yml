@@ -65,15 +65,10 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"
@@ -82,14 +77,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          python -m pip install -r backend/requirements.txt
 
-      # DB 환경변수는 비워둬도 됨. (DB 없는 테스트만 돌릴 거라)
       - name: Run tests
         env:
+          PYTHONPATH: backend
           DB_HOST: ""
           DB_NAME: ""
           DB_USER: ""
           DB_PASSWORD: ""
           DB_PORT: "5432"
-        run: pytest -q
+        run: python -m pytest -q backend
