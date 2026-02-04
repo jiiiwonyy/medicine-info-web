@@ -23,6 +23,18 @@
   --color-warning: rgb(var(--warning));
   --color-danger: rgb(var(--danger));
   --color-info: rgb(var(--info));
+
+  --color-success-50: rgb(var(--success-50));
+  --color-success-200: rgb(var(--success-200));
+
+  --color-warning-50: rgb(var(--warning-50));
+  --color-warning-200: rgb(var(--warning-200));
+
+  --color-danger-50: rgb(var(--danger-50));
+  --color-danger-200: rgb(var(--danger-200));
+
+  --color-info-50: rgb(var(--info-50));
+  --color-info-200: rgb(var(--info-200));
 }
 
 /* 2) Design tokens */
@@ -54,6 +66,18 @@
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+  --success-50: 240 253 244;
+  --success-200: 187 247 208;
+
+  --warning-50: 255 251 235;
+  --warning-200: 254 215 170;
+
+  --danger-50: 254 242 242;
+  --danger-200: 254 202 202;
+
+  --info-50: 239 246 255;
+  --info-200: 191 219 254;
 }
 
 /* 다크모드 보류
