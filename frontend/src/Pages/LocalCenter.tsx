@@ -1,4 +1,4 @@
-import Callout from '@/components/Callout';
+import Callout from '@/components/ui/Callout';
 import { useState, useEffect } from 'react';
 import KoreaMap from '@/assets/map.svg?react';
 import '@/styles/map.css';
