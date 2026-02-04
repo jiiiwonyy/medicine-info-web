@@ -81,10 +81,12 @@ jobs:
 
       - name: Run tests
         env:
+          PYTHONPATH: backend
           DB_HOST: ""
           DB_NAME: ""
           DB_USER: ""
           DB_PASSWORD: ""
           DB_PORT: "5432"
         run: python -m pytest -q backend
+
 
