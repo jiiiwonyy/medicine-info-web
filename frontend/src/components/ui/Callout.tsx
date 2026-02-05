@@ -41,9 +41,9 @@ const variantStyles: Record<Variant, string> = {
 const iconColorStyles: Record<Variant, string> = {
   info: 'text-primary-700',
   note: 'text-muted-fg',
-  success: 'text-[rgb(var(--success))]',
-  warning: 'text-[rgb(var(--warning))]',
-  danger: 'text-[rgb(var(--danger))]',
+  success: 'text-success',
+  warning: 'text-warning',
+  danger: 'text-danger',
 };
 
 export default function Callout({
