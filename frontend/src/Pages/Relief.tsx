@@ -1,5 +1,6 @@
 import PageLayout from '@/components/PageLayout';
 import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 import {
   MdComputer,
   MdPhoneInTalk,
@@ -25,14 +26,16 @@ export default function ReliefPage() {
             <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mb-4">
               <MdSick size={24} />
             </div>
-            <h2 className="text-xl font-bold mb-3 text-primary-700">
+            <h2
+              className={cn(textStyles.sectionTitle, 'mb-3 text-primary-700')}
+            >
               부작용
               <br />
-              <span className="text-base font-normal text-muted-fg">
+              <span className={cn(textStyles.bodySm, 'font-normal block mt-1')}>
                 (Side Effect)
               </span>
             </h2>
-            <p className="text-fg leading-relaxed text-base">
+            <p className={cn(textStyles.body, 'text-fg leading-relaxed')}>
               정상적인 용량에 따라 약물을 투여할 경우 발생하는 모든 의도되지
               않은 효과
             </p>
@@ -49,14 +52,16 @@ export default function ReliefPage() {
             <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mb-4">
               <MdWarningAmber size={24} />
             </div>
-            <h2 className="text-xl font-bold mb-3 text-primary-700">
+            <h2
+              className={cn(textStyles.sectionTitle, 'mb-3 text-primary-700')}
+            >
               이상사례
               <br />
-              <span className="text-base font-normal text-muted-fg">
+              <span className={cn(textStyles.bodySm, 'font-normal block mt-1')}>
                 (Adverse Event)
               </span>
             </h2>
-            <p className="text-fg leading-relaxed text-base">
+            <p className={cn(textStyles.body, 'text-fg leading-relaxed')}>
               약물 사용 중 발생한 바람직하지 않고 의도되지 않는 징후, 증상 또는
               질병
             </p>
@@ -73,14 +78,16 @@ export default function ReliefPage() {
             <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center mb-4">
               <MdMedication size={24} />
             </div>
-            <h2 className="text-xl font-bold mb-3 text-primary-700">
+            <h2
+              className={cn(textStyles.sectionTitle, 'mb-3 text-primary-700')}
+            >
               약물이상반응
               <br />
-              <span className="text-base font-normal text-muted-fg">
+              <span className={cn(textStyles.bodySm, 'font-normal block mt-1')}>
                 (Adverse Drug Reaction)
               </span>
             </h2>
-            <p className="text-fg leading-relaxed text-base">
+            <p className={cn(textStyles.body, 'text-fg leading-relaxed')}>
               이상사례 중 해당 의약품과의 인과관계를 배제할 수 없는 경우
             </p>
           </div>
@@ -93,10 +100,15 @@ export default function ReliefPage() {
             'border-l-4 border-l-danger',
           )}
         >
-          <h2 className="text-xl font-bold mb-4 text-danger flex items-center gap-2">
+          <h2
+            className={cn(
+              textStyles.sectionTitle,
+              'mb-4 text-danger flex items-center gap-2',
+            )}
+          >
             ⚠️ 중대한 이상사례·약물이상반응
           </h2>
-          <p className="text-muted-fg mb-4">
+          <p className={cn(textStyles.bodySm, 'mb-4')}>
             다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.
           </p>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-8">
@@ -106,7 +118,10 @@ export default function ReliefPage() {
               '지속적 또는 중대한 불구나 기능저하를 초래하는 경우',
               '선천적 기형 또는 이상을 초래하는 경우',
             ].map((item, index) => (
-              <li key={index} className="flex items-start text-fg">
+              <li
+                key={index}
+                className={cn(textStyles.body, 'flex items-start text-fg')}
+              >
                 <span className="mr-2 text-danger">•</span>
                 {item}
               </li>
@@ -117,11 +132,21 @@ export default function ReliefPage() {
         {/* Section 3: Necessity & Process */}
         <section className="space-y-8">
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-fg border-b border-border pb-2">
+            <h2
+              className={cn(
+                textStyles.pageTitle,
+                'mb-4 text-fg border-b border-border pb-2',
+              )}
+            >
               의약품 이상사례 보고의 필요성
             </h2>
             <div className="bg-muted/50 p-6 rounded-lg border border-border">
-              <p className="leading-relaxed text-lg text-fg text-justify">
+              <p
+                className={cn(
+                  textStyles.body,
+                  'leading-relaxed text-fg text-justify',
+                )}
+              >
                 의약품은 시판 전 동물시험에 의한 전임상시험과 사람에 대한
                 임상시험을 거쳐 시판 허가를 받게 됩니다. 이러한 임상시험은
                 관찰기간이 제한되고, 한정된 연구대상자를 대상으로 하기 때문에
@@ -138,11 +163,21 @@ export default function ReliefPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-fg border-b border-border pb-2">
+            <h2
+              className={cn(
+                textStyles.pageTitle,
+                'mb-4 text-fg border-b border-border pb-2',
+              )}
+            >
               이상사례 보고 후 과정
             </h2>
             <div className="bg-muted/50 p-6 rounded-lg border border-border">
-              <p className="leading-relaxed text-lg text-fg text-justify">
+              <p
+                className={cn(
+                  textStyles.body,
+                  'leading-relaxed text-fg text-justify',
+                )}
+              >
                 이상사례가 보고되면,{' '}
                 <strong className="text-primary-700">
                   한국의약품안전관리원
@@ -163,7 +198,12 @@ export default function ReliefPage() {
 
         {/* Section 4: Reporting Methods (Updated) */}
         <section>
-          <h2 className="text-2xl font-bold mb-6 text-fg border-b border-border pb-2">
+          <h2
+            className={cn(
+              textStyles.pageTitle,
+              'mb-6 text-fg border-b border-border pb-2',
+            )}
+          >
             이상사례 보고 방법
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
@@ -183,8 +223,10 @@ export default function ReliefPage() {
               >
                 <MdComputer size={36} />
               </div>
-              <h3 className="text-xl font-bold text-fg mb-3">온라인 보고</h3>
-              <p className="text-muted-fg mb-8 leading-relaxed">
+              <h3 className={cn(textStyles.sectionTitle, 'text-fg mb-3')}>
+                온라인 보고
+              </h3>
+              <p className={cn(textStyles.bodySm, 'mb-8 leading-relaxed')}>
                 의약품안전나라 의약품통합정보시스템을
                 <br />
                 이용하실 수 있습니다.
@@ -199,6 +241,7 @@ export default function ReliefPage() {
                   'px-8 py-3 rounded-lg shadow-sm',
                   'hover:bg-primary-700 hover:shadow-md hover:-translate-y-0.5',
                   'transition-all duration-200 w-full md:w-auto',
+                  textStyles.body,
                 )}
               >
                 온라인 보고 바로가기 &rarr;
@@ -221,8 +264,10 @@ export default function ReliefPage() {
               >
                 <MdPhoneInTalk size={36} />
               </div>
-              <h3 className="text-xl font-bold text-fg mb-3">전화 보고</h3>
-              <p className="text-muted-fg mb-8 leading-relaxed">
+              <h3 className={cn(textStyles.sectionTitle, 'text-fg mb-3')}>
+                전화 보고
+              </h3>
+              <p className={cn(textStyles.bodySm, 'mb-8 leading-relaxed')}>
                 한국의약품안전관리원 대표전화
                 <br />
                 <span className="font-bold text-fg">1644-6223</span> (또는
@@ -236,6 +281,7 @@ export default function ReliefPage() {
                   'px-8 py-3 rounded-lg shadow-sm',
                   'hover:bg-muted hover:border-primary-200 hover:-translate-y-0.5',
                   'transition-all duration-200 w-full md:w-auto',
+                  textStyles.body,
                 )}
               >
                 전화 걸기 1644-6223
@@ -245,12 +291,16 @@ export default function ReliefPage() {
         </section>
 
         {/* Section 5: Items to Report */}
-        <section className="bg-surface p-6 rounded-lg border border-border">
-          <h3 className="text-xl font-bold mb-4 text-fg flex items-center gap-2">
-            <span className="bg-primary/10 text-primary p-1 rounded">📋</span>
+        <section>
+          <h2
+            className={cn(
+              textStyles.pageTitle,
+              'mb-4 text-fg border-b border-border pb-2',
+            )}
+          >
             보고 시 작성 항목
-          </h3>
-          <p className="mb-6 text-muted-fg">
+          </h2>
+          <p className={cn(textStyles.body, 'mb-6')}>
             부작용 보고를 위해 사이트에 접속하면 아래와 같은 항목들을 입력하게
             됩니다.
           </p>
@@ -281,8 +331,15 @@ export default function ReliefPage() {
                 key={idx}
                 className="flex flex-col p-4 rounded bg-muted/30 border border-border/50"
               >
-                <strong className="text-primary-700 mb-1">{item.title}</strong>
-                <span className="text-sm text-muted-fg">{item.desc}</span>
+                <strong
+                  className={cn(
+                    textStyles.body,
+                    'font-bold text-primary-700 mb-1',
+                  )}
+                >
+                  {item.title}
+                </strong>
+                <span className={cn(textStyles.bodySm)}>{item.desc}</span>
               </li>
             ))}
           </ul>
