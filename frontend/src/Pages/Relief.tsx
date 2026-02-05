@@ -216,12 +216,8 @@ export default function ReliefPage() {
               <div
                 className={cn(
                   'w-16 h-16 rounded-full flex items-center justify-center mb-6',
-                  'bg-indigo-50 text-indigo-700' /* Using Indigo for distinction or Primary */,
+                  'bg-primary-50 text-primary-700',
                 )}
-                style={{
-                  backgroundColor: 'rgb(var(--info-50))',
-                  color: 'rgb(var(--info))',
-                }} // fallback to check if indigo works or use known token
               >
                 <MdPhoneInTalk size={36} />
               </div>
