@@ -1,4 +1,4 @@
-import Callout from '@/components/Callout';
+import Callout from '@/components/ui/Callout';
 import PageLayout from '@/components/PageLayout';
 
 export default function KopsPage() {

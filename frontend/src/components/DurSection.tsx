@@ -1,5 +1,5 @@
 import type { DurData } from '@/types/dur';
-import Callout from './Callout';
+import Callout from './ui/Callout';
 
 interface Props {
   dur: DurData;

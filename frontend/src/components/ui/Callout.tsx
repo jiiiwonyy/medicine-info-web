@@ -1,6 +1,6 @@
 // components/Callout.tsx
-import { useMemo } from 'react';
 import type { ReactNode } from 'react';
+import { cn } from '@/shared/cn';
 
 type Variant = 'info' | 'warning' | 'success' | 'danger' | 'note';
 
@@ -12,14 +12,6 @@ type CalloutProps = {
   icon?: ReactNode;
   roleOverride?: React.AriaRole;
   className?: string;
-};
-
-const variantStyles: Record<Variant, string> = {
-  info: 'border-blue-200 bg-blue-50 text-blue-900',
-  note: 'border-slate-200 bg-slate-50 text-slate-900',
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-900',
-  warning: 'border-amber-200 bg-amber-50 text-amber-900',
-  danger: 'border-rose-200 bg-rose-50 text-rose-900',
 };
 
 const defaultIcons: Record<Variant, ReactNode> = {
@@ -38,6 +30,22 @@ const roleByVariant: Record<Variant, React.AriaRole> = {
   danger: 'alert',
 };
 
+const variantStyles: Record<Variant, string> = {
+  info: 'bg-info-50 border-info-200 text-fg',
+  note: 'bg-muted border-border text-fg',
+  success: 'bg-success-50 border-success-200 text-fg',
+  warning: 'bg-warning-50 border-warning-200 text-fg',
+  danger: 'bg-danger-50 border-danger-200 text-fg',
+};
+
+const iconColorStyles: Record<Variant, string> = {
+  info: 'text-primary-700',
+  note: 'text-muted-fg',
+  success: 'text-success',
+  warning: 'text-warning',
+  danger: 'text-danger',
+};
+
 export default function Callout({
   title,
   children,
@@ -45,28 +53,33 @@ export default function Callout({
   dense = false,
   icon,
   roleOverride,
-  className = '',
+  className,
 }: CalloutProps) {
   const role = roleOverride ?? roleByVariant[variant];
-  const spacing = dense ? 'p-3 text-sm' : 'p-4';
   const iconNode = icon ?? defaultIcons[variant];
-
-  const classes = useMemo(
-    () => `rounded-xl border ${variantStyles[variant]} ${spacing} ${className}`,
-    [variant, spacing, className],
-  );
 
   return (
     <div
-      className={classes}
+      className={cn(
+        'rounded-[var(--radius-lg)] border',
+        variantStyles[variant],
+        dense ? 'p-3 text-sm' : 'p-4',
+        className,
+      )}
       role={role}
       aria-live={role === 'alert' ? 'assertive' : 'polite'}
     >
       <div className="flex items-start gap-3">
-        <div className="select-none leading-6">{iconNode}</div>
+        <div
+          className={cn('select-none leading-6', iconColorStyles[variant])}
+          aria-hidden
+        >
+          {iconNode}
+        </div>
+
         <div className="min-w-0">
-          {title && <div className="font-semibold mb-1">{title}</div>}
-          <div className="leading-6">{children}</div>
+          {title && <div className={cn('font-semibold mb-1')}>{title}</div>}
+          <div className="leading-6 text-muted-fg">{children}</div>
         </div>
       </div>
     </div>
