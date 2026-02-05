@@ -189,6 +189,20 @@ export default function ReliefPage() {
                 <br />
                 이용하실 수 있습니다.
               </p>
+              <a
+                href="https://kaers.drugsafe.or.kr/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  'inline-flex items-center justify-center',
+                  'bg-primary text-white font-bold',
+                  'px-8 py-3 rounded-lg shadow-sm',
+                  'hover:bg-primary-700 hover:shadow-md hover:-translate-y-0.5',
+                  'transition-all duration-200 w-full md:w-auto',
+                )}
+              >
+                온라인 보고 바로가기 &rarr;
+              </a>
             </div>
 
             {/* Phone Reporting */}
@@ -218,6 +232,18 @@ export default function ReliefPage() {
                 <span className="font-bold text-fg">1644-6223</span> (또는
                 14-3330)으로 보고하실 수 있습니다.
               </p>
+              <a
+                href="tel:1644-6223"
+                className={cn(
+                  'inline-flex items-center justify-center',
+                  'bg-white border border-border text-fg font-bold',
+                  'px-8 py-3 rounded-lg shadow-sm',
+                  'hover:bg-muted hover:border-primary-200 hover:-translate-y-0.5',
+                  'transition-all duration-200 w-full md:w-auto',
+                )}
+              >
+                전화 걸기 1644-6223
+              </a>
             </div>
           </div>
         </section>
