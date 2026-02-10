@@ -1,3 +1,5 @@
+import { TableWrap } from '@/components/ui/Table';
+
 export default function MedicineDetailRenderer({ data }: { data: any }) {
   if (!data) return null;
 
@@ -27,11 +29,15 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
 
               if (item.type === 'table') {
                 return (
-                  <div
+                  <TableWrap
                     key={i}
-                    className="overflow-x-auto my-4 table-wrapper rounded-md"
-                    dangerouslySetInnerHTML={{ __html: item.html }}
-                  />
+                    className="border border-border bg-surface overflow-hidden"
+                  >
+                    <div
+                      className="legacy-html-table"
+                      dangerouslySetInnerHTML={{ __html: item.html }}
+                    />
+                  </TableWrap>
                 );
               }
 
