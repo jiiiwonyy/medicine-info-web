@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getMedicineById } from '@/api/searchMedicine';
 import type { Medicine } from '../types/medicine';
-import { useRef } from 'react';
+import { useMemo, useState } from 'react';
 import TopButton from '@/components/TopButton';
 import Spinner from '@/components/Spinner';
 import FloatingNavigation from '@/components/FloatingNavigation';
@@ -18,15 +18,17 @@ import {
   Td,
   TableContent,
 } from '@/components/ui/Table';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
+
+type TabKey = 'effect' | 'usage' | 'caution' | 'dur';
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const effectRef = useRef<HTMLDivElement>(null);
-  const usageRef = useRef<HTMLDivElement>(null);
-  const cautionRef = useRef<HTMLDivElement>(null);
+
+  const [activeTab, setActiveTab] = useState<TabKey>('effect');
 
   const HEADER_OFFSET = 72;
   const numericId = Number(id);
@@ -44,10 +46,19 @@ export default function Detail() {
 
   const dur = med?.dur ?? { interactions: [], age: [], pregnancy: [] };
 
-  const hasDur =
-    (dur.interactions?.length ?? 0) > 0 ||
-    (dur.age?.length ?? 0) > 0 ||
-    (dur.pregnancy?.length ?? 0) > 0;
+  const tabs = useMemo(() => {
+    const base: Array<{ value: TabKey; label: string; id: string }> = [
+      { value: 'effect', label: '효능·효과', id: 'effect' },
+      { value: 'usage', label: '용법·용량', id: 'usage' },
+      { value: 'caution', label: '사용상의 주의사항', id: 'caution' },
+    ];
+    return base;
+  }, []);
+
+  const onTabClick = (tab: { id: string; value: TabKey }) => {
+    setActiveTab(tab.value); // TabsTrigger 클릭 시 value 바뀌긴 하지만, 명확히 해두면 안정적
+    scrollToId(tab.id, HEADER_OFFSET);
+  };
 
   if (isLoading) return <Spinner />;
   if (isError) return <p className="text-red-600">❗ 오류: {error?.message}</p>;
@@ -84,10 +95,9 @@ export default function Detail() {
         ← 목록으로 돌아가기
       </button>
 
-      {/* ✅ 필드명 영문화 적용 */}
       <h1 className={cn(textStyles.pageTitle, 'mb-2')}>{med.product_name}</h1>
       {med.product_name_eng && (
-        <p className="text-gray-600 italic mb-4">{med.product_name_eng}</p>
+        <p className="text-muted-fg italic mb-4">{med.product_name_eng}</p>
       )}
 
       <TableWrap scroll className="mb-6 overflow-hidden bg-surface">
@@ -105,9 +115,8 @@ export default function Detail() {
                       'bg-muted',
                       'border-0 border-b border-border',
                       'border-x-0',
-                      !isLast && '',
                       isLast && 'border-b-0',
-                      'w-[180px] align-top',
+                      'w-[180px] align-top text-fg',
                     )}
                   >
                     {label}
@@ -118,6 +127,7 @@ export default function Detail() {
                       'border-0 border-b border-border',
                       'border-x-0',
                       isLast && 'border-b-0',
+                      'text-fg',
                     )}
                   >
                     <TableContent className={textStyles.bodySm}>
@@ -131,64 +141,60 @@ export default function Detail() {
         </Table>
       </TableWrap>
 
-      {/* 탭 */}
-      <div className="flex border-b mb-4 space-x-4">
-        <button
-          onClick={() => scrollToId('effect', HEADER_OFFSET)}
-          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-sky-600 cursor-pointer"
-        >
-          효능·효과
-        </button>
-        <button
-          onClick={() => scrollToId('usage', HEADER_OFFSET)}
-          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-sky-600 cursor-pointer"
-        >
-          용법·용량
-        </button>
-        <button
-          onClick={() => scrollToId('caution', HEADER_OFFSET)}
-          className="px-4 py-2 text-sm md:text-base font-medium text-gray-600 hover:text-sky-600 cursor-pointer"
-        >
-          사용상의 주의사항
-        </button>
-      </div>
+      {/* ✅ Tabs 공용 컴포넌트로 스크롤 네비 통일 */}
+      <Tabs
+        value={activeTab}
+        onValueChange={(val) => setActiveTab(val as TabKey)}
+        className="mb-6"
+      >
+        <TabsList className="w-full grid h-12 grid-cols-3">
+          {tabs.map((t) => (
+            <TabsTrigger
+              key={t.value}
+              value={t.value}
+              onClick={() => onTabClick(t)}
+              className="text-base"
+            >
+              {t.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
 
       {/* 본문 내용 */}
       <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
-        <section id="effect" ref={effectRef} className="scroll-mt-24 pt-4">
-          <h2 className="text-sky-700 font-bold text-xl mb-2">📌 효능·효과</h2>
+        <section id="effect" className="scroll-mt-24 pt-4">
+          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
+            📌 효능·효과
+          </h2>
           <MedicineDetailRenderer data={med.efficacy} />
         </section>
 
         <section
           id="usage"
-          ref={usageRef}
-          className="scroll-mt-24 pt-4 border-t border-gray-300"
+          className="scroll-mt-24 pt-4 border-t border-border"
         >
-          <h2 className="text-sky-700 font-bold text-xl mb-2">📌 용법·용량</h2>
+          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
+            📌 용법·용량
+          </h2>
           <MedicineDetailRenderer data={med.dosage_and_administration} />
         </section>
 
         <section
           id="caution"
-          ref={cautionRef}
-          className="pt-4 border-t border-gray-300 scroll-mt-24"
+          className="pt-4 border-t border-border scroll-mt-24"
         >
-          <h2 className="text-sky-700 font-bold text-xl mb-2">
+          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
             📌 사용상의 주의사항
           </h2>
           <MedicineDetailRenderer data={med.precautions} />
         </section>
 
         <section id="dur" className="scroll-mt-24">
-          {hasDur && (
-            <>
-              <h2 className="text-sky-700 font-bold text-xl mb-2">
-                📌 의약품안전사용(DUR)
-              </h2>
-              <DurSection dur={dur} />
-            </>
-          )}
+          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
+            📌 의약품안전사용(DUR)
+          </h2>
+          <DurSection dur={dur} />
         </section>
       </section>
 
