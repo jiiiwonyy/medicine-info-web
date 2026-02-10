@@ -9,6 +9,17 @@ import FloatingNavigation from '@/components/FloatingNavigation';
 import DurSection from '@/components/DurSection';
 import { scrollToId } from '@/hooks/useScrollSpy';
 import MedicineDetailRenderer from '@/components/MedicineDetailRender';
+import {
+  TableWrap,
+  Table,
+  TBody,
+  Tr,
+  Th,
+  Td,
+  TableContent,
+} from '@/components/ui/Table';
+import { textStyles } from '@/styles/typography';
+import { cn } from '@/shared/cn';
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
@@ -42,49 +53,83 @@ export default function Detail() {
   if (isError) return <p className="text-red-600">❗ 오류: {error?.message}</p>;
   if (!med) return <p>해당 약품을 찾을 수 없습니다.</p>;
 
+  const baseRows: Array<[string, unknown]> = [
+    ['품목기준코드', med.item_code],
+    ['업체명', med.company_name],
+    ['허가일', med.approval_date],
+    ['주성분', med.main_ingredient],
+    ['주성분영문', med.main_ingredient_eng],
+    ['첨가제', med.additive],
+    ['전문의약품', med.prescription_type],
+    ['완제/원료', med.formulation_type],
+    ['원료', med.raw_material],
+    ['허가/신고', med.approval_or_report],
+    ['제조/수입', med.manufacture_or_import],
+    ['마약구분', med.narcotic_class],
+    ['제형', med.dosage_form],
+    ['신약구분', med.new_drug_flag],
+    ['ATC코드', med.atc_code],
+    ['수입제조국', med.import_country],
+  ];
+
   return (
     <div className="p-6">
       <button
         onClick={() => navigate(-1)}
-        className="text-sky-700 hover:underline mb-4 block"
+        className={cn(
+          textStyles.nav,
+          'text-primary-700 mb-4 block hover:underline',
+        )}
       >
         ← 목록으로 돌아가기
       </button>
 
       {/* ✅ 필드명 영문화 적용 */}
-      <h1 className="text-xl font-bold mb-2">{med.product_name}</h1>
+      <h1 className={cn(textStyles.pageTitle, 'mb-2')}>{med.product_name}</h1>
       {med.product_name_eng && (
         <p className="text-gray-600 italic mb-4">{med.product_name_eng}</p>
       )}
 
-      {/* 기본 정보 테이블 */}
-      <table className="table-auto w-full mb-6 border-collapse">
-        <tbody>
-          {[
-            ['품목기준코드', med.item_code],
-            ['업체명', med.company_name],
-            ['허가일', med.approval_date],
-            ['주성분', med.main_ingredient],
-            ['주성분영문', med.main_ingredient_eng],
-            ['첨가제', med.additive],
-            ['전문의약품', med.prescription_type],
-            ['완제/원료', med.formulation_type],
-            ['원료', med.raw_material],
-            ['허가/신고', med.approval_or_report],
-            ['제조/수입', med.manufacture_or_import],
-            ['마약구분', med.narcotic_class],
-            ['제형', med.dosage_form],
-            ['신약구분', med.new_drug_flag],
-            ['ATC코드', med.atc_code],
-            ['수입제조국', med.import_country],
-          ].map(([label, value]) => (
-            <tr key={label}>
-              <th className="text-left p-2 border">{label}</th>
-              <td className="p-2 border">{value || '-'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableWrap scroll className="mb-6 overflow-hidden bg-surface">
+        <Table className={cn('border-0', 'border-y border-border-strong')}>
+          <TBody>
+            {baseRows.map(([label, value], idx) => {
+              const isLast = idx === baseRows.length - 1;
+              const display =
+                value == null || value === '' ? '-' : String(value);
+
+              return (
+                <Tr key={label} className="hover:bg-transparent">
+                  <Th
+                    className={cn(
+                      'bg-muted',
+                      'border-0 border-b border-border',
+                      'border-x-0',
+                      !isLast && '',
+                      isLast && 'border-b-0',
+                      'w-[180px] align-top',
+                    )}
+                  >
+                    {label}
+                  </Th>
+
+                  <Td
+                    className={cn(
+                      'border-0 border-b border-border',
+                      'border-x-0',
+                      isLast && 'border-b-0',
+                    )}
+                  >
+                    <TableContent className={textStyles.bodySm}>
+                      {display}
+                    </TableContent>
+                  </Td>
+                </Tr>
+              );
+            })}
+          </TBody>
+        </Table>
+      </TableWrap>
 
       {/* 탭 */}
       <div className="flex border-b mb-4 space-x-4">
