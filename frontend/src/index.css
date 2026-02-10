@@ -8,6 +8,7 @@
   --color-muted: rgb(var(--muted));
   --color-muted-fg: rgb(var(--muted-fg));
   --color-border: rgb(var(--border));
+  --color-border-strong: rgb(var(--border-strong));
 
   --color-primary: rgb(var(--primary));
   --color-primary-fg: rgb(var(--primary-fg));
@@ -52,6 +53,7 @@
   --muted: 248 250 252;
   --muted-fg: 100 116 139;
   --border: 226 232 240;
+  --border-strong: 31 41 55;
 
   --primary: 2 132 199; /* 600 */
   --primary-fg: 255 255 255;
