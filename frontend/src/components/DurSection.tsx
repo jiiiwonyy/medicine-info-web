@@ -136,7 +136,7 @@ export default function DurSection({ dur }: Props) {
 
         return (
           // ✅ 섹션 패널 래퍼 + 왼쪽 컬러바
-          <section key={key} className={`${theme.bg} rounded-2xl`}>
+          <section key={key} className={theme.bg}>
             <div className="flex gap-4">
               <div className={`w-1.5 rounded-l-2xl ${theme.bar}`} />
               <div className="flex-1 py-4 pr-4">
@@ -155,7 +155,7 @@ export default function DurSection({ dur }: Props) {
                 </Callout>
 
                 {/* ✅ 공용 Table 적용 */}
-                <TableWrap className="mt-3 rounded-[var(--radius-lg)] border border-border bg-surface overflow-hidden">
+                <TableWrap className="mt-3 border border-border bg-surface overflow-hidden">
                   <Table className="border-0">
                     <THead>
                       <Tr>
