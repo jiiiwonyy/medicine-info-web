@@ -1,5 +1,16 @@
 import type { DurData } from '@/types/dur';
 import Callout from './ui/Callout';
+import {
+  TableWrap,
+  Table,
+  THead,
+  TBody,
+  Tr,
+  Th,
+  Td,
+  TableContent,
+} from '@/components/ui/Table';
+import { textStyles } from '@/styles/typography';
 
 interface Props {
   dur: DurData;
@@ -27,8 +38,6 @@ const COLUMN_LABELS: Record<string, string> = {
 };
 
 type DurRow = DurData[keyof DurData][number];
-
-// ✅ 2번 방식: 섹션별 패널 테마(왼쪽 바 + 배경 + 타이틀색 + callout variant)
 type DurKey = keyof DurData;
 
 const SECTION_THEME: Record<
@@ -38,29 +47,25 @@ const SECTION_THEME: Record<
     bg: string;
     title: string;
     calloutVariant: 'info' | 'note' | 'warning';
-    theadBg: string;
   }
 > = {
   interactions: {
-    bar: 'bg-sky-500',
-    bg: 'bg-sky-50/40',
-    title: 'text-sky-800',
+    bar: 'bg-info-600',
+    bg: 'bg-info-50/20',
+    title: 'text-info-700',
     calloutVariant: 'info',
-    theadBg: 'bg-sky-50',
   },
   age: {
-    bar: 'bg-amber-500',
-    bg: 'bg-amber-50/40',
-    title: 'text-amber-800',
+    bar: 'bg-warning-600',
+    bg: 'bg-warning-50/20',
+    title: 'text-warning-700',
     calloutVariant: 'note',
-    theadBg: 'bg-amber-50',
   },
   pregnancy: {
-    bar: 'bg-rose-500',
-    bg: 'bg-rose-50/40',
-    title: 'text-rose-800',
+    bar: 'bg-danger-600',
+    bg: 'bg-danger-50/40',
+    title: 'text-danger-700',
     calloutVariant: 'warning',
-    theadBg: 'bg-rose-50',
   },
 };
 
@@ -131,13 +136,13 @@ export default function DurSection({ dur }: Props) {
 
         return (
           // ✅ 섹션 패널 래퍼 + 왼쪽 컬러바
-          <section key={key} className={`rounded-2xl ${theme.bg}`}>
+          <section key={key} className={`${theme.bg} rounded-2xl`}>
             <div className="flex gap-4">
               <div className={`w-1.5 rounded-l-2xl ${theme.bar}`} />
               <div className="flex-1 py-4 pr-4">
                 <h2
                   id={sectionId}
-                  className={`scroll-mt-24 font-bold text-lg mb-3 ${theme.title}`}
+                  className={`scroll-mt-24 ${textStyles.sectionTitle} mb-3 ${theme.title}`}
                 >
                   {LABEL_MAP[key]}
                 </h2>
@@ -149,46 +154,34 @@ export default function DurSection({ dur }: Props) {
                   {INFO_MAP[key]}
                 </Callout>
 
-                <div className="overflow-x-auto mt-3">
-                  <table className="table-auto w-full text-sm border border-gray-200 bg-white rounded-xl overflow-hidden">
-                    <thead className={theme.theadBg}>
-                      <tr>
+                {/* ✅ 공용 Table 적용 */}
+                <TableWrap className="mt-3 rounded-[var(--radius-lg)] border border-border bg-surface overflow-hidden">
+                  <Table className="border-0">
+                    <THead>
+                      <Tr>
                         {columns.map((col) => (
-                          <th
-                            key={col}
-                            className="border border-gray-200 px-3 py-2 text-left font-medium"
-                          >
+                          <Th key={col} className="bg-muted">
                             {COLUMN_LABELS[col] ?? col}
-                          </th>
+                          </Th>
                         ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item: DurRow, idx) => {
-                        const entries = Object.entries(item).filter(
-                          ([k]) => !HIDDEN_KEYS.includes(k),
-                        );
-                        return (
-                          <tr
-                            key={idx}
-                            className="odd:bg-white even:bg-gray-50"
-                          >
-                            {entries.map(([k, value]) =>
-                              columns.includes(k) ? (
-                                <td
-                                  key={k}
-                                  className="border border-gray-200 px-3 py-2"
-                                >
-                                  {String(value ?? '')}
-                                </td>
-                              ) : null,
-                            )}
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                      </Tr>
+                    </THead>
+
+                    <TBody>
+                      {list.map((row: DurRow, idx) => (
+                        <Tr key={idx} className="odd:bg-surface even:bg-muted">
+                          {columns.map((col) => (
+                            <Td key={col}>
+                              <TableContent>
+                                {String((row as any)[col] ?? '')}
+                              </TableContent>
+                            </Td>
+                          ))}
+                        </Tr>
+                      ))}
+                    </TBody>
+                  </Table>
+                </TableWrap>
               </div>
             </div>
           </section>
