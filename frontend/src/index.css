@@ -131,47 +131,44 @@ body {
 }
 
 /* 4) Legacy table styling */
-.table-wrapper table {
+/* Legacy HTML table styling (scoped) */
+.legacy-html-table table {
   width: 100%;
-  border-collapse: collapse;
   font-size: 14px;
   background-color: rgb(var(--bg));
-  margin: 12px 0;
 }
 
-.table-wrapper table,
-.table-wrapper th,
-.table-wrapper td {
+.legacy-html-table td,
+.legacy-html-table th {
   border: 1px solid rgb(var(--border));
+  padding: 8px 10px;
+  vertical-align: middle;
+
+  width: auto !important;
+  height: auto !important;
 }
 
-.table-wrapper th {
+/* ✅ th 배경/텍스트 */
+.legacy-html-table th {
   background-color: rgb(var(--muted));
   color: rgb(var(--fg));
 }
 
-.table-wrapper td,
-.table-wrapper th {
-  padding: 8px 10px;
-  vertical-align: middle;
-}
-
-.table-wrapper td,
-.table-wrapper th {
+.legacy-html-table p {
+  margin: 0 !important;
+  line-height: 1.4;
   white-space: normal !important;
   word-break: break-word;
   overflow-wrap: break-word;
+
+  margin-left: 0 !important;
+  text-indent: 0 !important;
 }
 
-.table-wrapper td p {
-  margin: 0;
-  line-height: 1.4;
-  word-break: break-word;
-  white-space: normal !important;
-}
-
-.table-wrapper td {
-  white-space: nowrap;
+.legacy-html-table ul,
+.legacy-html-table ol {
+  margin: 0 !important;
+  padding-left: 1.25rem;
 }
 
 @media (max-width: 480px) {
