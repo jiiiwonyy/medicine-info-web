@@ -6,6 +6,8 @@ import {
   HiOutlineChartBar,
   HiOutlineMegaphone,
 } from 'react-icons/hi2';
+import { textStyles } from '@/styles/typography';
+import { cn } from '@/shared/cn';
 
 export default function Home() {
   const quickLinks = [
@@ -46,10 +48,12 @@ export default function Home() {
       <div className="py-6">
         {/* Hero Section */}
         <div className="text-center space-y-3 py-4 mb-10">
-          <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
-            의약품 정보, <span className="text-sky-700">쉽고 정확하게</span>
-          </h1>
-          <p className="text-gray-500 text-lg">
+          <p
+            className={cn(textStyles.displayLg, 'text-gray-900 tracking-tight')}
+          >
+            의약품 정보, <span className="text-primary-700">쉽고 정확하게</span>
+          </p>
+          <p className={cn(textStyles.headingLg, 'text-fg')}>
             안전한 투약을 위한 의약품 정보, 쉽고 정확하게
             <br />
             식품의약품안전처, 공공기관 데이터를 기반으로 신뢰할 수 있는 정보를
@@ -60,14 +64,16 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           <div className="space-y-8">
             <div className="grid grid-cols-1 gap-4">
-              <div className="bg-sky-50 rounded-xl p-5 border border-sky-100 flex flex-col gap-2">
+              <div className="bg-primary-50 rounded-xl p-5 border border-primary-100 flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-sky-600"></span>
-                  <strong className="text-gray-900 text-lg">효능·효과</strong>
+                  <span className="w-2 h-2 rounded-full bg-primary-700"></span>
+                  <strong className={cn(textStyles.headingLg, 'text-fg')}>
+                    효능·효과
+                  </strong>
                 </div>
-                <p className="text-gray-700 leading-relaxed text-sm">
+                <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
                   의약품의{' '}
-                  <strong className="text-sky-700">
+                  <strong className="text-primary-700">
                     허가된 적응증(Indication)
                   </strong>
                   을 기술하는 항목으로, 임상시험 결과 및 약리학적 근거에 따라
@@ -78,9 +84,11 @@ export default function Home() {
               <div className="bg-sky-50 rounded-xl p-5 border border-sky-100 flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-sky-600"></span>
-                  <strong className="text-gray-900 text-lg">용법·용량</strong>
+                  <strong className={cn(textStyles.headingLg, 'text-fg')}>
+                    용법·용량
+                  </strong>
                 </div>
-                <p className="text-gray-700 leading-relaxed text-sm">
+                <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
                   의약품의 표준 투여 경로, 투여 빈도, 1회 및 1일 투여량을
                   규정하는 항목
                 </p>
@@ -89,25 +97,30 @@ export default function Home() {
               <div className="bg-sky-50 rounded-xl p-5 border border-sky-100 flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-sky-600"></span>
-                  <strong className="text-gray-900 text-lg">
+                  <strong className={cn(textStyles.headingLg, 'text-fg')}>
                     사용상의 주의사항
                   </strong>
                 </div>
-                <p className="text-gray-700 leading-relaxed text-sm">
+                <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
                   의약품 사용 시 발생 가능한 위해 요소를 최소화하기 위한 안전성
                   정보를 제공하는 항목
                 </p>
               </div>
             </div>
 
-            <div className="border-t border-gray-100 pt-6">
-              <p className="mb-6 font-bold text-gray-800 text-lg flex items-center gap-2">
+            <div className="border-t border-border pt-6">
+              <p
+                className={cn(
+                  textStyles.titleLg,
+                  'mb-6 text-fg flex items-center gap-2',
+                )}
+              >
                 <svg
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={2}
                   stroke="currentColor"
-                  className="w-5 h-5 text-amber-500"
+                  className="w-8 h-8 text-primary-700"
                 >
                   <path
                     strokeLinecap="round"
@@ -178,12 +191,17 @@ export default function Home() {
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="group hover:bg-gray-50 p-4 rounded-xl border-l-4 border-gray-200"
+                    className="group hover:bg-muted p-4 rounded-xl border-l-4 border-gray-200"
                   >
-                    <h4 className="font-bold text-gray-900 mb-1">
+                    <h4 className={cn(textStyles.headingLg, 'text-fg mb-1')}>
                       {item.title}
                     </h4>
-                    <p className="text-sm text-gray-600 leading-relaxed">
+                    <p
+                      className={cn(
+                        textStyles.bodyMd,
+                        'text-fg leading-relaxed',
+                      )}
+                    >
                       {item.content}
                     </p>
                   </div>
@@ -193,12 +211,12 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+            <div className="bg-bg p-6 rounded-2xl border border-border shadow-sm">
               <div className="grid grid-cols-1 gap-4">
                 {quickLinks.map((card) => (
                   <button
                     key={card.title}
-                    className="group flex flex-col items-start gap-3 p-4 bg-gray-50 rounded-xl border border-transparent hover:border-sky-200 hover:bg-sky-50 transition-all text-left h-full"
+                    className="group flex flex-col items-start gap-3 p-4 bg-muted rounded-xl border border-transparent hover:border-sky-200 hover:bg-sky-50 transition-all text-left h-full"
                   >
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center ${card.color} group-hover:scale-110 transition-transform`}
@@ -206,10 +224,20 @@ export default function Home() {
                       {card.icon}
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-800 group-hover:text-sky-700 transition-colors">
+                      <h3
+                        className={cn(
+                          textStyles.headingLg,
+                          'text-fg group-hover:text-primary transition-colors mb-2',
+                        )}
+                      >
                         {card.title}
                       </h3>
-                      <p className="text-xs text-gray-600 mt-1 leading-snug">
+                      <p
+                        className={cn(
+                          textStyles.bodyMd,
+                          'text-fg mt-1 leading-snug',
+                        )}
+                      >
                         {card.desc}
                       </p>
                     </div>
