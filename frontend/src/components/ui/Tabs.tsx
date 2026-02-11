@@ -4,6 +4,7 @@ import { cn } from '@/shared/cn';
 interface TabsContextValue {
   value: string;
   onValueChange: (value: string) => void;
+  baseId: string;
 }
 
 const TabsContext = React.createContext<TabsContextValue | undefined>(
@@ -27,6 +28,7 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
     },
     ref,
   ) => {
+    const baseId = React.useId();
     const [uncontrolledValue, setUncontrolledValue] =
       React.useState(defaultValue);
     const value = controlledValue ?? uncontrolledValue ?? '';
@@ -42,7 +44,9 @@ const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
     );
 
     return (
-      <TabsContext.Provider value={{ value, onValueChange: handleValueChange }}>
+      <TabsContext.Provider
+        value={{ value, onValueChange: handleValueChange, baseId }}
+      >
         <div ref={ref} className={cn('w-full', className)} {...props} />
       </TabsContext.Provider>
     );
@@ -56,6 +60,7 @@ const TabsList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
+    role="tablist"
     className={cn(
       'inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-fg',
       className,
@@ -78,12 +83,16 @@ const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
     }
 
     const isActive = context.value === value;
+    const triggerId = `${context.baseId}-tab-${value}`;
+    const panelId = `${context.baseId}-panel-${value}`;
 
     return (
       <button
         ref={ref}
         type="button"
         role="tab"
+        id={triggerId}
+        aria-controls={panelId}
         aria-selected={isActive}
         data-state={isActive ? 'active' : 'inactive'}
         className={cn(
@@ -118,10 +127,15 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
       return null;
     }
 
+    const triggerId = `${context.baseId}-tab-${value}`;
+    const panelId = `${context.baseId}-panel-${value}`;
+
     return (
       <div
         ref={ref}
         role="tabpanel"
+        id={panelId}
+        aria-labelledby={triggerId}
         className={cn(
           'mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
           className,
