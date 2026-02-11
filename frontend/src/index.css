@@ -130,6 +130,8 @@ html {
 body {
   background: rgb(var(--bg));
   color: rgb(var(--fg));
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 /* 4) Legacy table styling */
