@@ -155,7 +155,7 @@ export default function DurSection({ dur }: Props) {
                 </Callout>
 
                 {/* ✅ 공용 Table 적용 */}
-                <TableWrap className="mt-3 border border-border bg-surface overflow-hidden">
+                <TableWrap className="mt-3 border border-border bg-surface">
                   <Table className="border-0">
                     <THead>
                       <Tr>
