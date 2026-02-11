@@ -160,10 +160,7 @@ body {
   margin: 0 !important;
   line-height: 1.4;
   white-space: normal !important;
-  word-break: break-word;
   overflow-wrap: break-word;
-
-  margin-left: 0 !important;
   text-indent: 0 !important;
 }
 
@@ -174,7 +171,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  .table-wrapper td {
+  .legacy-html-table td {
     white-space: normal !important;
   }
 }
