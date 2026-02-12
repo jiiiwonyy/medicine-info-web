@@ -142,7 +142,7 @@ export default function DurSection({ dur }: Props) {
               <div className="flex-1 py-4 pr-4">
                 <h2
                   id={sectionId}
-                  className={`scroll-mt-24 ${textStyles.sectionTitle} mb-3 ${theme.title}`}
+                  className={`scroll-mt-24 ${textStyles.titleMd} mb-3 ${theme.title}`}
                 >
                   {LABEL_MAP[key]}
                 </h2>

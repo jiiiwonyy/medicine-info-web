@@ -1,5 +1,9 @@
 import Callout from '@/components/ui/Callout';
 import PageLayout from '@/components/PageLayout';
+import { Card } from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 export default function LawInfoPage() {
   const laws = [
@@ -99,27 +103,27 @@ export default function LawInfoPage() {
       </div>
 
       <div>
-        <h3 className="text-xl font-bold mt-10 mb-4 text-sky-800">
+        <h3 className={cn(textStyles.titleMd, 'text-primary-700 mt-10 mb-4')}>
           ⚙️ 핵심 기능
         </h3>
         <ul className="list-disc pl-6 space-y-1">
           <li>
             🏛️ <strong>3단 비교 법률-시행령</strong> - 시행규칙을 한 화면에
-            나란히 놓고 비교할 수 있는 가장 강력한 기능입니다.<br></br>
+            나란히 놓고 비교할 수 있는 가장 강력한 기능입니다.
             <span className="pl-5 block">
               법 조항이 하위 법령에서 어떻게 구체화되는지 한눈에 파악할 수
               있습니다.
             </span>
           </li>
           <li>
-            🔄 <strong>신구법 비교 법</strong>이 개정되었을 때,{' '}
+            🔄 <strong>신구법 비교</strong> 법이 개정되었을 때,{' '}
             <strong>개정 전(구법)과 후(신법)의 조문</strong>을 나란히 비교하여
             변경된 부분을 쉽게 확인할 수 있습니다.
           </li>
           <li>
-            📄 <strong>한글(HWP)·PDF 파일 다운로드</strong> 법령에 첨부된 각종
-            <strong> 별표, 서식(신청서 등)</strong>을 클릭 한 번으로
-            다운로드하여 바로 사용할 수 있습니다.
+            📄 <strong>한글(HWP)·PDF 파일 다운로드</strong> 법령에 첨부된 각종{' '}
+            <strong>별표, 서식(신청서 등)</strong>을 클릭 한 번으로 다운로드하여
+            바로 사용할 수 있습니다.
           </li>
           <li>
             🔍 <strong>통합 검색 및 연혁 조회</strong> 키워드 하나로 관련된
@@ -129,36 +133,42 @@ export default function LawInfoPage() {
         </ul>
       </div>
 
-      <h3 className="text-xl font-bold mt-10 mb-4 text-sky-800">
+      <h3 className={cn(textStyles.titleMd, 'text-primary-700 mt-10 mb-4')}>
         📚 주요 보건의료 관련 법률 바로가기
       </h3>
 
       <div className="grid md:grid-cols-2 gap-4">
         {laws.map((law) => (
-          <div
+          <Card
             key={law.title}
-            className="bg-white border border-sky-100 rounded-lg shadow-sm p-4 hover:shadow-md transition hover:-translate-y-0.5"
+            variant="outlined"
+            padding="md"
+            className={cn(
+              'transition hover:shadow-[var(--shadow-sm)] hover:-translate-y-0.5',
+            )}
           >
-            <h4 className="font-semibold text-sky-800 mb-2">{law.title}</h4>
+            <h4 className={cn(textStyles.titleSm, 'text-primary-700 mb-3')}>
+              {law.title}
+            </h4>
+
             <div className="flex flex-wrap gap-2">
-              <a
-                href={law.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-white bg-sky-700 hover:bg-sky-900 px-3 py-1 rounded transition"
-              >
-                🔗 법령 바로가기
-              </a>
-              <a
-                href={law.threeLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-sky-800 border border-sky-700 px-3 py-1 rounded hover:bg-sky-50 transition"
-              >
-                📖 삼단비교법 보기
-              </a>
+              <Button asChild size="sm" variant="primary">
+                <a href={law.link} target="_blank" rel="noopener noreferrer">
+                  🔗 법령 바로가기
+                </a>
+              </Button>
+
+              <Button asChild size="sm" variant="secondary">
+                <a
+                  href={law.threeLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  📖 삼단비교법 보기
+                </a>
+              </Button>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </PageLayout>

@@ -88,16 +88,16 @@ export default function Detail() {
       <button
         onClick={() => navigate(-1)}
         className={cn(
-          textStyles.nav,
+          textStyles.bodyLg,
           'text-primary-700 mb-4 block hover:underline',
         )}
       >
         ← 목록으로 돌아가기
       </button>
 
-      <h1 className={cn(textStyles.pageTitle, 'mb-2')}>{med.product_name}</h1>
+      <h1 className={cn(textStyles.titleLg, 'mb-2')}>{med.product_name}</h1>
       {med.product_name_eng && (
-        <p className="text-muted-fg italic mb-4">{med.product_name_eng}</p>
+        <p className={cn(textStyles.bodyMd, 'mb-4')}>{med.product_name_eng}</p>
       )}
 
       <TableWrap scroll className="mb-6 overflow-hidden bg-surface">
@@ -117,6 +117,7 @@ export default function Detail() {
                       'border-x-0',
                       isLast && 'border-b-0',
                       'w-[180px] align-top text-fg',
+                      textStyles.bodyMd,
                     )}
                   >
                     {label}
@@ -124,13 +125,14 @@ export default function Detail() {
 
                   <Td
                     className={cn(
+                      textStyles.bodyMd,
                       'border-0 border-b border-border',
                       'border-x-0',
                       isLast && 'border-b-0',
                       'text-fg',
                     )}
                   >
-                    <TableContent className={textStyles.bodySm}>
+                    <TableContent className={textStyles.bodyMd}>
                       {display}
                     </TableContent>
                   </Td>
@@ -164,7 +166,7 @@ export default function Detail() {
       {/* 본문 내용 */}
       <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
         <section id="effect" className="scroll-mt-24 pt-4">
-          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
+          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
             📌 효능·효과
           </h2>
           <MedicineDetailRenderer data={med.efficacy} />
@@ -174,7 +176,7 @@ export default function Detail() {
           id="usage"
           className="scroll-mt-24 pt-4 border-t border-border"
         >
-          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
+          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
             📌 용법·용량
           </h2>
           <MedicineDetailRenderer data={med.dosage_and_administration} />
@@ -184,14 +186,14 @@ export default function Detail() {
           id="caution"
           className="pt-4 border-t border-border scroll-mt-24"
         >
-          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
+          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
             📌 사용상의 주의사항
           </h2>
           <MedicineDetailRenderer data={med.precautions} />
         </section>
 
         <section id="dur" className="scroll-mt-24">
-          <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-2')}>
+          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
             📌 의약품안전사용(DUR)
           </h2>
           <DurSection dur={dur} />

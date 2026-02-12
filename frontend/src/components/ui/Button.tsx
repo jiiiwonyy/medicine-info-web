@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import { Slot } from '@radix-ui/react-slot';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 type ButtonSize = 'sm' | 'md';
@@ -10,6 +11,7 @@ export interface ButtonProps
   variant?: ButtonVariant;
   size?: ButtonSize;
   isLoading?: boolean;
+  asChild?: boolean;
 }
 
 const base = cn(
@@ -29,13 +31,10 @@ const sizes: Record<ButtonSize, string> = {
   md: 'h-10 px-4',
 };
 
-function Spinner({ className }: { className?: string }) {
+function Spinner() {
   return (
     <span
-      className={cn(
-        'inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent',
-        className,
-      )}
+      className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
       aria-hidden="true"
     />
   );
@@ -49,16 +48,37 @@ export default function Button({
   disabled,
   children,
   type = 'button',
+  asChild = false,
   ...props
 }: ButtonProps) {
   const isDisabled = disabled || isLoading;
+
+  if (asChild) {
+    const onlyChild = React.Children.only(children) as React.ReactElement;
+
+    return (
+      <Slot
+        className={cn(
+          base,
+          textStyles.bodyMd,
+          variants[variant],
+          sizes[size],
+          className,
+        )}
+        aria-disabled={isDisabled || undefined}
+        {...props}
+      >
+        {onlyChild}
+      </Slot>
+    );
+  }
 
   return (
     <button
       type={type}
       className={cn(
         base,
-        textStyles.nav,
+        textStyles.bodyMd,
         variants[variant],
         sizes[size],
         className,

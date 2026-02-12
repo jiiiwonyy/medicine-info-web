@@ -130,10 +130,10 @@ export default function SearchResult() {
 
   return (
     <PageLayout>
-      <h2 className={cn(textStyles.pageTitle, 'text-center mb-5')}>
+      <h2 className={cn(textStyles.titleXl, 'text-center mb-5')}>
         {query ? (
           <>
-            통합검색 : <span className={textStyles.pageTitle}>{rawQuery}</span>{' '}
+            통합검색 : <span className={textStyles.titleXl}>{rawQuery}</span>{' '}
             (으)로 검색한 결과입니다.
           </>
         ) : (
@@ -141,7 +141,7 @@ export default function SearchResult() {
         )}
       </h2>
 
-      <h2 className={cn(textStyles.sectionTitle, 'text-primary mb-6')}>
+      <h2 className={cn(textStyles.titleMd, 'text-primary mb-6')}>
         {query ? '검색결과 리스트' : '등록된 의약품 목록'} ( {total}개 )
       </h2>
 
