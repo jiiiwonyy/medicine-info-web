@@ -102,7 +102,7 @@ export default function Header() {
               onMouseEnter={() => setOpenMain(tab)}
               className={cn(
                 'px-4 py-3 cursor-pointer transition',
-                textStyles.nav,
+                textStyles.uiLg,
                 openMain === tab
                   ? 'bg-primary-100 text-fg'
                   : 'text-primary-fg hover:bg-primary-700',
@@ -119,7 +119,7 @@ export default function Header() {
             <div className="mx-auto w-full max-w-6xl px-8 py-6">
               <h3
                 className={cn(
-                  textStyles.sectionTitle,
+                  textStyles.uiLg,
                   'text-fg mb-4 border-b border-border pb-2',
                 )}
               >
@@ -137,7 +137,7 @@ export default function Header() {
                       }}
                       className={cn(
                         'w-full text-left px-3 py-2 rounded-md transition',
-                        textStyles.nav,
+                        textStyles.bodyMd,
                         isActive
                           ? 'bg-primary-50 text-primary font-semibold'
                           : 'text-muted-fg hover:bg-muted hover:text-fg',
