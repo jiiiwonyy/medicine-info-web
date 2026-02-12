@@ -11,7 +11,7 @@ export default function Input({ className, hasError, ...props }: InputProps) {
   return (
     <input
       className={cn(
-        textStyles.body,
+        textStyles.bodyMd,
         'w-full rounded-md px-3 py-2',
         'bg-bg text-fg placeholder:text-muted-fg',
         'border border-border',
