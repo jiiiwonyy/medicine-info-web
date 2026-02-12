@@ -210,12 +210,12 @@ export default function Home() {
                     padding="md"
                     className="group hover:bg-muted border-l-4 border-gray-200"
                   >
-                    <h4 className={cn(textStyles.headingMd, 'text-fg mb-1')}>
+                    <h4 className={cn(textStyles.titleSm, 'text-fg mb-1')}>
                       {item.title}
                     </h4>
                     <p
                       className={cn(
-                        textStyles.bodySm,
+                        textStyles.bodyMd,
                         'text-muted-fg leading-relaxed',
                       )}
                     >
@@ -258,7 +258,7 @@ export default function Home() {
                         {card.title}
                       </h3>
                       <p
-                        className={cn(textStyles.bodySm, 'text-muted-fg mt-1')}
+                        className={cn(textStyles.bodyMd, 'text-muted-fg mt-1')}
                       >
                         {card.desc}
                       </p>
