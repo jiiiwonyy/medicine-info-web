@@ -35,6 +35,12 @@ export default function Header() {
       { label: '의약품 이상반응(실마리) 정보', path: '/signal' },
     ],
 
+    '안전한 투약 관리': [
+      { label: '투약 안전이란?', path: '/medication-safety-info' },
+      { label: '안전한 투약 과정', path: '/safe-medication-process' },
+      { label: '투약오류 감소 전략', path: '/error-reduction-strategy' },
+    ],
+
     '부작용 보고자료': [
       { label: '국내 부작용 보고건수', path: '/domestic' },
       { label: '미국 FDA 부작용 보고건수', path: '/fda' },
