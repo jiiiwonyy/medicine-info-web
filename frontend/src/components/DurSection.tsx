@@ -11,6 +11,7 @@ import {
   TableContent,
 } from '@/components/ui/Table';
 import { textStyles } from '@/styles/typography';
+import { cn } from '@/shared/cn';
 
 interface Props {
   dur: DurData;
@@ -153,6 +154,10 @@ export default function DurSection({ dur }: Props) {
                 >
                   {INFO_MAP[key]}
                 </Callout>
+
+                <p className={cn(textStyles.bodySm, 'mt-2 mb-2 text-fg')}>
+                  ※ 아래에서 검색한 약물의 주성분 결과를 확인하여 주십시오.
+                </p>
 
                 {/* ✅ 공용 Table 적용 */}
                 <TableWrap className="mt-3 border border-border bg-surface">
