@@ -11,7 +11,6 @@ const STEP_META: Array<{
   inactive: string;
   activeText: string;
   inactiveText: string;
-  focusRing: string;
 }> = [
   {
     key: 'prescribing',
@@ -21,7 +20,6 @@ const STEP_META: Array<{
     inactive: 'bg-danger-200/40',
     activeText: 'text-white',
     inactiveText: 'text-fg',
-    focusRing: 'focus-visible:ring-danger/25',
   },
   {
     key: 'administration',
@@ -31,7 +29,6 @@ const STEP_META: Array<{
     inactive: 'bg-success-200/40',
     activeText: 'text-white',
     inactiveText: 'text-fg',
-    focusRing: 'focus-visible:ring-success/25',
   },
   {
     key: 'monitoring',
@@ -41,7 +38,6 @@ const STEP_META: Array<{
     inactive: 'bg-primary-200/40',
     activeText: 'text-white',
     inactiveText: 'text-fg',
-    focusRing: 'focus-visible:ring-primary/25',
   },
 ];
 
