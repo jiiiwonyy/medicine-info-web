@@ -8,6 +8,7 @@
   --color-muted: rgb(var(--muted));
   --color-muted-fg: rgb(var(--muted-fg));
   --color-border: rgb(var(--border));
+  --color-border-strong: rgb(var(--border-strong));
 
   --color-primary: rgb(var(--primary));
   --color-primary-fg: rgb(var(--primary-fg));
@@ -26,15 +27,23 @@
 
   --color-success-50: rgb(var(--success-50));
   --color-success-200: rgb(var(--success-200));
+  --color-success-600: rgb(var(--success-600));
+  --color-success-700: rgb(var(--success-700));
 
   --color-warning-50: rgb(var(--warning-50));
   --color-warning-200: rgb(var(--warning-200));
+  --color-warning-600: rgb(var(--warning-600));
+  --color-warning-700: rgb(var(--warning-700));
 
   --color-danger-50: rgb(var(--danger-50));
   --color-danger-200: rgb(var(--danger-200));
+  --color-danger-600: rgb(var(--danger-600));
+  --color-danger-700: rgb(var(--danger-700));
 
   --color-info-50: rgb(var(--info-50));
   --color-info-200: rgb(var(--info-200));
+  --color-info-600: rgb(var(--info-600));
+  --color-info-700: rgb(var(--info-700));
 }
 
 /* 2) Design tokens */
@@ -44,6 +53,7 @@
   --muted: 248 250 252;
   --muted-fg: 100 116 139;
   --border: 226 232 240;
+  --border-strong: 31 41 55;
 
   --primary: 2 132 199; /* 600 */
   --primary-fg: 255 255 255;
@@ -67,17 +77,29 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.08);
 
+  /* success */
   --success-50: 240 253 244;
   --success-200: 187 247 208;
+  --success-600: 22 163 74;
+  --success-700: 21 128 61;
 
-  --warning-50: 255 251 235;
-  --warning-200: 254 215 170;
+  /* warning */
+  --warning-50: 255 247 237; /* orange-50 */
+  --warning-200: 254 215 170; /* 기존 유지 */
+  --warning-600: 234 88 12; /* orange-600 */
+  --warning-700: 194 65 12; /* orange-700 */
 
+  /* danger */
   --danger-50: 254 242 242;
   --danger-200: 254 202 202;
+  --danger-600: 220 38 38;
+  --danger-700: 185 28 28;
 
+  /* info */
   --info-50: 239 246 255;
   --info-200: 191 219 254;
+  --info-600: 37 99 235;
+  --info-700: 29 78 216;
 }
 
 /* 다크모드 보류
@@ -108,54 +130,50 @@ html {
 body {
   background: rgb(var(--bg));
   color: rgb(var(--fg));
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 /* 4) Legacy table styling */
-.table-wrapper table {
+/* Legacy HTML table styling (scoped) */
+.legacy-html-table table {
   width: 100%;
-  border-collapse: collapse;
   font-size: 14px;
   background-color: rgb(var(--bg));
-  margin: 12px 0;
 }
 
-.table-wrapper table,
-.table-wrapper th,
-.table-wrapper td {
+.legacy-html-table td,
+.legacy-html-table th {
   border: 1px solid rgb(var(--border));
+  padding: 8px 10px;
+  vertical-align: middle;
+
+  width: auto !important;
+  height: auto !important;
 }
 
-.table-wrapper th {
+/* ✅ th 배경/텍스트 */
+.legacy-html-table th {
   background-color: rgb(var(--muted));
   color: rgb(var(--fg));
 }
 
-.table-wrapper td,
-.table-wrapper th {
-  padding: 8px 10px;
-  vertical-align: middle;
-}
-
-.table-wrapper td,
-.table-wrapper th {
-  white-space: normal !important;
-  word-break: break-word;
-  overflow-wrap: break-word;
-}
-
-.table-wrapper td p {
-  margin: 0;
+.legacy-html-table p {
+  margin: 0 !important;
   line-height: 1.4;
-  word-break: break-word;
   white-space: normal !important;
+  overflow-wrap: break-word;
+  text-indent: 0 !important;
 }
 
-.table-wrapper td {
-  white-space: nowrap;
+.legacy-html-table ul,
+.legacy-html-table ol {
+  margin: 0 !important;
+  padding-left: 1.25rem;
 }
 
 @media (max-width: 480px) {
-  .table-wrapper td {
+  .legacy-html-table td {
     white-space: normal !important;
   }
 }

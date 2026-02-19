@@ -1,3 +1,7 @@
+import { TableWrap } from '@/components/ui/Table';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
+
 export default function MedicineDetailRenderer({ data }: { data: any }) {
   if (!data) return null;
 
@@ -11,7 +15,7 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
         {data.map((section, idx) => (
           <div key={idx} className="space-y-3">
             {section.title && (
-              <h3 className="text-md font-semibold">{section.title}</h3>
+              <h3 className={textStyles.titleMd}>{section.title}</h3>
             )}
 
             {section.items?.map((item: any, i: number) => {
@@ -19,7 +23,7 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
                 return (
                   <p
                     key={i}
-                    className="leading-relaxed"
+                    className={cn(textStyles.bodyMd, 'leading-relaxed')}
                     dangerouslySetInnerHTML={{ __html: item.html }}
                   />
                 );
@@ -27,11 +31,15 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
 
               if (item.type === 'table') {
                 return (
-                  <div
+                  <TableWrap
                     key={i}
-                    className="overflow-x-auto my-4 table-wrapper rounded-md"
-                    dangerouslySetInnerHTML={{ __html: item.html }}
-                  />
+                    className="border border-border bg-surface overflow-hidden"
+                  >
+                    <div
+                      className="legacy-html-table"
+                      dangerouslySetInnerHTML={{ __html: item.html }}
+                    />
+                  </TableWrap>
                 );
               }
 

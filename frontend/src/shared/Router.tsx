@@ -16,6 +16,9 @@ import AdverseReliefPage from '@/Pages/AdverseReliefPage';
 import LawInfoPage from '@/Pages/LawInfo';
 import AdminPage from '@/Pages/AdminPage';
 import FdaPage from '@/Pages/FdaPage';
+import MedicationSafetyInfo from '@/Pages/MedicationSafetyInfo';
+import SafeMedicationProcess from '@/Pages/SafeMedicationProcess/SafeMedicationProcess';
+import ErrorReductionStrategy from '@/Pages/ErrorReductionStrategy';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
@@ -40,16 +43,27 @@ const Router = () => {
           element={<PlaceholderPage title="의약품 안전 정보" />}
         />
 
+        {/* 안전한 투약 관리 */}
+        <Route
+          path="/medication-safety-info"
+          element={<MedicationSafetyInfo />}
+        />
+        <Route
+          path="/safe-medication-process"
+          element={<SafeMedicationProcess />}
+        />
+        <Route
+          path="/error-reduction-strategy"
+          element={<ErrorReductionStrategy />}
+        />
+
         {/* 안전성 서한 및 실마리정보 */}
         <Route path="/safety-letter" element={<SafetyLetter />} />
         <Route path="/signal" element={<Signal />} />
 
         {/* 부작용 보고자료 */}
         <Route path="/domestic" element={<AdverseEventDomestic />} />
-        <Route
-          path="/fda"
-          element={<FdaPage />}
-        />
+        <Route path="/fda" element={<FdaPage />} />
         <Route
           path="/who"
           element={<PlaceholderPage title="WHO 부작용 보고건수" />}

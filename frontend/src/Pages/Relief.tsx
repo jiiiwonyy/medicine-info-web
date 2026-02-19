@@ -26,16 +26,14 @@ export default function ReliefPage() {
             <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mb-4">
               <MdSick size={24} />
             </div>
-            <h2
-              className={cn(textStyles.sectionTitle, 'mb-3 text-primary-700')}
-            >
+            <h2 className={cn(textStyles.titleMd, 'mb-3 text-primary-700')}>
               부작용
               <br />
               <span className={cn(textStyles.bodySm, 'font-normal block mt-1')}>
                 (Side Effect)
               </span>
             </h2>
-            <p className={cn(textStyles.body, 'text-fg leading-relaxed')}>
+            <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
               정상적인 용량에 따라 약물을 투여할 경우 발생하는 모든 의도되지
               않은 효과
             </p>
@@ -52,16 +50,14 @@ export default function ReliefPage() {
             <div className="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mb-4">
               <MdWarningAmber size={24} />
             </div>
-            <h2
-              className={cn(textStyles.sectionTitle, 'mb-3 text-primary-700')}
-            >
+            <h2 className={cn(textStyles.titleMd, 'mb-3 text-primary-700')}>
               이상사례
               <br />
               <span className={cn(textStyles.bodySm, 'font-normal block mt-1')}>
                 (Adverse Event)
               </span>
             </h2>
-            <p className={cn(textStyles.body, 'text-fg leading-relaxed')}>
+            <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
               약물 사용 중 발생한 바람직하지 않고 의도되지 않는 징후, 증상 또는
               질병
             </p>
@@ -78,16 +74,14 @@ export default function ReliefPage() {
             <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center mb-4">
               <MdMedication size={24} />
             </div>
-            <h2
-              className={cn(textStyles.sectionTitle, 'mb-3 text-primary-700')}
-            >
+            <h2 className={cn(textStyles.titleMd, 'mb-3 text-primary-700')}>
               약물이상반응
               <br />
               <span className={cn(textStyles.bodySm, 'font-normal block mt-1')}>
                 (Adverse Drug Reaction)
               </span>
             </h2>
-            <p className={cn(textStyles.body, 'text-fg leading-relaxed')}>
+            <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
               이상사례 중 해당 의약품과의 인과관계를 배제할 수 없는 경우
             </p>
           </div>
@@ -102,7 +96,7 @@ export default function ReliefPage() {
         >
           <h2
             className={cn(
-              textStyles.sectionTitle,
+              textStyles.titleMd,
               'mb-4 text-danger flex items-center gap-2',
             )}
           >
@@ -120,7 +114,7 @@ export default function ReliefPage() {
             ].map((item, index) => (
               <li
                 key={index}
-                className={cn(textStyles.body, 'flex items-start text-fg')}
+                className={cn(textStyles.bodyMd, 'flex items-start text-fg')}
               >
                 <span className="mr-2 text-danger">•</span>
                 {item}
@@ -134,7 +128,7 @@ export default function ReliefPage() {
           <div>
             <h2
               className={cn(
-                textStyles.pageTitle,
+                textStyles.titleMd,
                 'mb-4 text-fg border-b border-border pb-2',
               )}
             >
@@ -143,7 +137,7 @@ export default function ReliefPage() {
             <div className="bg-muted/50 p-6 rounded-lg border border-border">
               <p
                 className={cn(
-                  textStyles.body,
+                  textStyles.bodyMd,
                   'leading-relaxed text-fg text-justify',
                 )}
               >
@@ -165,7 +159,7 @@ export default function ReliefPage() {
           <div>
             <h2
               className={cn(
-                textStyles.pageTitle,
+                textStyles.titleLg,
                 'mb-4 text-fg border-b border-border pb-2',
               )}
             >
@@ -174,7 +168,7 @@ export default function ReliefPage() {
             <div className="bg-muted/50 p-6 rounded-lg border border-border">
               <p
                 className={cn(
-                  textStyles.body,
+                  textStyles.bodyMd,
                   'leading-relaxed text-fg text-justify',
                 )}
               >
@@ -200,7 +194,7 @@ export default function ReliefPage() {
         <section>
           <h2
             className={cn(
-              textStyles.pageTitle,
+              textStyles.titleLg,
               'mb-6 text-fg border-b border-border pb-2',
             )}
           >
@@ -223,7 +217,7 @@ export default function ReliefPage() {
               >
                 <MdComputer size={36} />
               </div>
-              <h3 className={cn(textStyles.sectionTitle, 'text-fg mb-3')}>
+              <h3 className={cn(textStyles.titleMd, 'text-fg mb-3')}>
                 온라인 보고
               </h3>
               <p className={cn(textStyles.bodySm, 'mb-8 leading-relaxed')}>
@@ -241,7 +235,7 @@ export default function ReliefPage() {
                   'px-8 py-3 rounded-lg shadow-sm',
                   'hover:bg-primary-700 hover:shadow-md hover:-translate-y-0.5',
                   'transition-all duration-200 w-full md:w-auto',
-                  textStyles.body,
+                  textStyles.bodyMd,
                 )}
               >
                 온라인 보고 바로가기 &rarr;
@@ -264,7 +258,7 @@ export default function ReliefPage() {
               >
                 <MdPhoneInTalk size={36} />
               </div>
-              <h3 className={cn(textStyles.sectionTitle, 'text-fg mb-3')}>
+              <h3 className={cn(textStyles.titleMd, 'text-fg mb-3')}>
                 전화 보고
               </h3>
               <p className={cn(textStyles.bodySm, 'mb-8 leading-relaxed')}>
@@ -281,7 +275,7 @@ export default function ReliefPage() {
                   'px-8 py-3 rounded-lg shadow-sm',
                   'hover:bg-muted hover:border-primary-200 hover:-translate-y-0.5',
                   'transition-all duration-200 w-full md:w-auto',
-                  textStyles.body,
+                  textStyles.bodyMd,
                 )}
               >
                 전화 걸기 1644-6223
@@ -294,13 +288,13 @@ export default function ReliefPage() {
         <section>
           <h2
             className={cn(
-              textStyles.pageTitle,
+              textStyles.titleLg,
               'mb-4 text-fg border-b border-border pb-2',
             )}
           >
             보고 시 작성 항목
           </h2>
-          <p className={cn(textStyles.body, 'mb-6')}>
+          <p className={cn(textStyles.bodyMd, 'mb-6')}>
             부작용 보고를 위해 사이트에 접속하면 아래와 같은 항목들을 입력하게
             됩니다.
           </p>
@@ -333,7 +327,7 @@ export default function ReliefPage() {
               >
                 <strong
                   className={cn(
-                    textStyles.body,
+                    textStyles.bodyMd,
                     'font-bold text-primary-700 mb-1',
                   )}
                 >
