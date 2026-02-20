@@ -6,7 +6,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SafetyLetter from '@/Pages/SafetyLetter';
 import Signal from '@/Pages/SignalInfo';
-import AdverseEventDomestic from '@/Pages/AdverseEventDomestic';
+import AdverseEventDomestic from '@/features/AdverseEventDomestic';
 import ReliefPage from '@/Pages/Relief';
 import MedicationGuide from '@/Pages/MedicationGuide';
 import LocalCenter from '@/Pages/LocalCenter';
