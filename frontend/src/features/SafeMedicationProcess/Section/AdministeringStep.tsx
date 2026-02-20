@@ -1,9 +1,9 @@
 import * as React from 'react';
-import type { StepTheme } from './types';
-import { InfoList } from './StepCommon';
+import type { StepTheme } from '../types';
+import { InfoList } from '../components/StepCommon';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import { FlowWrap, FlowBlock, FinalBlock } from './FlowLayout';
+import { FlowWrap, FlowBlock, FinalBlock } from '../components/FlowLayout';
 
 const ADMIN_CONSIDERATIONS: React.ReactNode[] = [
   '즉시 사용할 수 있는 형태로 약물을 얻는 것 (계수, 계산, 혼합, 라벨 부착 등 준비 과정)',

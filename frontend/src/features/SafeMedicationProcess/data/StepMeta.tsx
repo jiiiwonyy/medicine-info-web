@@ -1,4 +1,4 @@
-import type { StepMeta } from './types';
+import type { StepMeta } from '../types';
 
 export const STEPS: StepMeta[] = [
   {

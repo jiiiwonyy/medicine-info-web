@@ -17,7 +17,7 @@ import LawInfoPage from '@/Pages/LawInfo';
 import AdminPage from '@/Pages/AdminPage';
 import FdaPage from '@/Pages/FdaPage';
 import MedicationSafetyInfo from '@/Pages/MedicationSafetyInfo';
-import SafeMedicationProcess from '@/Pages/SafeMedicationProcess/SafeMedicationProcess';
+import SafeMedicationProcess from '@/features/SafeMedicationProcess';
 import ErrorReductionStrategy from '@/Pages/ErrorReductionStrategy';
 
 const PlaceholderPage = ({ title }: { title: string }) => (

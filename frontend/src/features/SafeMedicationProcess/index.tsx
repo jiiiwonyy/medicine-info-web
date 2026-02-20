@@ -3,11 +3,11 @@ import PageLayout from '@/components/PageLayout';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import ArrowStepper from '@/components/MedicationStepper';
-import { STEPS } from './StepMeta';
-import type { StepKey } from './types';
-import PrescribingStep from './PrescribingStep';
-import AdministeringStep from './AdministeringStep';
-import MonitoringStep from './MonitoringStep';
+import { STEPS } from '@/features/SafeMedicationProcess/data/StepMeta';
+import type { StepKey } from '@/features/SafeMedicationProcess/types';
+import PrescribingStep from '@/features/SafeMedicationProcess/Section/PrescribingStep';
+import AdministeringStep from '@/features/SafeMedicationProcess/Section/AdministeringStep';
+import MonitoringStep from '@/features/SafeMedicationProcess/Section/MonitoringStep';
 
 export default function SafetyMedicationProcess() {
   const [step, setStep] = React.useState<StepKey>('prescribing');

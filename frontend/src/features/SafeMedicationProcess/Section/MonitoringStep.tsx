@@ -1,9 +1,9 @@
 import * as React from 'react';
-import type { StepTheme } from './types';
-import { InfoList } from './StepCommon';
+import type { StepTheme } from '../types';
+import { InfoList } from '../components/StepCommon';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import { FlowWrap, FlowBlock, FinalBlock } from './FlowLayout';
+import { FlowWrap, FlowBlock, FinalBlock } from '../components/FlowLayout';
 
 const MONITORING_CONSIDERATIONS: React.ReactNode[] = [
   <>

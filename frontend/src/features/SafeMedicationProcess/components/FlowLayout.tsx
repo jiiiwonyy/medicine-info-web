@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import type { StepTheme } from './types';
+import type { StepTheme } from '../types';
 import { MdArrowDownward, MdCheckCircle } from 'react-icons/md';
 import { Card } from '@/components/ui/Card';
 
