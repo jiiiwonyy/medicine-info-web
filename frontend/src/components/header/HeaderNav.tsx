@@ -1,4 +1,3 @@
-// src/components/header/HeaderNav.tsx
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import type { SubTabsMap } from './types';

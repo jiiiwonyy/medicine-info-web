@@ -1,6 +1,17 @@
 import Callout from '@/components/ui/Callout';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import KoreaMap from '@/assets/map.svg?react';
+import { textStyles } from '@/styles/typography';
+import { cn } from '@/shared/cn';
+import {
+  Table,
+  TableWrap,
+  THead,
+  TBody,
+  Tr,
+  Th,
+  Td,
+} from '@/components/ui/Table';
 import '@/styles/map.css';
 
 interface HospitalInfo {
@@ -190,7 +201,21 @@ export default function LocalCenter() {
     jeonnam: '광주·전라',
   };
 
+  const regionOrder = [
+    '전국약국통합센터',
+    '서울',
+    '인천·경기',
+    '강원',
+    '대전·충청',
+    '광주·전라',
+    '대구·경북',
+    '부산·울산·경남',
+  ];
+
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+
+  // 모바일 표 섹션 ref
+  const tableRefs = useRef<Record<string, HTMLTableSectionElement | null>>({});
 
   useEffect(() => {
     document
@@ -210,6 +235,14 @@ export default function LocalCenter() {
     }
   }, [hoveredRegion]);
 
+  // 모바일에서 지역 클릭 시 표 섹션으로 스크롤
+  const handleMobileMapClick = (region: string) => {
+    const target = tableRefs.current[region];
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const TooltipLink = ({ name, phone, url }: HospitalInfo) => {
     const [hovered, setHovered] = useState(false);
 
@@ -223,7 +256,7 @@ export default function LocalCenter() {
           href={url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sky-700 hover:underline font-medium"
+          className="text-primary-700 hover:underline font-medium"
         >
           {name}
         </a>
@@ -246,12 +279,14 @@ export default function LocalCenter() {
     const isHovered = hoveredRegion === region;
     return (
       <div
-        className={`bg-white shadow-md rounded-lg p-3 w-44 mb-2 transition-all duration-300 ${
-          isHovered ? 'translate-y-[-4px] shadow-lg border border-sky-500' : ''
+        className={`bg-white shadow-md rounded-lg p-3 w-50 mb-2 transition-all duration-300 ${
+          isHovered ? 'translate-y-[-4px] shadow-lg border border-primary' : ''
         }`}
       >
-        <h3 className="font-bold text-sm mb-2 text-sky-800">{region}</h3>
-        <ul className="space-y-1 text-sm">
+        <h3 className={cn(textStyles.titleSm, 'mb-2 text-primary-700')}>
+          {region}
+        </h3>
+        <ul className={cn(textStyles.bodyMd, 'space-y-1')}>
           {hospitals.map((h) => (
             <li key={h.name}>
               <TooltipLink {...h} />
@@ -263,54 +298,141 @@ export default function LocalCenter() {
   };
 
   return (
-    <section className="max-w-5xl mx-auto px-4 py-8 text-gray-800 leading-relaxed space-y-8">
+    <section className="max-w-5xl mx-auto px-4 py-8 leading-relaxed space-y-8">
       <Callout variant="info" title="지역의약품안전센터란?">
         우리나라는 권역별로 지정된 지역의약품안전센터를 통해 의약품 이상사례를
         수집·분석하고, 교육 및 상담을 제공합니다. 가까운 센터를 통해 이상사례
         보고, 환자 상담, 교육 참여를 할 수 있습니다.
       </Callout>
 
-      {/* 지도 + 센터 박스 */}
-      <div className="relative flex justify-center items-center w-full h-[800px]">
-        <KoreaMap
-          className="interactive-map w-[400px] h-auto"
-          onMouseOver={(e) => {
-            const id = (e.target as SVGElement).id;
-            if (id && regionGroups[id]) setHoveredRegion(regionGroups[id]);
-          }}
-          onMouseOut={() => setHoveredRegion(null)}
-        />
-
-        {/* 지도 양쪽 Box 위치 (기존 위치 그대로 유지) */}
-        <div className="absolute top-0">
-          <Box
-            region="전국약국통합센터"
-            hospitals={centers['전국약국통합센터']}
+      {/* ── 모바일 레이아웃 (md 미만) ── */}
+      <div className="md:hidden space-y-6">
+        {/* 지도: 모바일에서도 표시, 클릭으로 표 섹션 이동 */}
+        <div className="flex justify-center">
+          <KoreaMap
+            className="interactive-map w-[280px] h-auto cursor-pointer"
+            onMouseOver={(e) => {
+              const id = (e.target as SVGElement).id;
+              if (id && regionGroups[id]) setHoveredRegion(regionGroups[id]);
+            }}
+            onMouseOut={() => setHoveredRegion(null)}
+            onClick={(e) => {
+              const id = (e.target as SVGElement).id;
+              if (id && regionGroups[id]) {
+                handleMobileMapClick(regionGroups[id]);
+              }
+            }}
           />
         </div>
 
-        <div className="absolute left-4 top-20 flex flex-col gap-4">
-          <Box region="서울" hospitals={centers['서울']} />
-          <Box region="인천·경기" hospitals={centers['인천·경기']} />
-          <Box region="대전·충청" hospitals={centers['대전·충청']} />
-          <Box region="광주·전라" hospitals={centers['광주·전라']} />
-        </div>
+        <p className={cn(textStyles.bodySm, 'text-muted-fg text-center')}>
+          지역을 탭하면 해당 센터 목록으로 이동합니다.
+        </p>
 
-        <div className="absolute right-4 top-28 flex flex-col gap-4">
-          <Box region="강원" hospitals={centers['강원']} />
-          <Box region="대구·경북" hospitals={centers['대구·경북']} />
-          <Box region="부산·울산·경남" hospitals={centers['부산·울산·경남']} />
+        {/* 표 형태 센터 목록 */}
+        <TableWrap>
+          <Table>
+            <THead>
+              <Tr>
+                <Th className={cn(textStyles.titleSm, 'bg-muted w-1/3')}>
+                  권역
+                </Th>
+                <Th className={cn(textStyles.titleSm, 'bg-muted')}>
+                  기관명 / 전화번호
+                </Th>
+              </Tr>
+            </THead>
+            {regionOrder.map((region) => (
+              <TBody
+                key={region}
+                ref={(el) => {
+                  tableRefs.current[region] = el;
+                }}
+                className={
+                  hoveredRegion === region ? 'bg-primary-50' : undefined
+                }
+              >
+                {centers[region].map((h, i) => (
+                  <Tr key={h.name}>
+                    {i === 0 && (
+                      <Td
+                        rowSpan={centers[region].length}
+                        className={cn(
+                          textStyles.bodySm,
+                          'font-semibold text-primary-700 align-top',
+                        )}
+                      >
+                        {region}
+                      </Td>
+                    )}
+                    <Td>
+                      <a
+                        href={h.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={cn(
+                          textStyles.bodyMd,
+                          'text-primary-700 hover:underline block',
+                        )}
+                      >
+                        {h.name}
+                      </a>
+                      <span className={cn(textStyles.bodySm, 'text-muted-fg')}>
+                        ☎ {h.phone}
+                      </span>
+                    </Td>
+                  </Tr>
+                ))}
+              </TBody>
+            ))}
+          </Table>
+        </TableWrap>
+      </div>
+
+      {/* ── 데스크탑 레이아웃 (md 이상) ── */}
+      <div className="hidden md:block">
+        <div className="relative flex justify-center items-center w-full h-[800px]">
+          <KoreaMap
+            className="interactive-map w-[400px] h-auto"
+            onMouseOver={(e) => {
+              const id = (e.target as SVGElement).id;
+              if (id && regionGroups[id]) setHoveredRegion(regionGroups[id]);
+            }}
+            onMouseOut={() => setHoveredRegion(null)}
+          />
+
+          <div className="absolute top-0">
+            <Box
+              region="전국약국통합센터"
+              hospitals={centers['전국약국통합센터']}
+            />
+          </div>
+
+          <div className="absolute left-4 top-20 flex flex-col gap-4">
+            <Box region="서울" hospitals={centers['서울']} />
+            <Box region="인천·경기" hospitals={centers['인천·경기']} />
+            <Box region="대전·충청" hospitals={centers['대전·충청']} />
+            <Box region="광주·전라" hospitals={centers['광주·전라']} />
+          </div>
+
+          <div className="absolute right-4 top-28 flex flex-col gap-4">
+            <Box region="강원" hospitals={centers['강원']} />
+            <Box region="대구·경북" hospitals={centers['대구·경북']} />
+            <Box
+              region="부산·울산·경남"
+              hospitals={centers['부산·울산·경남']}
+            />
+          </div>
         </div>
       </div>
 
-      {/* 지도 아래 설명 */}
-      <article className="prose prose-blue max-w-none">
-        <p className="text-sm">
-          “지역의약품안전센터는 전국을 권역별로 나누어 지정되며, 권역 내
+      <article className="prose prose-blue max-w-none md:mt-40">
+        <p className={cn(textStyles.bodySm)}>
+          "지역의약품안전센터는 전국을 권역별로 나누어 지정되며, 권역 내
           센터들이 특정 구역을 나눠 맡는 것이 아니라 권역 전체를 공동으로
           담당합니다. 따라서 환자·의료진은 거주지와 가까운 센터를 선택해
           보고·상담할 수 있으며, 모든 보고 내용은 한국의약품안전관리원(KIDS)에서
-          최종적으로 통합 관리됩니다.”
+          최종적으로 통합 관리됩니다."
         </p>
       </article>
     </section>

@@ -1,3 +1,6 @@
+import Button from '../ui/Button';
+import Input from '../ui/Input';
+
 type Props = {
   value: string;
   onChange: (v: string) => void;
@@ -5,7 +8,12 @@ type Props = {
   placeholder?: string;
 };
 
-export default function FdaSearchBar({ value, onChange, onSubmit, placeholder }: Props) {
+export default function FdaSearchBar({
+  value,
+  onChange,
+  onSubmit,
+  placeholder,
+}: Props) {
   return (
     <form
       className="flex gap-2"
@@ -14,18 +22,14 @@ export default function FdaSearchBar({ value, onChange, onSubmit, placeholder }:
         onSubmit();
       }}
     >
-      <input
-        className="flex-1 border rounded-lg px-3 py-2"
+      <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
       />
-      <button
-        type="submit"
-        className="px-4 py-2 rounded-lg bg-black text-white"
-      >
+      <Button type="submit" variant="primary">
         검색
-      </button>
+      </Button>
     </form>
   );
 }

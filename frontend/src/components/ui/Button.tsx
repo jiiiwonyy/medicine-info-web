@@ -60,7 +60,7 @@ export default function Button({
       <Slot
         className={cn(
           base,
-          textStyles.bodyMd,
+          textStyles.uiLg,
           variants[variant],
           sizes[size],
           className,
@@ -78,7 +78,7 @@ export default function Button({
       type={type}
       className={cn(
         base,
-        textStyles.bodyMd,
+        textStyles.uiLg,
         variants[variant],
         sizes[size],
         className,

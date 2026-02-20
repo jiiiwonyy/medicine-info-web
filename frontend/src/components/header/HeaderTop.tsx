@@ -1,4 +1,3 @@
-// src/components/header/HeaderTop.tsx
 import SearchBar from '@/components/SearchBar';
 import { cn } from '@/shared/cn';
 

@@ -1,7 +1,12 @@
 import * as React from 'react';
 
-type CardVariant = 'default' | 'outlined' | 'elevated' | 'muted' | 'primary'; // ⭐ 추가
-
+type CardVariant =
+  | 'default'
+  | 'outlined'
+  | 'elevated'
+  | 'muted'
+  | 'primary'
+  | 'strong';
 type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 const variantStyles: Record<CardVariant, string> = {
@@ -10,6 +15,8 @@ const variantStyles: Record<CardVariant, string> = {
 
   // 표준 섹션
   outlined: 'bg-surface border border-border',
+
+  strong: 'border border-strong',
 
   // 살짝 띄운 카드
   elevated: 'bg-surface shadow-[var(--shadow-sm)]',

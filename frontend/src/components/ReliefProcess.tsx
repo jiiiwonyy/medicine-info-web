@@ -1,3 +1,7 @@
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
+import { Card } from './ui/Card';
+
 export default function ReliefProcessVertical() {
   const steps = [
     {
@@ -75,8 +79,13 @@ export default function ReliefProcessVertical() {
   ];
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-8 text-gray-800 leading-relaxed">
-      <h2 className="text-2xl font-bold border-b-2 border-sky-700 pb-2 mb-10">
+    <section className="py-8 text-fg leading-relaxed">
+      <h2
+        className={cn(
+          textStyles.titleLg,
+          'border-b-2 border-primary-700 pb-2 mb-10',
+        )}
+      >
         의약품 부작용 피해구제 절차
       </h2>
 
@@ -85,21 +94,32 @@ export default function ReliefProcessVertical() {
           <div key={index} className="relative flex gap-4">
             {/* 왼쪽 타임라인 */}
             <div className="flex flex-col items-center">
-              <div className="w-8 h-8 rounded-full bg-sky-600 text-white flex items-center justify-center font-bold">
+              <div
+                className={cn(
+                  textStyles.uiLg,
+                  'w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center',
+                )}
+              >
                 {index + 1}
               </div>
               {index < steps.length - 1 && (
-                <div className="w-[2px] flex-1 bg-sky-300 mt-1"></div>
+                <div className="w-[2px] flex-1 bg-primary-200 mt-1"></div>
               )}
             </div>
 
             {/* 본문 카드 */}
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 w-full">
-              <h3 className="text-lg font-semibold text-sky-800 mb-2">
+            <Card
+              variant="outlined"
+              padding="lg"
+              className="w-full border-border"
+            >
+              <h3 className={cn(textStyles.titleMd, 'text-primary-800 mb-2')}>
                 {step.title}
               </h3>
-              <p className="text-sm text-gray-700 mb-2">{step.desc}</p>
-              <p className="text-sm font-medium text-sky-700 mb-3">
+              <p className={cn(textStyles.bodyMd, 'text-gray-700 mb-2')}>
+                {step.desc}
+              </p>
+              <p className={cn(textStyles.bodyMd, 'text-primary-700 mb-3')}>
                 {step.period}
               </p>
 
@@ -107,18 +127,27 @@ export default function ReliefProcessVertical() {
               {step.sections &&
                 step.sections.map((section, sIdx) => (
                   <div key={sIdx} className="mt-4">
-                    <p className="font-semibold text-gray-800 mb-1">
+                    <p className={cn(textStyles.titleMd, 'text-fg mb-1')}>
                       {section.subtitle}
                     </p>
 
                     {section.content.map((group, gIdx) => (
                       <div key={gIdx} className="mb-3">
                         {group.label && (
-                          <p className="text-sm font-medium text-sky-800 mb-1">
+                          <p
+                            className={cn(
+                              textStyles.bodyMd,
+                              'text-primary-800 mb-1',
+                            )}
+                          >
                             • {group.label}
                           </p>
                         )}
-                        <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                        <ul
+                          className={cn(
+                            'list-disc pl-5 text-sm text-gray-600 space-y-1',
+                          )}
+                        >
                           {group.items.map((item, i) => (
                             <li key={i}>{item}</li>
                           ))}
@@ -127,20 +156,20 @@ export default function ReliefProcessVertical() {
                     ))}
                   </div>
                 ))}
-            </div>
+            </Card>
           </div>
         ))}
       </div>
 
-      <div className="mt-10 bg-sky-50 border border-sky-200 rounded-md py-5 px-6 text-center">
-        <p className="font-medium text-gray-800">
+      <Card variant="primary" className="mt-10 py-5 px-6 text-center">
+        <p className="text-fg">
           신청부터 최종 결과까지 모든 단계가 지연 없이 진행될 경우{' '}
-          <span className="font-bold text-sky-800">
+          <span className="font-bold text-primary-800">
             최소 4개월에서 최대 8개월 이상
           </span>{' '}
           소요될 수 있습니다.
         </p>
-      </div>
+      </Card>
     </section>
   );
 }
