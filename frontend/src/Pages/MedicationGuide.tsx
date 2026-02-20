@@ -3,13 +3,6 @@ import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
 import Button from '@/components/ui/Button';
 
-/**
- * Render the "복약지도서" page that presents KPIS information, key features,
- * a plain-language explanation of 복약지도서, step-by-step access instructions,
- * and a call-to-action link to the KPIS site.
- *
- * @returns The React element for the MedicationGuide page layout with informational sections and a CTA link.
- */
 export default function MedicationGuide() {
   return (
     <PageLayout title="복약지도서">

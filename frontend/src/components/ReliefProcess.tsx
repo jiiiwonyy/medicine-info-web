@@ -2,15 +2,6 @@ import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { Card } from './ui/Card';
 
-/**
- * Render a vertical timeline describing the pharmaceutical adverse reaction relief process.
- *
- * Renders a numbered sequence of steps as outlined cards, each showing a title, period, description,
- * and optional subsections with labeled groups and itemized lists. Ends with a highlighted summary card
- * noting the overall expected duration.
- *
- * @returns A JSX element containing the vertical timeline of steps and the final summary card.
- */
 export default function ReliefProcessVertical() {
   const steps = [
     {

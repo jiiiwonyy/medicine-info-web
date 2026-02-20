@@ -16,14 +16,6 @@ import Input from '@/components/ui/Input';
 
 type TabKey = 'info' | 'publish';
 
-/**
- * Renders the "의약품 안전성서한(속보)" page with informational content and a searchable, paginated list of safety letters.
- *
- * The component provides two tabs: an information tab and a "publish" tab that fetches and displays safety letters when active.
- * The publish tab supports text search, pagination, loading/error/empty states, and downloading attached PDF files (opens in a new browser tab).
- *
- * @returns The rendered SafetyLetter page component node.
- */
 export default function SafetyLetter() {
   const [activeTab, setActiveTab] = useState<TabKey>('info');
 
@@ -237,13 +229,6 @@ export default function SafetyLetter() {
   );
 }
 
-/**
- * Render a card displaying a safety letter's title, metadata, optional summary, and a list of attached files with download actions.
- *
- * @param item - The safety letter data to display (title, notice_date, department, summary, files, etc.).
- * @param onDownload - Callback invoked when an attached file is clicked; called with `(letterId, fileIndex)`.
- * @returns A JSX element representing the safety letter card.
- */
 function SafetyLetterCard({
   item,
   onDownload,

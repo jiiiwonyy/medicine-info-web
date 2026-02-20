@@ -5,13 +5,6 @@ import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 
-/**
- * Render a page summarizing the 국가법령정보센터 and providing quick links to 주요 보건의료 관련 법률.
- *
- * The page includes an informational callout about the national legal information platform, sections describing key roles and features, and a responsive grid of cards that link to each law's official page and its three-column comparison view.
- *
- * @returns The component's JSX element representing the full page layout with informational content and law link cards.
- */
 export default function LawInfoPage() {
   const laws = [
     {

@@ -32,11 +32,6 @@ function trimDocNo(title: string) {
 
 type TabKey = 'info' | 'publish';
 
-/**
- * Render the SignalInfo page with "정보" and "발행 현황" tabs, including explanatory content, a searchable/paginated list of published signal bulletins, and actions to view or download items.
- *
- * @returns The JSX element for the SignalInfo page component.
- */
 export default function SignalInfo() {
   // ===== 탭 =====
   const [activeTab, setActiveTab] = useState<TabKey>('info');

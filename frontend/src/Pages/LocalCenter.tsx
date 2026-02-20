@@ -22,13 +22,6 @@ interface HospitalInfo {
 
 type CentersType = Record<string, HospitalInfo[]>;
 
-/**
- * Render an interactive view of regional pharmacovigilance centers with a map and responsive contact listings.
- *
- * The component displays an SVG map that highlights regions on hover and, on mobile, scrolls to the corresponding table section when a region is tapped. It provides per-region lists of centers with links and phone tooltips, and presents a desktop layout with positioned region cards over the map and a mobile tabular listing.
- *
- * @returns A JSX element containing the interactive map, responsive region cards (desktop), and a scrollable table of centers (mobile).
- */
 export default function LocalCenter() {
   const centers: CentersType = {
     전국약국통합센터: [

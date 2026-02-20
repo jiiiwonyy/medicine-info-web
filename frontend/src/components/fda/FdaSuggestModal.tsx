@@ -13,22 +13,6 @@ type Props = {
   onSelect: (drug: string) => void;
 };
 
-/**
- * Render a modal that displays candidate suggestions for a search query.
- *
- * Renders an overlay and a centered dialog that shows the current `query`, a scrollable
- * list of candidate `items`, loading and error states, and controls to close the modal
- * or select a candidate.
- *
- * @param open - Controls whether the modal is visible; when `false` nothing is rendered
- * @param query - The search phrase shown in the modal title
- * @param items - Candidate suggestion strings presented as selectable rows
- * @param loading - If `true`, displays a loading spinner instead of candidates
- * @param error - If `true`, displays an error message instead of candidates
- * @param onClose - Callback invoked when the modal should be closed (overlay or close button)
- * @param onSelect - Callback invoked with the selected candidate string when a row is clicked
- * @returns The modal element when `open` is `true`, or `null` when `open` is `false`
- */
 export default function FdaSuggestModal({
   open,
   query,

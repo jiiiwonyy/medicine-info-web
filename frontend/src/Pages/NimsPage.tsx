@@ -4,11 +4,6 @@ import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 
-/**
- * Renders an informational page describing the 마약류통합관리시스템 (NIMS), its scope, key features, usage guidance, and a link to the official site.
- *
- * @returns A React element that renders the NIMS informational page.
- */
 export default function NimsPage() {
   return (
     <PageLayout title="마약류통합관리시스템(NIMS)">

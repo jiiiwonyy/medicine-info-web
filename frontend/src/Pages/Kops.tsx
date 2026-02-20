@@ -76,14 +76,6 @@ const menuCards: MenuCardProps[] = [
   },
 ];
 
-/**
- * Renders a compact, numbered step element with a title and optional subtitle.
- *
- * @param n - The step number to display inside the circular badge
- * @param title - The primary text for the step
- * @param subtitle - Optional secondary text shown beneath the title
- * @returns A JSX element representing the numbered step with its text
- */
 function Step({
   n,
   title,
@@ -110,12 +102,6 @@ function Step({
   );
 }
 
-/**
- * Renders the KOPS (Korea Patient Safety reporting & learning system) overview page,
- * including header, summary callouts, a grid of menu cards, and the reporting types and procedure sections.
- *
- * @returns The page's JSX element for displaying KOPS information and navigation actions.
- */
 export default function KopsPage() {
   return (
     <PageLayout title="환자안전보고학습시스템 (KOPS; Korea Patient Safety reporting & learning system)">

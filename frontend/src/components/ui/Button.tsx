@@ -40,22 +40,6 @@ function Spinner() {
   );
 }
 
-/**
- * Renders a styled button that supports variants, sizes, a loading state, and an optional Slot wrapper.
- *
- * When `isLoading` is true the component shows a spinner and is considered disabled; when `asChild` is true
- * the provided child element is rendered inside a Radix `Slot` and receives the button styling and forwarded props.
- *
- * @param variant - Visual style of the button (e.g., 'primary', 'secondary', 'ghost')
- * @param size - Button size ('sm' or 'md')
- * @param isLoading - If true, displays a spinner and treats the button as disabled
- * @param disabled - If true, disables the button; combined with `isLoading` to compute the effective disabled state
- * @param asChild - If true, renders the single child inside a `Slot` instead of a native `<button>`
- * @param className - Additional class names merged with the component's base styles
- * @param type - Button `type` attribute (defaults to 'button')
- *
- * @returns A React element: either a native `<button>` with the applied styles and behavior, or the provided child wrapped in a `Slot`.
- */
 export default function Button({
   className,
   variant = 'primary',

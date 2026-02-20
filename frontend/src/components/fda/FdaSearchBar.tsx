@@ -8,15 +8,6 @@ type Props = {
   placeholder?: string;
 };
 
-/**
- * Render a controlled search bar form with an input and a primary submit button.
- *
- * @param value - Current input value
- * @param onChange - Called with the new input value when the user types
- * @param onSubmit - Called when the form is submitted
- * @param placeholder - Optional placeholder text for the input
- * @returns A form element containing a bound input and a primary submit button
- */
 export default function FdaSearchBar({
   value,
   onChange,

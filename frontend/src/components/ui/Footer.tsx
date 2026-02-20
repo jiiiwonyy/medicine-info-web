@@ -1,11 +1,6 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 
-/**
- * Render the site footer with disclaimer text, funding acknowledgement, and a contact mailto link.
- *
- * @returns The footer JSX element containing legal/disclaimer paragraphs and a "Contact PI" mailto link.
- */
 export default function Footer() {
   return (
     <footer className="mt-20 border-t border-border bg-muted">

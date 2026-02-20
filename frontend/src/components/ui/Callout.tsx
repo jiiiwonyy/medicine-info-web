@@ -46,18 +46,6 @@ const iconColorStyles: Record<Variant, string> = {
   danger: 'text-danger',
 };
 
-/**
- * Render a stylized callout box with an icon, optional title, and body content.
- *
- * @param title - Optional heading displayed above the body content
- * @param children - Content shown inside the callout body
- * @param variant - Visual and semantic variant; one of `'info' | 'warning' | 'success' | 'danger' | 'note'`
- * @param dense - When true, use reduced padding and smaller text
- * @param icon - Optional custom icon node that overrides the variant's default icon
- * @param roleOverride - Optional ARIA role to use instead of the role implied by `variant`
- * @param className - Additional CSS class names applied to the outer container
- * @returns A React element representing the callout with appropriate styling, icon, title, and ARIA attributes
- */
 export default function Callout({
   title,
   children,

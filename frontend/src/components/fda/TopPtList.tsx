@@ -2,12 +2,6 @@ import { textStyles } from '@/styles/typography';
 
 type Item = { pt: string; total: number };
 
-/**
- * Renders a ranked list of point items with their totals or a compact empty-state message.
- *
- * @param items - Array of items to display; each item must have `pt` (label) and `total` (numeric count). When the array is empty, a small gray "데이터가 없어요." message is rendered instead.
- * @returns A JSX element containing an ordered list of the items with index, label, and formatted total, or the empty-state message when there are no items.
- */
 export default function TopPtList({ items }: { items: Item[] }) {
   if (!items.length)
     return <div className="text-sm text-gray-600">데이터가 없어요.</div>;
