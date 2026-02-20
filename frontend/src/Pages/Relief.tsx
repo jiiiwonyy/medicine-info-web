@@ -10,6 +10,12 @@ import {
   MdMedication,
 } from 'react-icons/md';
 
+/**
+ * Renders the ReliefPage containing static informational content about adverse drug events,
+ * reporting criteria, reporting processes, and available reporting methods.
+ *
+ * @returns A React element with sections covering definitions (side effect, adverse event, adverse drug reaction), serious case criteria, why reporting is necessary, post-reporting process, online and phone reporting options, and the fields required when submitting a report.
+ */
 export default function ReliefPage() {
   return (
     <PageLayout>

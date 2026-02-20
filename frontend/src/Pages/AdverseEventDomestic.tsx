@@ -24,6 +24,15 @@ import {
   reportTypeData,
 } from '@/data/adverseEventData';
 
+/**
+ * Render the domestic adverse event reports page with charts, tables, and guidance.
+ *
+ * Presents yearly report trends, reporter-type distributions, regional center tables,
+ * reporter qualification breakdowns, report-type breakdowns, and lookup instructions
+ * for external resources.
+ *
+ * @returns The React element for the "국내 의약품 부작용 보고자료" page.
+ */
 export default function AdverseEventDomestic() {
   return (
     <PageLayout title="국내 의약품 부작용 보고자료">

@@ -4,6 +4,15 @@ import { Card } from '@/components/ui/Card';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
 
+/**
+ * Render a page that presents information about the Drug Utilization Review (DUR) service.
+ *
+ * The page includes sections describing what DUR is, how the service is provided, key DUR
+ * information (e.g., contraindications by co-administration, age, and pregnancy), practical
+ * usage examples, and a final emphasis card on DUR's importance.
+ *
+ * @returns A React element representing the DUR information page layout and content.
+ */
 export default function DURPage() {
   return (
     <PageLayout title="의약품안전사용서비스(DUR)">

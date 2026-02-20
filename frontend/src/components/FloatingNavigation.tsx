@@ -26,6 +26,16 @@ const collectIds = (items: NavItem[]): string[] =>
     ...(it.children ? collectIds(it.children) : []),
   ]);
 
+/**
+ * Render a fixed vertical auxiliary navigation that scrolls to and highlights document sections.
+ *
+ * The component displays a right-aligned, fixed aside with top-level navigation entries and optional nested items.
+ * Clicking an item scrolls the page to the corresponding section; the active section is highlighted based on scroll position.
+ *
+ * @param dur - Optional durability-related data. If `dur.interactions`, `dur.age`, or `dur.pregnancy` contain entries, a DUR section is included in the navigation.
+ * @param headerOffset - Vertical offset in pixels applied when scrolling to a section (defaults to 72).
+ * @returns The rendered floating auxiliary navigation element.
+ */
 export default function FloatingNavigation({
   dur,
   headerOffset = 72,

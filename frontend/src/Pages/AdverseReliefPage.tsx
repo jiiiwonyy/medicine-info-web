@@ -6,6 +6,11 @@ import { textStyles } from '@/styles/typography';
 import { Card } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 
+/**
+ * Renders the "의약품 부작용 피해구제" informational page with eligibility, coverage, application procedure, and quick links.
+ *
+ * @returns The page's JSX element containing descriptive callout text, sections for support targets and coverage, a card with application routes, action buttons linking to external resources, and the relief process section.
+ */
 export default function AdverseReliefPage() {
   return (
     <PageLayout title="의약품 부작용 피해구제">

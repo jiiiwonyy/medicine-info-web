@@ -42,6 +42,11 @@ export function TableWrap({
   );
 }
 
+/**
+ * Renders a table header group (<thead>) element with the provided classes and attributes.
+ *
+ * @returns The rendered `<thead>` element with the given `className` and any forwarded HTML attributes.
+ */
 export function THead({
   className,
   ...props
@@ -56,6 +61,11 @@ export const TBody = React.forwardRef<
   return <tbody ref={ref} className={cn(className)} {...props} />;
 });
 
+/**
+ * Renders a table row (<tr>) that applies a hover background and merges any provided classes.
+ *
+ * @returns The <tr> element with the `hover:bg-muted` class combined with `className`; all other props are forwarded to the element.
+ */
 export function Tr({
   className,
   ...props

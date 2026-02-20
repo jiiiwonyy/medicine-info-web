@@ -18,6 +18,15 @@ import { Card } from '@/components/ui/Card';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
 
+/**
+ * Render the FDA(FAERS) adverse event reporting analysis page.
+ *
+ * Displays a searchable drug input with suggestion modal, year-range and role filters,
+ * and, when a drug is selected, summary metrics, yearly totals, top PT list, top-5 PT timeseries,
+ * and interpretation notes.
+ *
+ * @returns The React element for the FDA(FAERS) analysis UI.
+ */
 export default function FdaPage() {
   const [q, setQ] = useState('');
   const debouncedQ = useDebounce(q, 300);
