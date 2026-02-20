@@ -1,3 +1,8 @@
+import Button from '../ui/Button';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
+import Spinner from '../Spinner';
+
 type Props = {
   open: boolean;
   query: string;
@@ -31,29 +36,26 @@ export default function FdaSuggestModal({
       <div className="absolute left-1/2 top-1/2 w-[92vw] max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white shadow-xl">
         <div className="p-4 border-b flex items-center justify-between">
           <div>
-            <div className="text-sm text-gray-500">검색 후보</div>
-            <div className="text-base font-semibold">
-              “{query}”에 대한 후보
+            <div className={cn(textStyles.bodyMd, 'text-muted-fg')}>
+              검색 후보
             </div>
+            <div className={textStyles.titleSm}>“{query}”에 대한 후보</div>
           </div>
-          <button
-            className="text-sm px-3 py-1 rounded border hover:bg-gray-50"
-            onClick={onClose}
-          >
+          <Button variant="secondary" onClick={onClose}>
             닫기
-          </button>
+          </Button>
         </div>
 
         <div className="p-4 max-h-[60vh] overflow-auto">
-          {loading && <div className="text-sm text-gray-600">불러오는 중…</div>}
+          {loading && <Spinner />}
           {error && (
-            <div className="text-sm text-red-600">
+            <div className={cn(textStyles.bodyMd, 'text-danger')}>
               후보를 불러오지 못했어요.
             </div>
           )}
 
           {!loading && !error && items.length === 0 && (
-            <div className="text-sm text-gray-600">
+            <div className={cn(textStyles.bodyMd, 'text-muted-fg')}>
               후보가 없어요. 더 길게 입력해보세요.
             </div>
           )}
@@ -62,7 +64,7 @@ export default function FdaSuggestModal({
             {items.map((name) => (
               <li key={name}>
                 <button
-                  className="w-full text-left py-3 hover:bg-gray-50 px-2 rounded"
+                  className="w-full text-left py-2 hover:bg-muted"
                   onClick={() => onSelect(name)}
                 >
                   {name}
@@ -72,7 +74,7 @@ export default function FdaSuggestModal({
           </ul>
         </div>
 
-        <div className="p-4 border-t text-xs text-gray-500">
+        <div className={cn(textStyles.bodySm, 'p-4 border-t text-muted-fg')}>
           팁: 철자를 더 입력하면 후보가 더 정확해져요.
         </div>
       </div>
