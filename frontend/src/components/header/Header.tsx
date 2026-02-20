@@ -1,4 +1,3 @@
-// src/components/header/Header.tsx
 import { useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '@/assets/logo.png';
