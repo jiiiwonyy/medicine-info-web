@@ -24,7 +24,7 @@ export default function TopButton() {
   return (
     <button
       onClick={scrollToTop}
-      className="fixed bottom-10 right-10 bg-sky-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-sky-700 transition-colors"
+      className="fixed bottom-10 right-10 bg-primary text-white px-4 py-2 rounded-full shadow-lg hover:bg-primary-700 transition-colors"
     >
       ↑ Top
     </button>

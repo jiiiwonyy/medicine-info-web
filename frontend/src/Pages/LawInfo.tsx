@@ -83,10 +83,10 @@ export default function LawInfoPage() {
       </Callout>
 
       <div>
-        <h3 className="text-xl font-bold mt-10 mb-4 text-sky-800">
+        <h3 className={cn(textStyles.titleMd, 'text-primary-700 mt-10 mb-4')}>
           📘 핵심 역할
         </h3>
-        <ul className="list-disc pl-6 space-y-1">
+        <ul className={cn(textStyles.bodyMd, 'list-disc pl-6 space-y-1')}>
           <li>
             <strong>법률정보 통합 제공</strong>: 법률, 시행령, 판례, 조례 등
             흩어져 있는 모든 법령정보를 하나로 모아 제공합니다.
@@ -106,7 +106,7 @@ export default function LawInfoPage() {
         <h3 className={cn(textStyles.titleMd, 'text-primary-700 mt-10 mb-4')}>
           ⚙️ 핵심 기능
         </h3>
-        <ul className="list-disc pl-6 space-y-1">
+        <ul className={cn(textStyles.bodyMd, 'list-disc pl-6 space-y-1')}>
           <li>
             🏛️ <strong>3단 비교 법률-시행령</strong> - 시행규칙을 한 화면에
             나란히 놓고 비교할 수 있는 가장 강력한 기능입니다.

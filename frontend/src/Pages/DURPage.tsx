@@ -10,8 +10,8 @@ export default function DURPage() {
       <div className="space-y-12">
         {/* 섹션 타이틀 */}
         <div className="flex items-center gap-3">
-          <span className="w-2 h-8 bg-primary rounded-full" />
-          <h3 className={textStyles.titleMd}>DUR(의약품안전사용서비스)란?</h3>
+          <span className="w-1 h-8 bg-primary" />
+          <h3 className={textStyles.titleLg}>DUR(의약품안전사용서비스)란?</h3>
         </div>
 
         <Callout variant="info" className="mb-8">
@@ -31,11 +31,13 @@ export default function DURPage() {
 
         {/* DUR 서비스 제공 방식 */}
         <section className="space-y-4">
-          <h3 className={textStyles.titleMd}>DUR 서비스 제공 방식</h3>
-
+          <div className="flex items-center gap-3">
+            <span className="w-1 h-8 bg-primary" />
+            <h3 className={textStyles.titleLg}>DUR 서비스 제공 방식</h3>
+          </div>
           <Card variant="outlined" padding="lg" className="border-border">
             <div className="space-y-3">
-              <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
+              <p className={'text-fg leading-relaxed'}>
                 의약품명을 검색하거나 처방·조제 시스템을 통해 확인하면, 해당
                 의약품에 대한{' '}
                 <strong className="text-fg">
@@ -43,7 +45,7 @@ export default function DURPage() {
                 </strong>
                 됩니다.
               </p>
-              <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
+              <p className={'text-fg leading-relaxed'}>
                 제공되는 정보는{' '}
                 <span className="font-semibold text-primary-700">
                   건강보험심사평가원
@@ -57,7 +59,10 @@ export default function DURPage() {
 
         {/* DUR 주요 정보 */}
         <section className="space-y-4">
-          <h3 className={textStyles.titleMd}>DUR에서 제공하는 주요 정보</h3>
+          <div className="flex items-center gap-3">
+            <span className="w-1 h-8 bg-primary" />
+            <h3 className={textStyles.titleLg}>DUR에서 제공하는 주요 정보</h3>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card
@@ -71,9 +76,7 @@ export default function DURPage() {
                 </div>
               </div>
 
-              <h4 className={cn(textStyles.titleMd, 'mt-4 text-lg')}>
-                병용금기
-              </h4>
+              <h4 className={cn(textStyles.titleSm, 'mt-4')}>병용금기</h4>
               <p
                 className={cn(
                   textStyles.bodyMd,
@@ -97,9 +100,7 @@ export default function DURPage() {
                 </div>
               </div>
 
-              <h4 className={cn(textStyles.titleMd, 'mt-4 text-lg')}>
-                연령 금기
-              </h4>
+              <h4 className={cn(textStyles.titleSm, 'mt-4')}>연령 금기</h4>
               <p
                 className={cn(
                   textStyles.bodyMd,
@@ -123,9 +124,7 @@ export default function DURPage() {
                 </div>
               </div>
 
-              <h4 className={cn(textStyles.titleMd, 'mt-4 text-lg')}>
-                임부 금기
-              </h4>
+              <h4 className={cn(textStyles.titleSm, 'mt-4')}>임부 금기</h4>
               <p
                 className={cn(
                   textStyles.bodyMd,
@@ -177,9 +176,7 @@ export default function DURPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <h4 className={textStyles.bodyMd}>
-                      <strong className="text-fg">{item.title}</strong>
-                    </h4>
+                    <h4 className={textStyles.titleSm}>{item.title}</h4>
                     <p
                       className={cn(
                         textStyles.bodyMd,
@@ -212,7 +209,7 @@ export default function DURPage() {
               입니다.
             </p>
             <div className="mt-6">
-              <p className={cn(textStyles.bodyMd, 'font-medium text-xl')}>
+              <p className={cn(textStyles.titleLg)}>
                 "의료 현장에서 DUR을 적극적으로 활용하는 것은 <br />
                 <strong className="text-primary-700">
                   전문가로서의 책임이자 환자 보호를 위한 필수 과정

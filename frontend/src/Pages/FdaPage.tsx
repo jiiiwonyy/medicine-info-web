@@ -14,13 +14,15 @@ import TopPtTimeseriesChart from '../components/fda/TopPtTimeseriesChart';
 import FdaSuggestModal from '../components/fda/FdaSuggestModal';
 import { useEffect } from 'react';
 import Spinner from '@/components/Spinner';
+import { Card } from '@/components/ui/Card';
+import { textStyles } from '@/styles/typography';
+import { cn } from '@/shared/cn';
 
 export default function FdaPage() {
   const [q, setQ] = useState('');
   const debouncedQ = useDebounce(q, 300);
 
   const [selectedDrug, setSelectedDrug] = useState<string>('');
-  const [top, setTop] = useState(5);
   const [roleOnlySuspect, setRoleOnlySuspect] = useState(true);
   const [yearFrom, setYearFrom] = useState<number | undefined>(undefined);
   const [yearTo, setYearTo] = useState<number | undefined>(undefined);
@@ -66,7 +68,6 @@ export default function FdaPage() {
   const tsQuery = useFaersTimeseriesQuery({
     drug: selectedDrug,
     enabled: canSearch,
-    top,
     role_filter: roleFilter,
     year_from: yearFrom,
     year_to: yearTo,
@@ -124,29 +125,13 @@ export default function FdaPage() {
               />
               의심약(PS/SS)만
             </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              Top
-              <select
-                className="border rounded px-2 py-1"
-                value={top}
-                onChange={(e) => setTop(Number(e.target.value))}
-              >
-                {[3, 4, 5].map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-              PT 표시
-            </label>
           </div>
         </div>
       </div>
 
       {/* 상태 */}
       {!selectedDrug && (
-        <div className="text-sm text-gray-600">
+        <div className={cn(textStyles.bodySm, 'text-muted-fg')}>
           약물명을 입력하면 후보를 선택할 수 있어요. 선택 후 연도별 보고 건수와
           주요 PT 추이를 볼 수 있어요.
         </div>
@@ -163,48 +148,52 @@ export default function FdaPage() {
       {/* 결과 */}
       {summary && timeseries && (
         <div className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="rounded-xl border p-4">
-              <div className="text-xs text-gray-500">선택 약물</div>
-              <div className="text-lg font-semibold">{summary.drug}</div>
-            </div>
-            <div className="rounded-xl border p-4">
-              <div className="text-xs text-gray-500">매칭 ISR 수</div>
-              <div className="text-lg font-semibold">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card variant="strong" className="md:col-span-1 w-full">
+              <div className={cn(textStyles.bodyMd, 'text-muted-fg')}>
+                선택 약물
+              </div>
+              <div className={cn(textStyles.titleSm)}>{summary.drug}</div>
+            </Card>
+            <Card variant="strong" className="md:col-span-1 w-full">
+              <div className={cn(textStyles.bodyMd, 'text-muted-fg')}>
+                매칭 ISR 수
+              </div>
+              <div className={cn(textStyles.titleSm)}>
                 {summary.matched_isr_count.toLocaleString()}
               </div>
-            </div>
-            <div className="rounded-xl border p-4">
-              <div className="text-xs text-gray-500">Top PT 개수</div>
-              <div className="text-lg font-semibold">{top}</div>
-            </div>
+            </Card>
           </div>
 
-          <div className="rounded-xl border p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-semibold">연도별 총 보고 건수</h2>
-              <div className="text-xs text-gray-500">기준: DEMO.FDA_DT</div>
+          <Card variant="strong">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className={cn(textStyles.titleSm)}>연도별 총 보고 건수</h2>
+              <div className={cn(textStyles.bodySm, 'text-muted-fg')}>
+                기준: DEMO.FDA_DT
+              </div>
             </div>
             <YearlyTotalChart data={summary.yearly_total} />
-          </div>
+          </Card>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="rounded-xl border p-4">
-              <h2 className="font-semibold mb-3">Top PT</h2>
-              <TopPtList items={topPts.slice(0, top)} />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card variant="strong" className="md:col-span-1 w-full">
+              <h2 className={cn(textStyles.titleSm, 'mb-4')}>Top PT</h2>
+              <TopPtList items={topPts} />
+            </Card>
 
-            <div className="lg:col-span-2 rounded-xl border p-4">
-              <h2 className="font-semibold mb-3">Top PT 연도별 추이</h2>
+            <Card variant="strong" className="md:col-span-2 w-full">
+              <h2 className={cn(textStyles.titleSm, 'mb-4')}>
+                Top5 PT 연도별 추이
+              </h2>
               <TopPtTimeseriesChart
                 years={timeseries.years}
                 series={timeseries.series}
               />
-            </div>
+            </Card>
           </div>
 
-          <div className="rounded-xl border p-4 text-sm text-gray-700 leading-relaxed">
-            <div className="font-semibold mb-2">해석 시 주의</div>
+          <Card variant="muted">
+            <div className={cn(textStyles.titleSm, 'mb-4')}>해석 시 주의</div>
             <ul className="list-disc pl-5 space-y-1">
               <li>
                 FAERS는 자발적 보고 데이터라 인과관계를 확정하지 않으며, 보고
@@ -218,7 +207,7 @@ export default function FdaPage() {
                 동일 ISR에서 여러 PT가 함께 보고되면 각각 카운트에 포함됩니다.
               </li>
             </ul>
-          </div>
+          </Card>
         </div>
       )}
     </PageLayout>

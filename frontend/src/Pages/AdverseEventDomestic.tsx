@@ -13,7 +13,8 @@ import {
   Cell,
 } from 'recharts';
 import PageLayout from '@/components/PageLayout';
-
+import { textStyles } from '@/styles/typography';
+import { cn } from '@/shared/cn';
 import {
   domesticData,
   reporterData2023,
@@ -40,8 +41,8 @@ export default function AdverseEventDomestic() {
       </div>
 
       {/* 보여줄 자료 */}
-      <h3 className="text-xl font-semibold mb-3">제공되는 주요 통계</h3>
-      <ul className="list-disc pl-6 mb-8 space-y-1">
+      <h3 className={cn(textStyles.titleLg, 'mb-3')}>제공되는 주요 통계</h3>
+      <ul className={'list-disc pl-6 mb-8 space-y-1'}>
         <li>국내 의약품 부작용 보고 추이 (그래프)</li>
         <li>성별·연령대별 분포 (차트)</li>
         <li>주요 이상사례 유형 (예: 발진, 소화기계 이상, 간수치 상승 등)</li>
@@ -50,8 +51,13 @@ export default function AdverseEventDomestic() {
 
       {/* 보고 추이 그래프 */}
       <div className="mb-10">
-        <h4 className="text-lg font-bold mb-4 border-l-4 border-sky-600 pl-3">
-          📊 연도별 보고 건수 현황
+        <h4
+          className={cn(
+            textStyles.headingLg,
+            'mb-4 border-l-4 border-primary pl-3',
+          )}
+        >
+          연도별 보고 건수 현황
         </h4>
         <div className="h-80 w-full bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <ResponsiveContainer width="100%" height="100%">
@@ -106,14 +112,19 @@ export default function AdverseEventDomestic() {
       </div>
 
       <div className="mb-10">
-        <h4 className="text-lg font-bold mb-4 border-l-4 border-sky-600 pl-3">
+        <h4
+          className={cn(
+            textStyles.headingLg,
+            'mb-4 border-l-4 border-primary pl-3',
+          )}
+        >
           보고자 유형별 의약품등 이상사례 보고 현황
         </h4>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 md:col-span-2">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-96">
             {/* 2023 Chart */}
             <div className="flex flex-col items-center">
-              <h5 className="text-md font-bold text-gray-700 mb-2">2023년</h5>
+              <h5 className={cn(textStyles.titleSm, 'mb-2')}>2023년</h5>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -147,7 +158,7 @@ export default function AdverseEventDomestic() {
 
             {/* 2024 Chart */}
             <div className="flex flex-col items-center">
-              <h5 className="text-md font-bold text-gray-700 mb-2">2024년</h5>
+              <h5 className={cn(textStyles.titleSm, 'mb-2')}>2024년</h5>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -187,7 +198,12 @@ export default function AdverseEventDomestic() {
       </div>
 
       <div className="mb-10">
-        <h4 className="text-lg font-bold mb-4 border-l-4 border-sky-600 pl-3">
+        <h4
+          className={cn(
+            textStyles.headingLg,
+            'mb-4 border-l-4 border-primary pl-3',
+          )}
+        >
           🏢 지역의약품안전센터 의약품등 이상사례 보고 현황
         </h4>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 md:col-span-2 overflow-x-auto">
@@ -289,7 +305,12 @@ export default function AdverseEventDomestic() {
       </div>
 
       <div className="mb-10">
-        <h4 className="text-lg font-bold mb-4 border-l-4 border-indigo-600 pl-3">
+        <h4
+          className={cn(
+            textStyles.headingLg,
+            'mb-4 border-l-4 border-primary pl-3',
+          )}
+        >
           🧑‍⚕️ 최초 원보고자 자격별 보고 현황
         </h4>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 md:col-span-2 overflow-x-auto">
@@ -365,7 +386,12 @@ export default function AdverseEventDomestic() {
       </div>
 
       <div className="mb-10">
-        <h4 className="text-lg font-bold mb-4 border-l-4 border-violet-600 pl-3">
+        <h4
+          className={cn(
+            textStyles.headingLg,
+            'mb-4 border-l-4 border-primary pl-3',
+          )}
+        >
           📋 보고 구분별 의약품등 이상사례 보고 현황
         </h4>
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 md:col-span-2 overflow-x-auto">
@@ -484,7 +510,7 @@ export default function AdverseEventDomestic() {
       </div>
 
       {/* 조회 안내 */}
-      <h3 className="text-xl font-semibold mb-3">이상사례보고 조회 안내</h3>
+      <h3 className={cn(textStyles.titleLg, 'mb-3')}>이상사례보고 조회 안내</h3>
       <p className="mb-4">
         <strong>의약품안전나라</strong> 사이트에서 이상사례보고 동향을 직접
         확인할 수 있습니다.
