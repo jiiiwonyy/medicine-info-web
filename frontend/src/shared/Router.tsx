@@ -1,6 +1,6 @@
 import Home from '@/features/home';
 import SearchResult from '@/Pages/SearchResult';
-import MedicineDetail from '@/Pages/MedicineDetail';
+import MedicineDetail from '@/features/medicine-detail';
 import DURPage from '@/features/DURPage';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';

@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getMedicineById } from '@/api/searchMedicine';
-import type { Medicine } from '../types/medicine';
+import type { Medicine } from '@/types/medicine';
 import { useMemo, useState } from 'react';
 import TopButton from '@/components/TopButton';
 import Spinner from '@/components/Spinner';
@@ -56,7 +56,7 @@ export default function Detail() {
   }, []);
 
   const onTabClick = (tab: { id: string; value: TabKey }) => {
-    setActiveTab(tab.value); // TabsTrigger 클릭 시 value 바뀌긴 하지만, 명확히 해두면 안정적
+    setActiveTab(tab.value);
     scrollToId(tab.id, HEADER_OFFSET);
   };
 
