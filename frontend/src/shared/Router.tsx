@@ -5,7 +5,7 @@ import DURPage from '@/features/DURPage';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SafetyLetter from '@/features/safety-letters';
-import Signal from '@/Pages/SignalInfo';
+import Signal from '@/features/signal-info';
 import AdverseEventDomestic from '@/features/AdverseEventDomestic';
 import ReliefPage from '@/features/relief';
 import MedicationGuide from '@/features/medication-guide';
