@@ -11,7 +11,7 @@ import ReliefPage from '@/Pages/Relief';
 import MedicationGuide from '@/features/medication-guide';
 import LocalCenter from '@/features/local-center';
 import KopsPage from '@/features/kops';
-import NimsPage from '@/Pages/NimsPage';
+import NimsPage from '@/features/nims';
 import AdverseReliefPage from '@/features/AdverseReliefPage';
 import LawInfoPage from '@/features/law-info';
 import AdminPage from '@/Pages/AdminPage';
