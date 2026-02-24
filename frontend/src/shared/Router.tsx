@@ -8,7 +8,7 @@ import SafetyLetter from '@/Pages/SafetyLetter';
 import Signal from '@/Pages/SignalInfo';
 import AdverseEventDomestic from '@/features/AdverseEventDomestic';
 import ReliefPage from '@/Pages/Relief';
-import MedicationGuide from '@/Pages/MedicationGuide';
+import MedicationGuide from '@/features/medication-guide';
 import LocalCenter from '@/features/local-center';
 import KopsPage from '@/features/kops';
 import NimsPage from '@/Pages/NimsPage';

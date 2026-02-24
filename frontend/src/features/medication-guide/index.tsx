@@ -1,9 +1,14 @@
 import PageLayout from '@/components/PageLayout';
-import { textStyles } from '@/styles/typography';
-import { cn } from '@/shared/cn';
 import Button from '@/components/ui/Button';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
+import HowToSection from '@/features/medication-guide/components/HowToSection';
+import {
+  KPIS_STEPS,
+  KPIS_URL,
+} from '@/features/medication-guide/data/medicationGuide';
 
-export default function MedicationGuide() {
+export default function MedicationGuidePage() {
   return (
     <PageLayout title="복약지도서">
       <div className="mb-12">
@@ -43,42 +48,11 @@ export default function MedicationGuide() {
 
       <div className="mb-10">
         <h3 className={cn(textStyles.titleMd, 'mb-3')}>복약지도서 확인 방법</h3>
-        <div className="space-y-4">
-          {[
-            { step: 1, text: '약학정보원 홈페이지 접속' },
-            {
-              step: 2,
-              text: '상단 메뉴 [의약품정보] → [제품별 복약정보] 선택',
-            },
-            {
-              step: 3,
-              text: '성분명 또는 제품명으로 검색하여 해당 의약품 복약지도서 확인',
-            },
-          ].map((item) => (
-            <div
-              key={item.step}
-              className="flex items-center gap-4 border rounded-lg p-4 shadow-sm bg-white"
-            >
-              <div
-                className={cn(
-                  textStyles.uiLg,
-                  'flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center',
-                )}
-              >
-                {item.step}
-              </div>
-              <p className={cn(textStyles.bodyMd)}>{item.text}</p>
-            </div>
-          ))}
-        </div>
+        <HowToSection steps={[...KPIS_STEPS]} />
       </div>
 
       <Button asChild className="w-full">
-        <a
-          href="https://www.health.kr/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={KPIS_URL} target="_blank" rel="noopener noreferrer">
           🔗 약학정보원 복약지도서 검색 바로가기
         </a>
       </Button>
