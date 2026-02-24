@@ -1,6 +1,6 @@
 import Callout from '@/components/ui/Callout';
 import PageLayout from '@/components/PageLayout';
-import ReliefProcess from '@/components/ReliefProcess';
+import ReliefProcess from '@/features/AdverseReliefPage/components/ReliefProcess';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { Card } from '@/components/ui/Card';

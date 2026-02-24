@@ -7,7 +7,7 @@ import Layout from '@/components/Layout';
 import SafetyLetter from '@/Pages/SafetyLetter';
 import Signal from '@/Pages/SignalInfo';
 import AdverseEventDomestic from '@/features/AdverseEventDomestic';
-import ReliefPage from '@/Pages/Relief';
+import ReliefPage from '@/features/relief';
 import MedicationGuide from '@/features/medication-guide';
 import LocalCenter from '@/features/local-center';
 import KopsPage from '@/features/kops';

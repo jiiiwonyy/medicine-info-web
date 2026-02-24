@@ -1,6 +1,6 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import { Card } from './ui/Card';
+import { Card } from '@/components/ui/Card';
 
 export default function ReliefProcessVertical() {
   const steps = [
