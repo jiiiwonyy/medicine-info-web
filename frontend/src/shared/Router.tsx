@@ -16,7 +16,7 @@ import AdverseReliefPage from '@/features/AdverseReliefPage';
 import LawInfoPage from '@/features/law-info';
 import AdminPage from '@/Pages/AdminPage';
 import FdaPage from '@/features/fda-page';
-import MedicationSafetyInfo from '@/Pages/MedicationSafetyInfo';
+import MedicationSafetyInfo from '@/features/medication-safety';
 import SafeMedicationProcess from '@/features/SafeMedicationProcess';
 import ErrorReductionStrategy from '@/Pages/ErrorReductionStrategy';
 
