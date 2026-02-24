@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getFaersSummary, getFaersTimeseries } from '@/api/fda';
+import {
+  getFaersSummary,
+  getFaersTimeseries,
+} from '@/features/fda-page/api/fda';
 
 export type RoleFilter =
   | 'all'
@@ -29,7 +32,14 @@ export function useFaersSummaryQuery(params: {
   const canFetch = enabled && !!drug?.trim();
 
   return useQuery({
-    queryKey: ['faers', 'summary', drug, role_filter, year_from ?? null, year_to ?? null],
+    queryKey: [
+      'faers',
+      'summary',
+      drug,
+      role_filter,
+      year_from ?? null,
+      year_to ?? null,
+    ],
     queryFn: () =>
       getFaersSummary({
         drug,
@@ -62,7 +72,15 @@ export function useFaersTimeseriesQuery(params: {
   const canFetch = enabled && !!drug?.trim();
 
   return useQuery({
-    queryKey: ['faers', 'timeseries', drug, top, role_filter, year_from ?? null, year_to ?? null],
+    queryKey: [
+      'faers',
+      'timeseries',
+      drug,
+      top,
+      role_filter,
+      year_from ?? null,
+      year_to ?? null,
+    ],
     queryFn: () =>
       getFaersTimeseries({
         drug,

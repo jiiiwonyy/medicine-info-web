@@ -15,7 +15,7 @@ import NimsPage from '@/Pages/NimsPage';
 import AdverseReliefPage from '@/features/AdverseReliefPage';
 import LawInfoPage from '@/Pages/LawInfo';
 import AdminPage from '@/Pages/AdminPage';
-import FdaPage from '@/Pages/FdaPage';
+import FdaPage from '@/features/fda-page';
 import MedicationSafetyInfo from '@/Pages/MedicationSafetyInfo';
 import SafeMedicationProcess from '@/features/SafeMedicationProcess';
 import ErrorReductionStrategy from '@/Pages/ErrorReductionStrategy';

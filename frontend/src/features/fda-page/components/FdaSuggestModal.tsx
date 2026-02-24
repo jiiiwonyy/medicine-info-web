@@ -1,7 +1,7 @@
-import Button from '../ui/Button';
+import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import Spinner from '../Spinner';
+import Spinner from '@/components/Spinner';
 
 type Props = {
   open: boolean;
