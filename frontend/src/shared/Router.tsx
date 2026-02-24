@@ -1,7 +1,7 @@
 import Home from '@/Pages/Home';
 import SearchResult from '@/Pages/SearchResult';
 import MedicineDetail from '@/Pages/MedicineDetail';
-import DurPage from '@/Pages/DURPage';
+import DURPage from '@/features/DURPage';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SafetyLetter from '@/Pages/SafetyLetter';
@@ -12,7 +12,7 @@ import MedicationGuide from '@/Pages/MedicationGuide';
 import LocalCenter from '@/Pages/LocalCenter';
 import KopsPage from '@/Pages/Kops';
 import NimsPage from '@/Pages/NimsPage';
-import AdverseReliefPage from '@/Pages/AdverseReliefPage';
+import AdverseReliefPage from '@/features/AdverseReliefPage';
 import LawInfoPage from '@/Pages/LawInfo';
 import AdminPage from '@/Pages/AdminPage';
 import FdaPage from '@/Pages/FdaPage';
@@ -37,7 +37,7 @@ const Router = () => {
         {/* 의약품정보 */}
         <Route path="/search" element={<SearchResult />} />
         <Route path="/medicines/:id" element={<MedicineDetail />} />
-        <Route path="/dur" element={<DurPage />} />
+        <Route path="/dur" element={<DURPage />} />
         <Route
           path="/medicines/safe"
           element={<PlaceholderPage title="의약품 안전 정보" />}
