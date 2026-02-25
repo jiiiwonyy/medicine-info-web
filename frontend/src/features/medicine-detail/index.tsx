@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import TopButton from '@/components/TopButton';
 import Spinner from '@/components/Spinner';
 import FloatingNavigation from '@/components/FloatingNavigation';
-import DurSection from '@/components/DurSection';
+import DurSection from '@/features/medicine-detail/section/DurSection';
 import { scrollToId } from '@/hooks/useScrollSpy';
 import MedicineDetailRenderer from '@/components/MedicineDetailRender';
 import {
