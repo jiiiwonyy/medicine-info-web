@@ -1,23 +1,23 @@
-import Home from '@/Pages/Home';
-import SearchResult from '@/Pages/SearchResult';
-import MedicineDetail from '@/Pages/MedicineDetail';
-import DurPage from '@/Pages/DURPage';
+import Home from '@/features/home';
+import SearchResult from '@/features/medicine-search';
+import MedicineDetail from '@/features/medicine-detail';
+import DURPage from '@/features/dur-page';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import SafetyLetter from '@/Pages/SafetyLetter';
-import Signal from '@/Pages/SignalInfo';
-import AdverseEventDomestic from '@/Pages/AdverseEventDomestic';
-import ReliefPage from '@/Pages/Relief';
-import MedicationGuide from '@/Pages/MedicationGuide';
-import LocalCenter from '@/Pages/LocalCenter';
-import KopsPage from '@/Pages/Kops';
-import NimsPage from '@/Pages/NimsPage';
-import AdverseReliefPage from '@/Pages/AdverseReliefPage';
-import LawInfoPage from '@/Pages/LawInfo';
+import SafetyLetter from '@/features/safety-letters';
+import Signal from '@/features/signal-info';
+import AdverseEventDomestic from '@/features/adverse-event-domestic';
+import ReliefPage from '@/features/relief';
+import MedicationGuide from '@/features/medication-guide';
+import LocalCenter from '@/features/local-center';
+import KopsPage from '@/features/kops';
+import NimsPage from '@/features/nims';
+import AdverseReliefPage from '@/features/adverse-relief-page';
+import LawInfoPage from '@/features/law-info';
 import AdminPage from '@/Pages/AdminPage';
-import FdaPage from '@/Pages/FdaPage';
-import MedicationSafetyInfo from '@/Pages/MedicationSafetyInfo';
-import SafeMedicationProcess from '@/Pages/SafeMedicationProcess/SafeMedicationProcess';
+import FdaPage from '@/features/fda-page';
+import MedicationSafetyInfo from '@/features/medication-safety';
+import SafeMedicationProcess from '@/features/safe-medication-process';
 import ErrorReductionStrategy from '@/Pages/ErrorReductionStrategy';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
@@ -37,7 +37,7 @@ const Router = () => {
         {/* 의약품정보 */}
         <Route path="/search" element={<SearchResult />} />
         <Route path="/medicines/:id" element={<MedicineDetail />} />
-        <Route path="/dur" element={<DurPage />} />
+        <Route path="/dur" element={<DURPage />} />
         <Route
           path="/medicines/safe"
           element={<PlaceholderPage title="의약품 안전 정보" />}
