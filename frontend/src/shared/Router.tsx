@@ -1,23 +1,23 @@
 import Home from '@/features/home';
-import SearchResult from '@/Pages/SearchResult';
+import SearchResult from '@/features/medicine-search';
 import MedicineDetail from '@/features/medicine-detail';
-import DURPage from '@/features/DURPage';
+import DURPage from '@/features/dur-page';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import SafetyLetter from '@/features/safety-letters';
 import Signal from '@/features/signal-info';
-import AdverseEventDomestic from '@/features/AdverseEventDomestic';
+import AdverseEventDomestic from '@/features/adverse-event-domestic';
 import ReliefPage from '@/features/relief';
 import MedicationGuide from '@/features/medication-guide';
 import LocalCenter from '@/features/local-center';
 import KopsPage from '@/features/kops';
 import NimsPage from '@/features/nims';
-import AdverseReliefPage from '@/features/AdverseReliefPage';
+import AdverseReliefPage from '@/features/adverse-relief-page';
 import LawInfoPage from '@/features/law-info';
 import AdminPage from '@/Pages/AdminPage';
 import FdaPage from '@/features/fda-page';
 import MedicationSafetyInfo from '@/features/medication-safety';
-import SafeMedicationProcess from '@/features/SafeMedicationProcess';
+import SafeMedicationProcess from '@/features/safe-medication-process';
 import ErrorReductionStrategy from '@/Pages/ErrorReductionStrategy';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
