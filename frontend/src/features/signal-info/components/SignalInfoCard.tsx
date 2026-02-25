@@ -1,4 +1,4 @@
-import type { SignalInfoItem } from '@/types/signalInfo';
+import type { SignalInfoItem } from '@/features/signal-info/types';
 import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';

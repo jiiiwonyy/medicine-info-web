@@ -3,8 +3,8 @@ import {
   fetchSignalInfos,
   fetchSignalInfoDownloadUrl,
   fetchSignalInfoViewUrl,
-} from '@/api/signalInfo';
-import type { SignalInfoItem } from '@/types/signalInfo';
+} from '@/features/signal-info/api/signalInfo';
+import type { SignalInfoItem } from '@/features/signal-info/types';
 import { extractDocNo, trimDocNo } from '@/features/signal-info/utils';
 import type { SignalInfoTabKey } from '@/features/signal-info/types';
 

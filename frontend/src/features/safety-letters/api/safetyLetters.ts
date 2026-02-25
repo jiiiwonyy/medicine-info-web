@@ -1,12 +1,14 @@
 import api from '@/api/axiosInstance';
-import type { SafetyLetterListResponse } from '@/types/safetyLetter';
+import type { SafetyLetterListResponse } from '@/features/safety-letters/types';
 
 export async function fetchSafetyLetters(params: {
   limit?: number;
   offset?: number;
   q?: string;
 }): Promise<SafetyLetterListResponse> {
-  const res = await api.get<SafetyLetterListResponse>('/safety-letters', { params });
+  const res = await api.get<SafetyLetterListResponse>('/safety-letters', {
+    params,
+  });
   return res.data;
 }
 
