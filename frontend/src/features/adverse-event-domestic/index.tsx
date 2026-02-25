@@ -1,13 +1,12 @@
 import PageLayout from '@/components/PageLayout';
-
-import IntroSection from '@/features/AdverseEventDomestic/components/IntroSection';
-import ProvidedStatsSection from '@/features/AdverseEventDomestic/components/ProvidedStatsSection';
-import YearlyReportsBarChart from '@/features/AdverseEventDomestic/components/YearlyReportsBarChart';
-import ReporterTypePieCharts from '@/features/AdverseEventDomestic/components/ReporterTypePieCharts';
-import RegionalReportTable from '@/features/AdverseEventDomestic/components/RegionalReportTable';
-import OriginalReporterTable from '@/features/AdverseEventDomestic/components/OriginalReporterTable';
-import ReportTypeTable from '@/features/AdverseEventDomestic/components/ReportTypeTable';
-import LookupGuideSection from '@/features/AdverseEventDomestic/components/LookupGuideSection';
+import IntroSection from '@/features/adverse-event-domestic/components/IntroSection';
+import ProvidedStatsSection from '@/features/adverse-event-domestic/components/ProvidedStatsSection';
+import YearlyReportsBarChart from '@/features/adverse-event-domestic/components/YearlyReportsBarChart';
+import ReporterTypePieCharts from '@/features/adverse-event-domestic/components/ReporterTypePieCharts';
+import RegionalReportTable from '@/features/adverse-event-domestic/components/RegionalReportTable';
+import OriginalReporterTable from '@/features/adverse-event-domestic/components/OriginalReporterTable';
+import ReportTypeTable from '@/features/adverse-event-domestic/components/ReportTypeTable';
+import LookupGuideSection from '@/features/adverse-event-domestic/components/LookupGuideSection';
 
 export default function AdverseEventDomesticPage() {
   return (

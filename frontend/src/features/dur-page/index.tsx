@@ -4,8 +4,8 @@ import { Card } from '@/components/ui/Card';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
 import SectionTitle from '@/components/ui/SectionTitle';
-import DurInfoCard from '@/features/DURPage/components/DurInfoCard';
-import { DUR_MAIN_INFO, DUR_USE_CASES } from '@/features/DURPage/data/DurData';
+import DurInfoCard from '@/features/dur-page/components/DurInfoCard';
+import { DUR_MAIN_INFO, DUR_USE_CASES } from '@/features/dur-page/data/DurData';
 
 export default function DURPage() {
   return (

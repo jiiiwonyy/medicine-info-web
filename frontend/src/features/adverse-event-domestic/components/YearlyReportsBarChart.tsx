@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   LabelList,
 } from 'recharts';
-import { domesticData } from '@/data/adverseEventData';
+import { domesticData } from '@/features/adverse-event-domestic/data/adverseEventData';
 
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';

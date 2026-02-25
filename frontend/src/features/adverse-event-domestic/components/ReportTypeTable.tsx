@@ -1,4 +1,4 @@
-import { reportTypeData } from '@/data/adverseEventData';
+import { reportTypeData } from '@/features/adverse-event-domestic/data/adverseEventData';
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
 

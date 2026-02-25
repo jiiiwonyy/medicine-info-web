@@ -8,7 +8,10 @@ import {
 } from 'recharts';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import { reporterData2023, reporterData2024 } from '@/data/adverseEventData';
+import {
+  reporterData2023,
+  reporterData2024,
+} from '@/features/adverse-event-domestic/data/adverseEventData';
 
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';

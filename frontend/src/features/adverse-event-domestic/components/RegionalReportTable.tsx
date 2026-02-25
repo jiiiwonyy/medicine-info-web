@@ -1,4 +1,4 @@
-import { regionalTableData } from '@/data/adverseEventData';
+import { regionalTableData } from '@/features/adverse-event-domestic/data/adverseEventData';
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
 
