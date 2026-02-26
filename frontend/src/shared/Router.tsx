@@ -18,7 +18,7 @@ import AdminPage from '@/Pages/AdminPage';
 import FdaPage from '@/features/fda-page';
 import MedicationSafetyInfo from '@/features/medication-safety';
 import SafeMedicationProcess from '@/features/safe-medication-process';
-import ErrorReductionStrategy from '@/Pages/ErrorReductionStrategy';
+import ErrorReductionStrategy from '@/features/error-reduction-strategy';
 
 const PlaceholderPage = ({ title }: { title: string }) => (
   <div className="p-10 text-center">
