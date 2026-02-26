@@ -4,6 +4,7 @@ import { InfoList } from '../components/StepCommon';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { FlowWrap, FlowBlock, FinalBlock } from '../components/FlowLayout';
+import IVRateTip from '../components/IVRateTip';
 
 const ADMIN_CONSIDERATIONS: React.ReactNode[] = [
   '즉시 사용할 수 있는 형태로 약물을 얻는 것 (계수, 계산, 혼합, 라벨 부착 등 준비 과정)',
@@ -68,37 +69,41 @@ const ADMIN_CHECKLIST: React.ReactNode[] = [
 
 export default function AdministeringStep({ theme }: { theme: StepTheme }) {
   return (
-    <FlowWrap>
-      <FlowBlock title="투여단계 고려사항">
-        <InfoList items={ADMIN_CONSIDERATIONS} />
-      </FlowBlock>
+    <>
+      <FlowWrap>
+        <FlowBlock title="투여단계 고려사항">
+          <InfoList items={ADMIN_CONSIDERATIONS} />
+        </FlowBlock>
 
-      <FlowBlock title="투여원칙 8 Rights">
-        <InfoList items={EIGHT_RIGHTS} />
-      </FlowBlock>
+        <FlowBlock title="투여원칙 8 Rights">
+          <InfoList items={EIGHT_RIGHTS} />
+        </FlowBlock>
 
-      {/* ✅ 마지막만 강조 */}
-      <FinalBlock title="투여 확인 체크리스트" theme={theme}>
-        <ol className="space-y-3">
-          {ADMIN_CHECKLIST.map((item, idx) => (
-            <li
-              key={idx}
-              className={cn(
-                textStyles.bodyMd,
-                'flex items-start gap-3 text-fg leading-relaxed',
-              )}
-            >
-              <span
+        {/* ✅ 마지막만 강조 */}
+        <FinalBlock title="투여 확인 체크리스트" theme={theme}>
+          <ol className="space-y-3">
+            {ADMIN_CHECKLIST.map((item, idx) => (
+              <li
+                key={idx}
                 className={cn(
-                  'mt-1 inline-block h-2 w-2 rounded-full',
-                  theme.dot,
+                  textStyles.bodyMd,
+                  'flex items-start gap-3 text-fg leading-relaxed',
                 )}
-              />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ol>
-      </FinalBlock>
-    </FlowWrap>
+              >
+                <span
+                  className={cn(
+                    'mt-1 inline-block h-2 w-2 rounded-full',
+                    theme.dot,
+                  )}
+                />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ol>
+        </FinalBlock>
+      </FlowWrap>
+
+      <IVRateTip />
+    </>
   );
 }
