@@ -6,7 +6,7 @@ import CaseStudySection from '@/features/error-reduction-strategy/section/CaseSt
 
 export default function ErrorReductionStrategyPage() {
   return (
-    <PageLayout title="오류 감소 전략">
+    <PageLayout title="투약 오류 감소 전략">
       <Tabs defaultValue="safe-medication" className="mt-2">
         <TabsList className="w-full flex">
           <TabsTrigger value="safe-medication" className="flex-1">
