@@ -51,12 +51,10 @@ export default function CommunicationSection() {
               className="shadow-sm text-center space-y-2"
             >
               <div className="text-2xl">{icon}</div>
-              <p className={cn(textStyles.bodyMd, 'font-bold text-fg')}>
-                {title}
-              </p>
+              <p className={cn(textStyles.titleSm)}>{title}</p>
               <p
                 className={cn(
-                  textStyles.captionMd,
+                  textStyles.bodyMd,
                   'text-muted-fg leading-relaxed',
                 )}
               >
@@ -82,18 +80,17 @@ export default function CommunicationSection() {
               <div className="flex items-center gap-2">
                 <span
                   className={cn(
-                    'flex items-center justify-center w-8 h-8 rounded-lg font-bold text-lg',
+                    textStyles.titleSm,
+                    'flex items-center justify-center w-8 h-8 rounded-lg',
                     badge,
                   )}
                 >
                   {letter}
                 </span>
-                <span className={cn(textStyles.bodyMd, 'font-semibold')}>
-                  {label}{' '}
-                </span>
-                <span className={cn(textStyles.captionMd)}>{word}</span>
+                <span className={cn(textStyles.titleSm)}>{label} </span>
+                <span className={cn(textStyles.bodyMd)}>{word}</span>
               </div>
-              <p className={cn(textStyles.captionMd, 'leading-relaxed')}>
+              <p className={cn(textStyles.bodyMd, 'leading-relaxed')}>
                 {question}
               </p>
             </div>
@@ -183,12 +180,8 @@ export default function CommunicationSection() {
                 {/* 오른쪽: 내용 */}
                 <div className={cn('flex-1', isLast ? 'pb-0' : 'pb-8')}>
                   <div className="pt-1.5 mb-3">
-                    <p
-                      className={cn(textStyles.bodyMd, 'font-semibold text-fg')}
-                    >
-                      {block.titleKo}
-                    </p>
-                    <p className={cn(textStyles.captionMd, 'text-muted-fg')}>
+                    <p className={cn(textStyles.titleSm)}>{block.titleKo}</p>
+                    <p className={cn(textStyles.bodySm, 'text-muted-fg')}>
                       {block.titleEn}
                     </p>
                   </div>
