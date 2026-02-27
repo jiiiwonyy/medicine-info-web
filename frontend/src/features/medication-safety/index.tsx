@@ -8,6 +8,7 @@ import WhoAreaSection from '@/features/medication-safety/components/WhoAreaSecti
 import HamTableSection from '@/features/medication-safety/components/HamTableSection';
 import { WHO_AREAS } from '@/features/medication-safety/data/whoAreas';
 import { HAM_CATEGORIES } from '@/features/medication-safety/data/hamCategories';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 
 export default function MedicationSafetyPage() {
   return (
@@ -44,17 +45,7 @@ export default function MedicationSafetyPage() {
 
         {/* B. Stats */}
         <section className="space-y-4">
-          <div className={cn(textStyles.titleMd, 'flex items-center gap-2')}>
-            <span
-              className={cn(
-                textStyles.uiLg,
-                'flex items-center justify-center w-6 h-6 rounded-full bg-muted text-muted-fg',
-              )}
-            >
-              1
-            </span>
-            왜 중요한가?
-          </div>
+          <SectionNumberHeader number={1} title="왜 중요한가?" />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <StatCard
@@ -81,18 +72,10 @@ export default function MedicationSafetyPage() {
 
         {/* D. HAM definition */}
         <section className="space-y-4">
-          <div className={cn(textStyles.titleMd, 'flex items-center gap-2')}>
-            <span
-              className={cn(
-                textStyles.uiLg,
-                'flex items-center justify-center w-6 h-6 rounded-full bg-muted text-muted-fg',
-              )}
-            >
-              3
-            </span>
-            고위험약물(High Alert Medication)이란?
-          </div>
-
+          <SectionNumberHeader
+            number={3}
+            title="고위험약물(High Alert Medication)이란?"
+          />
           <Card variant="outlined" padding="lg" className="shadow-sm">
             <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
               오류 발생 시 환자와 직원의 안전에{' '}

@@ -3,21 +3,15 @@ import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import type { WhoArea } from '@/features/medication-safety/types';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 
 export default function WhoAreaSection({ areas }: { areas: WhoArea[] }) {
   return (
     <section className="space-y-4">
-      <div className={cn(textStyles.titleMd, 'flex items-center gap-2')}>
-        <span
-          className={cn(
-            textStyles.uiLg,
-            'flex items-center justify-center w-6 h-6 rounded-full bg-muted text-muted-fg',
-          )}
-        >
-          2
-        </span>
-        투약오류 예방을 위한 3가지 영역 (WHO)
-      </div>
+      <SectionNumberHeader
+        number={2}
+        title="투약오류 예방을 위한 3가지 영역 (WHO)"
+      />
 
       <Card variant="outlined" padding="lg" className="shadow-sm space-y-6">
         <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
