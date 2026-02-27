@@ -1,11 +1,11 @@
 import PageLayout from '@/components/PageLayout';
 import { Card } from '@/components/ui/Card';
-import Callout from '@/components/ui/Callout';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import StatCard from '@/features/medication-safety/components/StatCard';
 import WhoAreaSection from '@/features/medication-safety/components/WhoAreaSection';
 import HamTableSection from '@/features/medication-safety/components/HamTableSection';
+import MedicationErrorChartsSection from '@/features/medication-safety/components/MedicationErrorChartsSection';
 import { WHO_AREAS } from '@/features/medication-safety/data/whoAreas';
 import { HAM_CATEGORIES } from '@/features/medication-safety/data/hamCategories';
 import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
@@ -25,46 +25,36 @@ export default function MedicationSafetyPage() {
               사고나 오류의 제거로 정의됩니다(WHO, 2009).
             </p>
           </Card>
-
-          <Callout
-            variant="info"
-            icon="💡"
-            className="bg-primary-50 border-primary-200 text-primary-900"
-          >
-            <p className={cn(textStyles.bodyMd, 'leading-relaxed')}>
-              투약오류 중{' '}
-              <span className="font-bold border-b-2 border-primary-500">
-                3분의 2가 예방 가능
-              </span>
-              한 것으로 보고되며(WHO, 2022), 투약은 치료 과정에서 가장 큰 영역을
-              차지하는 동시에 많은 의료오류가 발생하는 분야이므로 예방 가능한
-              투약오류를 줄이는 것이 중요합니다.
-            </p>
-          </Callout>
         </div>
 
         {/* B. Stats */}
         <section className="space-y-4">
           <SectionNumberHeader number={1} title="왜 중요한가?" />
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <p>
+            투약은 환자 치료 과정의 가장 큰 영역을 차지하지만, 동시에 가장
+            빈번한 의료 오류가 발생하는 지점입니다. 아래 데이터는 우리가 왜 투약
+            안전에 집중해야 하는지를 명확히 보여줍니다.
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <StatCard
-              title="예방 가능 비율"
-              value="2/3"
-              note="투약오류 중 3분의 2 예방 가능"
+              title="연간 사만자 수(추정)"
+              value="7,000명"
+              note="투약오류로 인한 심각한 결과"
+              accentColor="bg-danger"
             />
             <StatCard
-              title="입원 관련"
+              title="환자 경험 비율(7개국)"
+              value="11%"
+              note="환자 10명중 1명은 오류 경험"
+              accentColor="bg-success"
+            />
+            <StatCard
+              title="병원 입원 관련성"
               value="6~7%"
-              note="병원 입원의 6~7%가 투약오류와 관련"
-            />
-            <StatCard title="환자 경험" value="11%" note="투약 오류 경험" />
-            <StatCard
-              title="연간 사망(미국)"
-              value="7,000명+"
-              note="투약오류로 인한 연간 사망자 수"
+              note="전체 입원의 투약요류 연관 비율"
             />
           </div>
+          <MedicationErrorChartsSection />
         </section>
 
         {/* C. WHO 3 areas */}
