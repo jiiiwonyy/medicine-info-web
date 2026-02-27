@@ -60,10 +60,15 @@ export function FlowBlock({
 export function FinalBlock({
   title,
   theme,
+  className,
   children,
-}: React.PropsWithChildren<{ title: string; theme: StepTheme }>) {
+}: React.PropsWithChildren<{
+  title: string;
+  theme: StepTheme;
+  className?: string;
+}>) {
   return (
-    <section className="relative mx-auto max-w-2xl">
+    <section className={cn('relative mx-auto max-w-2xl', className)}>
       <div className="flex flex-col items-center mb-1">
         <span
           className={cn(
