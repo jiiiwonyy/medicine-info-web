@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/Card';
 import Callout from '@/components/ui/Callout';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import SectionHeader from '@/features/error-reduction-strategy/components/SectionHeader';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 import BulletList from '@/features/error-reduction-strategy/components/BulletList';
 import { SBAR_ITEMS } from '@/features/error-reduction-strategy/data/sbarData';
 import { IPASS_BLOCKS } from '@/features/error-reduction-strategy/data/ipassData';
@@ -67,7 +67,7 @@ export default function CommunicationSection() {
 
       {/* 1. SBAR */}
       <section className="space-y-4">
-        <SectionHeader number={1} title="SBAR" />
+        <SectionNumberHeader number={1} title="SBAR" />
         <p className={cn(textStyles.bodyMd, 'text-muted-fg')}>
           팀 구성원들이 상호간에 효과적인 의사소통을 하기 위한 프레임워크
         </p>
@@ -100,7 +100,7 @@ export default function CommunicationSection() {
 
       {/* 2. Call-out */}
       <section className="space-y-4">
-        <SectionHeader number={2} title="콜아웃 (Call-out)" />
+        <SectionNumberHeader number={2} title="콜아웃 (Call-out)" />
         <Card variant="outlined" padding="lg" className="shadow-sm">
           <p className={cn(textStyles.bodyMd, 'font-semibold mb-2')}>
             중요한 정보를 전달할 때 사용하는 방법
@@ -116,7 +116,7 @@ export default function CommunicationSection() {
 
       {/* 3. Check-Back */}
       <section className="space-y-4">
-        <SectionHeader number={3} title="재확인 (Check-Back)" />
+        <SectionNumberHeader number={3} title="재확인 (Check-Back)" />
         <Card variant="outlined" padding="lg" className="shadow-sm">
           <p className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}>
             발신자가 전달한 정보를 수신자가 올바르게 이해할 수 있도록 하는 데
@@ -130,7 +130,7 @@ export default function CommunicationSection() {
 
       {/* 4. I-PASS */}
       <section className="space-y-4">
-        <SectionHeader number={4} title="인수인계 방법: I-PASS" />
+        <SectionNumberHeader number={4} title="인수인계 방법: I-PASS" />
         <p className={cn(textStyles.bodyMd, 'text-muted-fg')}>
           환자 치료 전환 상황에서 권한 및 책임과 함께 정보를 전달하기 위한
           표준화된 방법
