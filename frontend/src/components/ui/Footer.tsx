@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="mt-20 border-t border-border bg-muted">
       <div
         className={cn(
-          textStyles.bodyMd,
+          textStyles.bodyXs,
           'max-w-screen-xl mx-auto px-6 py-10 text-muted-fg leading-relaxed',
         )}
       >
@@ -33,7 +33,7 @@ export default function Footer() {
             href="mailto:carpe@jnu.ac.kr"
             className="text-primary-600 hover:text-primary-700 hover:underline"
           >
-            Contact PI(carpe@jnu.ac.kr)
+            Contact PI
           </a>
         </div>
       </div>

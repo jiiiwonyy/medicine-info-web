@@ -1,6 +1,6 @@
-// components/Callout.tsx
 import type { ReactNode } from 'react';
 import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 type Variant = 'info' | 'warning' | 'success' | 'danger' | 'note';
 
@@ -78,8 +78,8 @@ export default function Callout({
         </div>
 
         <div className="min-w-0">
-          {title && <div className={cn('font-semibold mb-1')}>{title}</div>}
-          <div className="leading-6 text-muted-fg">{children}</div>
+          {title && <div className={cn(textStyles.titleSm)}>{title}</div>}
+          <div className={cn(textStyles.bodyMd)}>{children}</div>
         </div>
       </div>
     </div>

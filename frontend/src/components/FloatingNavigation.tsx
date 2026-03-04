@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import { useScrollSpy, scrollToId } from '@/hooks/useScrollSpy';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 type DurLite = {
   interactions: unknown[];
@@ -56,14 +58,19 @@ export default function FloatingNavigation({
     activeId === item.id || !!item.children?.some((c) => c.id === activeId);
 
   return (
-    <aside className="fixed top-1/3 right-20 hidden lg:flex flex-col space-y-2 bg-white border rounded shadow-md p-3 z-50 min-w-52">
+    <aside className="fixed top-1/3 right-20 hidden lg:flex flex-col space-y-2 bg-bg border rounded shadow-md p-3 z-50 min-w-52">
       <nav aria-label="보조 내비게이션" className="space-y-1">
         {navTree.map((item) => (
           <div key={item.id}>
             <button
               onClick={() => scrollToId(item.id, headerOffset)}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition
-                ${isParentActive(item) ? 'bg-sky-50 text-sky-700' : 'hover:bg-gray-50 text-gray-800'}`}
+              className={cn(
+                textStyles.bodyMd,
+                `w-full text-left px-3 py-2 rounded-lg transition`,
+                isParentActive(item)
+                  ? 'bg-primary-50 text-primary-700'
+                  : 'hover:bg-muted text-fg',
+              )}
               aria-current={isParentActive(item) ? 'location' : undefined}
             >
               {item.label}
@@ -77,8 +84,12 @@ export default function FloatingNavigation({
                     <li key={c.id}>
                       <button
                         onClick={() => scrollToId(c.id, headerOffset)}
-                        className={`w-full text-left px-3 py-1.5 rounded-md text-sm transition
-                          ${childActive ? 'bg-sky-50 text-sky-700' : 'hover:bg-gray-50 text-gray-600'}`}
+                        className={cn(
+                          `w-full text-left px-3 py-1.5 rounded-md text-sm transition`,
+                          childActive
+                            ? 'bg-primary-50 text-primary-700'
+                            : 'hover:bg-muted text-fg',
+                        )}
                         aria-current={childActive ? 'location' : undefined}
                       >
                         {c.label}

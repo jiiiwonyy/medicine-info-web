@@ -49,12 +49,12 @@ export function THead({
   return <thead className={cn(className)} {...props} />;
 }
 
-export function TBody({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return <tbody className={cn(className)} {...props} />;
-}
+export const TBody = React.forwardRef<
+  HTMLTableSectionElement,
+  React.HTMLAttributes<HTMLTableSectionElement>
+>(function TBody({ className, ...props }, ref) {
+  return <tbody ref={ref} className={cn(className)} {...props} />;
+});
 
 export function Tr({
   className,
