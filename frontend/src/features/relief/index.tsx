@@ -1,5 +1,5 @@
+import * as React from 'react';
 import PageLayout from '@/components/PageLayout';
-import DefinitionCardsSection from '@/features/relief/components/DefinitionCardsSection';
 import ReportingMethodsSection from '@/features/relief/components/ReportingMethodsSection';
 import ReportItemsSection from '@/features/relief/components/ReportItemSection';
 import { Card } from '@/components/ui/Card';
@@ -8,9 +8,75 @@ import { textStyles } from '@/styles/typography';
 
 export default function ReliefPage() {
   return (
-    <PageLayout>
+    <PageLayout title="부작용(이상사례) 보고">
       <div className="space-y-12">
-        <DefinitionCardsSection />
+        <section>
+          <div className="flex justify-center items-end mb-12 relative h-72">
+            <div className="absolute bottom-0 w-72 h-72 bg-gray-100 rounded-full border border-gray-200" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[calc(16rem-20px)] text-center text-black">
+              <p className="font-semibold text-lg">부작용</p>
+              <p className="text-sm opacity-90">Side Effect</p>
+            </div>
+
+            <div className="absolute bottom-0 w-56 h-56 bg-sky-100 rounded-full border border-gray-200" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[calc(12rem-20px)] text-center text-black">
+              <p className="font-semibold text-base">이상사례</p>
+              <p className="text-sm opacity-90">Adverse Event</p>
+            </div>
+
+            <div className="absolute bottom-0 w-40 h-40 bg-sky-600 rounded-full border border-gray-200" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[calc(5rem-20px)] text-center text-white">
+              <p className="font-semibold text-sm">약물이상반응</p>
+              <p className="text-xs opacity-90">Adverse Drug Reaction</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card padding="lg" className="bg-gray-100 border border-gray-200">
+              <h4 className={cn(textStyles.titleSm, 'mb-2')}>1. 부작용</h4>
+              <p className={cn(textStyles.bodyMd, 'mb-1 text-muted-fg')}>
+                Side Effect
+              </p>
+              <p className={cn(textStyles.bodyMd, 'leading-relaxed')}>
+                의약품 등을 정상적인 용량에 따라 투여할 경우 발생하는{' '}
+                <strong>모든 의도되지 않은 효과</strong> (유익한 효과 포함)
+              </p>
+            </Card>
+
+            <div className="bg-sky-100 p-6 rounded-xl border border-sky-100">
+              <h4 className={cn(textStyles.titleSm, 'mb-2')}>
+                2. 이상사례 (AE)
+              </h4>
+              <p className={cn(textStyles.bodyMd, 'mb-1 text-muted-fg')}>
+                Adverse Event
+              </p>
+              <p className={cn(textStyles.bodyMd, 'leading-relaxed')}>
+                의약품 투여 중 발생한 바람직하지 않은 징후, 증상, 질병.
+                <span
+                  className={cn(
+                    textStyles.bodySm,
+                    'block mt-1 text-primary-700',
+                  )}
+                >
+                  *약물과 반드시 인과관계가 입증된 것은 아님
+                </span>
+              </p>
+            </div>
+
+            <div className="bg-sky-600 p-6 rounded-xl text-white shadow-md">
+              <h4 className={cn(textStyles.titleSm, 'mb-2')}>
+                3. 약물이상반응 (ADR)
+              </h4>
+              <p className={cn(textStyles.bodyMd, 'mb-1')}>
+                Adverse Drug Reaction
+              </p>
+              <p className="text-white leading-relaxed">
+                정상적인 용법에도 불구하고 발생한 해롭고 예기치 못한 반응.
+                인과관계가 어느 정도 입증된 경우를 말함.
+              </p>
+            </div>
+          </div>
+        </section>
         <section
           className={cn(
             'bg-surface rounded-lg border border-border shadow-sm p-8',
@@ -86,27 +152,63 @@ export default function ReliefPage() {
             >
               이상사례 보고 후 과정
             </h2>
-            <Card variant="outlined">
-              <p
-                className={cn(
-                  textStyles.bodyMd,
-                  'leading-relaxed text-fg text-justify',
-                )}
-              >
-                이상사례가 보고되면,{' '}
-                <strong className="text-primary-700">
-                  한국의약품안전관리원
-                </strong>
-                에서는 이러한 정보를 체계적으로 수집하고, 보고된 자료 관리를
-                통하여 이상사례보고 데이터베이스를 구축합니다.
-                <br />
-                <br />
-                이렇게 축적된 이상사례 데이터베이스를 이용하여 약물이상사례의
-                실마리정보를 분석하게 되며, 또한 특정 이상사례에 대해 보다
-                체계적으로 평가하거나 심층적인 약물역학연구를 수행합니다. 이를
-                통해 의약품 안전성정보를 생산하며, 정부의 위해 관리정책에 대한
-                근거를 제공하는 업무를 수행하고 있습니다.
-              </p>
+            <Card variant="primary" padding="lg">
+              <div className="flex flex-col md:flex-row items-stretch gap-0">
+                {[
+                  {
+                    icon: '📋',
+                    title: '정보 수집',
+                    desc: '한국의약품안전관리원으로 체계적인 정보 보고 및 수집',
+                  },
+                  {
+                    icon: '🗄️',
+                    title: 'DB 구축',
+                    desc: '전국적인 이상사례 데이터베이스 구축 및 관리',
+                  },
+                  {
+                    icon: '🔍',
+                    title: '분석 및 연구',
+                    desc: '실마리정보 분석 및 심층적 약물역학 연구 수행',
+                  },
+                  {
+                    icon: '⚖️',
+                    title: '안전 대책 강구',
+                    desc: '안전성 정보 생산 및 정부 위해관리정책 근거 제공',
+                  },
+                ].map((step, idx, arr) => (
+                  <React.Fragment key={idx}>
+                    {/* 스텝 카드: 가로로 균등 분배, 넘침 없음 */}
+                    <div className="flex-1 min-w-0 flex flex-col items-center text-center px-3 py-5">
+                      <div className="flex items-center justify-center w-14 h-14 rounded-full text-2xl mb-3 bg-bg shrink-0">
+                        {step.icon}
+                      </div>
+                      <p
+                        className={cn(textStyles.titleSm, 'mb-1.5 break-keep')}
+                      >
+                        {step.title}
+                      </p>
+                      <p
+                        className={cn(
+                          textStyles.bodySm,
+                          'leading-snug break-keep',
+                        )}
+                      >
+                        {step.desc}
+                      </p>
+                    </div>
+                    {idx < arr.length - 1 && (
+                      <div
+                        className="flex items-center justify-center shrink-0 text-muted-fg/50 text-lg
+                                      md:self-center md:px-1
+                                      self-center py-0"
+                      >
+                        <span className="hidden md:inline">→</span>
+                        <span className="md:hidden">↓</span>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
             </Card>
           </div>
         </section>
