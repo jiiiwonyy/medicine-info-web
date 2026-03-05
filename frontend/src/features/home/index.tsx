@@ -18,7 +18,7 @@ export default function Home() {
           <div className="space-y-8">
             <p className={cn(textStyles.titleSm, 'text-fg')}>
               투약안전, 의약품 정보확인이 기본입니다!
-              <br />* 의약품 정보는 효능.효과, 용법.용량, 주의사항으로 구성되어
+              <br />* 의약품 정보는 효능·효과, 용법·용량, 주의사항으로 구성되어
               있습니다.
             </p>
             <KeyInfoCards />
