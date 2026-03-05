@@ -37,7 +37,7 @@ export default function MedicationSafetyPage() {
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <StatCard
-              title="연간 사만자 수(추정)"
+              title="연간 사망자 수(추정)"
               value="7,000명"
               note="투약오류로 인한 심각한 결과"
               accentColor="bg-danger"
