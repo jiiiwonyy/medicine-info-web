@@ -51,7 +51,7 @@ export default function MedicationSafetyPage() {
             <StatCard
               title="병원 입원 관련성"
               value="6~7%"
-              note="전체 입원의 투약요류 연관 비율"
+              note="전체 입원의 투약오류 연관 비율"
             />
           </div>
           <MedicationErrorChartsSection />
