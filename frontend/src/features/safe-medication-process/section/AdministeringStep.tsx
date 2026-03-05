@@ -62,7 +62,7 @@ const EIGHT_RIGHTS: React.ReactNode[] = [
 
 function FiveRightsSection({ theme }: { theme: StepTheme }) {
   return (
-    <div className={cn('p-6mt-8')}>
+    <div className={cn('p-6 mt-8')}>
       <p className={cn(textStyles.titleSm, 'text-fg mb-4 text-center')}>
         예방 가능한 오류를 줄이기 위해,
         <br /> 간호사가 투약 전 반드시 확인해야 할 5가지 기본 원칙입니다.
