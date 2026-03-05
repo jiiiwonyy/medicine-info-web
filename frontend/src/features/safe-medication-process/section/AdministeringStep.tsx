@@ -3,16 +3,20 @@ import type { StepTheme } from '../types';
 import { InfoList } from '../components/StepCommon';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import { FlowWrap, FlowBlock, FinalBlock } from '../components/FlowLayout';
+import { FinalBlock, FlowBlock, FlowWrap } from '../components/FlowLayout';
 import IVRateTip from '../components/IVRateTip';
+import { MdCampaign } from 'react-icons/md';
+import { Card } from '@/components/ui/Card';
+import { RightCard } from '@/features/safe-medication-process/components/FiveRightCard';
+import { FIVE_RIGHTS } from '@/features/safe-medication-process/data/fiveRights';
 
 const ADMIN_CONSIDERATIONS: React.ReactNode[] = [
   '즉시 사용할 수 있는 형태로 약물을 얻는 것 (계수, 계산, 혼합, 라벨 부착 등 준비 과정)',
   <>
-    <span className="font-semibold">알레르기 확인</span>
+    <span className="font-semibold text-danger">알레르기 확인</span>
   </>,
   <>
-    <span className="font-semibold">
+    <span className="font-semibold text-danger">
       적절한 환자에게 적절한 용량, 올바른 경로를 통해 적절한 시간에 적절한 약물
       투약
     </span>
@@ -56,16 +60,39 @@ const EIGHT_RIGHTS: React.ReactNode[] = [
   </>,
 ];
 
-const ADMIN_CHECKLIST: React.ReactNode[] = [
-  '올바른 약물',
-  '올바른 환자',
-  '올바른 용량',
-  '올바른 시간',
-  '올바른 경로',
-  '올바른 이유(근거)',
-  '올바른 반응',
-  '올바른 문서화',
-];
+function FiveRightsSection({ theme }: { theme: StepTheme }) {
+  return (
+    <div className={cn('p-6 mt-8')}>
+      <p className={cn(textStyles.titleSm, 'text-fg mb-4 text-center')}>
+        예방 가능한 오류를 줄이기 위해,
+        <br /> 간호사가 투약 전 반드시 확인해야 할 5가지 기본 원칙입니다.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {FIVE_RIGHTS.map((item) => (
+          <RightCard key={item.title} item={item} theme={theme} />
+        ))}
+      </div>
+
+      <Card variant="primary" className="mt-6">
+        <p
+          className={cn(
+            textStyles.titleSm,
+            'text-info flex items-center justify-center gap-2',
+          )}
+        >
+          <MdCampaign size={20} />
+          Speak Up for Safety
+        </p>
+        <p className={cn(textStyles.bodyMd, 'mt-1 text-center')}>
+          의약품 처방이나 조제 내용이 의심스럽다면, 투약하기 전 반드시 다시
+          확인하십시오.<br></br>
+          불확실할 때는 멈추는 것이 가장 큰 용기입니다.
+        </p>
+      </Card>
+    </div>
+  );
+}
 
 export default function AdministeringStep({ theme }: { theme: StepTheme }) {
   return (
@@ -78,28 +105,12 @@ export default function AdministeringStep({ theme }: { theme: StepTheme }) {
         <FlowBlock title="투여원칙 8 Rights">
           <InfoList items={EIGHT_RIGHTS} />
         </FlowBlock>
-
-        {/* ✅ 마지막만 강조 */}
-        <FinalBlock title="투여 확인 체크리스트" theme={theme}>
-          <ol className="space-y-3">
-            {ADMIN_CHECKLIST.map((item, idx) => (
-              <li
-                key={idx}
-                className={cn(
-                  textStyles.bodyMd,
-                  'flex items-start gap-3 text-fg leading-relaxed',
-                )}
-              >
-                <span
-                  className={cn(
-                    'mt-1 inline-block h-2 w-2 rounded-full',
-                    theme.dot,
-                  )}
-                />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ol>
+        <FinalBlock
+          title="투약 안전 수칙(5 Rights)"
+          theme={theme}
+          className="max-w-6xl"
+        >
+          <FiveRightsSection theme={theme} />
         </FinalBlock>
       </FlowWrap>
 

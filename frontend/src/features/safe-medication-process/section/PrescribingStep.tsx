@@ -7,12 +7,14 @@ import { FlowWrap, FlowBlock, FinalBlock } from '../components/FlowLayout';
 
 const PRESCRIBING_CONSIDERATIONS: React.ReactNode[] = [
   <>
-    주어진 임상적 상황에서 알레르기와 같은{' '}
-    <span className="font-semibold">환자 개인 요소</span>를 고려한 적합한
-    약물인가
+    주어진 임상적 상황에서{' '}
+    <span className="font-semibold text-danger">
+      알레르기와 같은 환자 개인 요소를 고려한
+    </span>{' '}
+    적합한 약물인가
   </>,
   <>
-    <span className="font-semibold">
+    <span className="font-semibold text-danger">
       투약 경로, 용량, 시간과 약물 요법(regimen)이 정확
     </span>
     한가
@@ -20,7 +22,7 @@ const PRESCRIBING_CONSIDERATIONS: React.ReactNode[] = [
   <div className="space-y-1">
     <div>
       투약 계획의 세부사항에 대한{' '}
-      <span className="font-semibold">의사소통</span>
+      <span className="font-semibold text-danger">의사소통</span>
     </div>
     <ul className="list-[circle] pl-5 space-y-1">
       <li>약물을 처방·투약하는 사람(서면 전달 및/또는 구두)</li>
@@ -71,18 +73,9 @@ export default function PrescribingStep({ theme }: { theme: StepTheme }) {
           {PRESCRIBING_CHECKLIST.map((item, idx) => (
             <li
               key={idx}
-              className={cn(
-                textStyles.bodyMd,
-                'flex items-start gap-3 text-fg leading-relaxed',
-              )}
+              className={cn(textStyles.bodyMd, 'text-fg leading-relaxed')}
             >
-              <span
-                className={cn(
-                  'mt-1 inline-block h-2 w-2 rounded-full',
-                  theme.dot,
-                )}
-              />
-              <span>{item}</span>
+              {item}
             </li>
           ))}
         </ol>

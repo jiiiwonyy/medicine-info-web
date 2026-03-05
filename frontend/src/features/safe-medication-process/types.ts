@@ -16,3 +16,10 @@ export type StepMeta = {
   badge: string;
   theme: StepTheme;
 };
+
+export type RightItem = {
+  icon: string;
+  title: string;
+  description: string;
+  tip: string;
+};

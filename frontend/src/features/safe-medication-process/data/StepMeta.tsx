@@ -6,8 +6,8 @@ export const STEPS: StepMeta[] = [
     title: '처방',
     badge: 'Step 1',
     theme: {
-      border: 'border-danger-200',
-      headerBg: 'bg-danger-50',
+      border: 'border-danger',
+      headerBg: 'bg-danger-200',
       headerText: 'text-fg',
       chip: 'bg-danger-200/40 border-danger-200',
       chipText: 'text-fg',
