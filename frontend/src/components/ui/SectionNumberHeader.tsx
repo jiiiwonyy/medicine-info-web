@@ -1,12 +1,15 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 
-interface SectionHeaderProps {
+interface SectionNumberHeaderProps {
   number: number | string;
   title: string;
 }
 
-export default function SectionHeader({ number, title }: SectionHeaderProps) {
+export default function SectionNumberHeader({
+  number,
+  title,
+}: SectionNumberHeaderProps) {
   return (
     <div className={cn(textStyles.titleMd, 'flex items-center gap-2')}>
       <span

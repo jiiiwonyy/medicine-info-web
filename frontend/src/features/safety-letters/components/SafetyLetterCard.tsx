@@ -1,4 +1,4 @@
-import type { SafetyLetter as SafetyLetterType } from '@/types/safetyLetter';
+import type { SafetyLetter as SafetyLetterType } from '@/features/safety-letters/types';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';

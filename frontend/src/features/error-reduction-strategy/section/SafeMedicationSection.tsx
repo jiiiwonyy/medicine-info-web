@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/Card';
 import Callout from '@/components/ui/Callout';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import SectionHeader from '@/features/error-reduction-strategy/components/SectionHeader';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 import BulletList from '@/features/error-reduction-strategy/components/BulletList';
 import { EIGHT_RIGHTS } from '@/features/error-reduction-strategy/data/rightsData';
 
@@ -11,7 +11,7 @@ export default function SafeMedicationSection() {
     <div className="flex flex-col gap-10">
       {/* 1. 투약 오류 발생 상황 */}
       <section className="space-y-4">
-        <SectionHeader
+        <SectionNumberHeader
           number={1}
           title="어떤 상황에서 투약 오류가 발생 가능?"
         />
@@ -33,7 +33,7 @@ export default function SafeMedicationSection() {
 
       {/* 2. 맞춤 처방 */}
       <section className="space-y-4">
-        <SectionHeader number={2} title="환자 개개인에 맞는 맞춤 처방" />
+        <SectionNumberHeader number={2} title="환자 개개인에 맞는 맞춤 처방" />
         <p className={cn(textStyles.bodyLg, 'text-muted-fg')}>
           투약 과거력을 완전히 사정하는 것을 배우고 실천
         </p>
@@ -52,7 +52,7 @@ export default function SafeMedicationSection() {
 
       {/* 3. 고위험의약품 */}
       <section className="space-y-4">
-        <SectionHeader
+        <SectionNumberHeader
           number={3}
           title="고위험의약품을 숙지하고 예방조치 취하기"
         />
@@ -69,7 +69,7 @@ export default function SafeMedicationSection() {
 
       {/* 4. 처방약 숙지 */}
       <section className="space-y-4">
-        <SectionHeader number={4} title="처방하는 약 완전히 숙지" />
+        <SectionNumberHeader number={4} title="처방하는 약 완전히 숙지" />
         <Card variant="outlined" padding="lg" className="shadow-sm">
           <BulletList
             items={[
@@ -97,7 +97,10 @@ export default function SafeMedicationSection() {
 
       {/* 5. 8 Rights */}
       <section className="space-y-4">
-        <SectionHeader number={5} title="기억력 보조 도구 사용 — 5Rs → 8Rs" />
+        <SectionNumberHeader
+          number={5}
+          title="기억력 보조 도구 사용 — 5Rs → 8Rs"
+        />
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {EIGHT_RIGHTS.map(({ num, label }) => (
             <div
@@ -117,7 +120,7 @@ export default function SafeMedicationSection() {
 
       {/* 6. 확인 습관 */}
       <section className="space-y-4">
-        <SectionHeader number={6} title="확인하는 습관 기르기" />
+        <SectionNumberHeader number={6} title="확인하는 습관 기르기" />
         <Callout variant="warning" icon="⚠️">
           <ul className="space-y-2">
             {[
@@ -140,7 +143,10 @@ export default function SafeMedicationSection() {
 
       {/* 7. 환자 참여 */}
       <section className="space-y-4">
-        <SectionHeader number={7} title="환자가 적극적으로 참여하도록 유도" />
+        <SectionNumberHeader
+          number={7}
+          title="환자가 적극적으로 참여하도록 유도"
+        />
         <Card variant="outlined" padding="lg" className="shadow-sm">
           <BulletList
             items={[
@@ -163,7 +169,10 @@ export default function SafeMedicationSection() {
 
       {/* 8. 투약오류 보고 */}
       <section className="space-y-4">
-        <SectionHeader number={8} title="투약오류 보고 및 오류를 통한 학습" />
+        <SectionNumberHeader
+          number={8}
+          title="투약오류 보고 및 오류를 통한 학습"
+        />
         <Card variant="outlined" padding="lg" className="shadow-sm">
           <BulletList
             items={[

@@ -11,6 +11,7 @@ import {
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import type { HamCategory } from '../types';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 
 export default function HamTableSection({
   categories,
@@ -19,18 +20,7 @@ export default function HamTableSection({
 }) {
   return (
     <section className="space-y-4">
-      <div className={cn(textStyles.titleMd, 'flex items-center gap-2')}>
-        <span
-          className={cn(
-            textStyles.uiLg,
-            'flex items-center justify-center w-6 h-6 rounded-full bg-muted text-muted-fg',
-          )}
-        >
-          4
-        </span>
-        고위험약물 종류
-      </div>
-
+      <SectionNumberHeader number={4} title="고위험약물 종류" />
       <Card
         variant="outlined"
         padding="none"

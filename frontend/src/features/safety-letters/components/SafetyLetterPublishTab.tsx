@@ -4,7 +4,7 @@ import Spinner from '@/components/Spinner';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import SafetyLetterCard from './SafetyLetterCard';
-import type { SafetyLetter as SafetyLetterType } from '@/types/safetyLetter';
+import type { SafetyLetter as SafetyLetterType } from '@/features/safety-letters/types';
 
 export default function SafetyLetterPublishTab({
   qInput,
