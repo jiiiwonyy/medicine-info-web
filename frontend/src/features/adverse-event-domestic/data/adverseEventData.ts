@@ -100,3 +100,64 @@ export const reportTypeData = [
     total: 253486,
   },
 ];
+
+export const efficacyGroupData = [
+  {
+    rank: 1,
+    year2023: { group: '해열.진통.소염제', reports: 34644, ratio: 12.9 },
+    year2024: { group: '항악성종양제', reports: 31748, ratio: 12.5 },
+  },
+  {
+    rank: 2,
+    year2023: { group: 'X선조영제', reports: 27604, ratio: 10.3 },
+    year2024: { group: '해열.진통.소염제', reports: 31228, ratio: 12.3 },
+  },
+  {
+    rank: 3,
+    year2023: { group: '항악성종양제', reports: 26145, ratio: 9.8 },
+    year2024: { group: 'X선조영제', reports: 27859, ratio: 11.0 },
+  },
+  {
+    rank: 4,
+    year2023: {
+      group: '주로 그람양성, 음성균에 작용하는 것',
+      reports: 24030,
+      ratio: 9.0,
+    },
+    year2024: {
+      group: '주로 그람양성, 음성균에 작용하는 것',
+      reports: 18165,
+      ratio: 7.2,
+    },
+  },
+  {
+    rank: 5,
+    year2023: { group: '합성마약', reports: 16991, ratio: 6.3 },
+    year2024: { group: '합성마약', reports: 12604, ratio: 5.0 },
+  },
+  {
+    rank: 6,
+    year2023: { group: '소화성궤양용제', reports: 7931, ratio: 3.0 },
+    year2024: { group: '소화성궤양용제', reports: 7260, ratio: 2.9 },
+  },
+  {
+    rank: 7,
+    year2023: { group: '기타의 화학요법제', reports: 7466, ratio: 2.8 },
+    year2024: { group: '기타의 화학요법제', reports: 6287, ratio: 2.5 },
+  },
+  {
+    rank: 8,
+    year2023: { group: '백신류', reports: 5965, ratio: 2.2 },
+    year2024: { group: '백신류', reports: 5909, ratio: 2.3 },
+  },
+  {
+    rank: 9,
+    year2023: { group: '혈압강하제', reports: 5245, ratio: 2.0 },
+    year2024: { group: '항원충제', reports: 5160, ratio: 2.0 },
+  },
+  {
+    rank: 10,
+    year2023: { group: '동맥경화용제', reports: 5135, ratio: 1.9 },
+    year2024: { group: '진해거담제', reports: 4947, ratio: 2.0 },
+  },
+];
