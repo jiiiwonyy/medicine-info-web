@@ -2,6 +2,8 @@ import { regionalTableData } from '@/features/adverse-event-domestic/data/advers
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
 import Callout from '@/components/ui/Callout';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 export default function RegionalReportTable() {
   return (
@@ -97,7 +99,9 @@ export default function RegionalReportTable() {
           </tbody>
         </table>
 
-        <p className="text-xs text-muted-fg mt-4 text-right">* (단위: 건)</p>
+        <p className={cn(textStyles.captionMd, 'mt-4 text-right')}>
+          * (단위: 건)
+        </p>
       </StatCard>
     </div>
   );

@@ -3,6 +3,8 @@ import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
 import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 import Callout from '@/components/ui/Callout';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 export default function OriginalReporterTable() {
   return (
@@ -86,7 +88,7 @@ export default function OriginalReporterTable() {
           </tbody>
         </table>
 
-        <p className="text-xs text-muted-fg mt-4 text-right">
+        <p className={cn(textStyles.captionMd, 'mt-4 text-right')}>
           * 기타: 변호사, 유관기관, 모름 등 포함 (단위: 건)
         </p>
       </StatCard>

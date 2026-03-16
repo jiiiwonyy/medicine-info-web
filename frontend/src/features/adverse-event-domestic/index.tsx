@@ -12,6 +12,7 @@ import LookupGuideSection from '@/features/adverse-event-domestic/components/Loo
 import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 const links = [
   { id: 'yearly-reports', label: '연도별 현황' },
@@ -51,28 +52,32 @@ export default function AdverseEventDomesticPage() {
       </div>
       <IntroSection />
       <ProvidedStatsSection />
+      <SectionTitle className="mb-4">
+        2024년 의약품등 안전성정보 보고동향
+      </SectionTitle>
+      <section className="space-y-14">
+        <section id="yearly-reports" className="scroll-mt-40">
+          <YearlyReportsBarChart />
+        </section>
+        <section id="reporter-type" className="scroll-mt-40">
+          <ReporterTypePieCharts />
+        </section>
 
-      <section id="yearly-reports" className="scroll-mt-20">
-        <YearlyReportsBarChart />
-      </section>
-      <section id="reporter-type" className="scroll-mt-20">
-        <ReporterTypePieCharts />
-      </section>
-
-      <section id="regional-report" className="scroll-mt-20">
-        <RegionalReportTable />
-      </section>
-      <section id="original-reporter" className="scroll-mt-20">
-        <OriginalReporterTable />
-      </section>
-      <section id="report-type" className="scroll-mt-20">
-        <ReportTypeTable />
-      </section>
-      <section id="efficacy-group" className="scroll-mt-20">
-        <EfficacyGroupTable />
-      </section>
-      <section id="adverse-event-group" className="scroll-mt-20">
-        <AdverseEventGroupTable />
+        <section id="regional-report" className="scroll-mt-40">
+          <RegionalReportTable />
+        </section>
+        <section id="original-reporter" className="scroll-mt-40">
+          <OriginalReporterTable />
+        </section>
+        <section id="report-type" className="scroll-mt-40">
+          <ReportTypeTable />
+        </section>
+        <section id="efficacy-group" className="scroll-mt-40">
+          <EfficacyGroupTable />
+        </section>
+        <section id="adverse-event-group" className="scroll-mt-40">
+          <AdverseEventGroupTable />
+        </section>
       </section>
 
       <LookupGuideSection />

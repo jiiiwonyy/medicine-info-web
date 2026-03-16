@@ -26,7 +26,7 @@ function PieBlock({
   data: Array<{ name: string; value: number; fill: string }>;
 }) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center h-80 md:h-96">
       <h5 className={cn(textStyles.titleSm, 'mb-2')}>{title}</h5>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
@@ -79,12 +79,12 @@ export default function ReporterTypePieCharts() {
       <SectionHeading>보고자 유형별 의약품등 이상사례 보고 현황</SectionHeading>
 
       <StatCard>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-96">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <PieBlock title="2023년" data={reporterData2023} />
           <PieBlock title="2024년" data={reporterData2024} />
         </div>
 
-        <p className="text-xs text-muted-fg mt-4 text-right">
+        <p className={cn(textStyles.captionMd, 'mt-4 text-right')}>
           * 의약품부작용신고센터를 통한 보고건, 질병관리청으로부터 전달받은
           보고건 등 포함 (단위: 건)
         </p>

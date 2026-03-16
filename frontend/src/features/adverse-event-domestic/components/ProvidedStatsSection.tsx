@@ -1,11 +1,10 @@
 import { Card } from '@/components/ui/Card';
-import { cn } from '@/shared/cn';
-import { textStyles } from '@/styles/typography';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 export default function ProvidedStatsSection() {
   return (
     <section className="mb-10">
-      <h3 className={cn(textStyles.titleLg, 'mb-3')}>제공되는 주요 통계</h3>
+      <SectionTitle className="mb-4">제공되는 주요 통계</SectionTitle>
       <Card variant="muted" className="mb-2">
         국내 의약품 부작용 보고 추이 (그래프)
       </Card>

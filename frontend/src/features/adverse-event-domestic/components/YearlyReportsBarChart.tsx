@@ -15,6 +15,8 @@ import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
 import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 import Callout from '@/components/ui/Callout';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 export default function YearlyReportsBarChart() {
   return (
@@ -77,9 +79,10 @@ export default function YearlyReportsBarChart() {
             </BarChart>
           </ResponsiveContainer>
         </div>
+        <p className={cn(textStyles.captionMd, 'mt-4 text-right')}>
+          * (단위: 건)
+        </p>
       </StatCard>
-
-      <p className="text-xs text-muted-fg mt-4 text-right">* (단위: 건)</p>
     </div>
   );
 }
