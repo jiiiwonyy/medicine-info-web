@@ -161,3 +161,60 @@ export const efficacyGroupData = [
     year2024: { group: '진해거담제', reports: 4947, ratio: 2.0 },
   },
 ];
+
+export const adverseEventGroupData = [
+  {
+    rank: 1,
+    year2023: { group: '구역(Nausea)', reports: 39916, ratio: 14.9 },
+    year2024: { group: '구역(Nausea)', reports: 34804, ratio: 13.7 },
+  },
+  {
+    rank: 2,
+    year2023: { group: '소양증(Pruritus)', reports: 29663, ratio: 11.1 },
+    year2024: { group: '소양증(Pruritus)', reports: 28390, ratio: 11.2 },
+  },
+  {
+    rank: 3,
+    year2023: { group: '두드러기(Urticaria)', reports: 24072, ratio: 9.0 },
+    year2024: { group: '두드러기(Urticaria)', reports: 22824, ratio: 9.0 },
+  },
+  {
+    rank: 4,
+    year2023: { group: '어지러움(Dizziness)', reports: 18395, ratio: 6.9 },
+    year2024: { group: '어지러움(Dizziness)', reports: 16662, ratio: 6.6 },
+  },
+  {
+    rank: 5,
+    year2023: { group: '구토(Vomiting)', reports: 18265, ratio: 6.8 },
+    year2024: { group: '발진(Rash)', reports: 14870, ratio: 5.9 },
+  },
+  {
+    rank: 6,
+    year2023: { group: '발진(Rash)', reports: 16458, ratio: 6.1 },
+    year2024: { group: '구토(Vomiting)', reports: 14653, ratio: 5.8 },
+  },
+  {
+    rank: 7,
+    year2023: { group: '설사(Diarrhoea)', reports: 10358, ratio: 3.9 },
+    year2024: { group: '설사(Diarrhoea)', reports: 10278, ratio: 4.1 },
+  },
+  {
+    rank: 8,
+    year2023: { group: '호흡 곤란(Dyspnoea)', reports: 7360, ratio: 2.7 },
+    year2024: { group: '호흡 곤란(Dyspnoea)', reports: 6789, ratio: 2.7 },
+  },
+  {
+    rank: 9,
+    year2023: { group: '두통(Headache)', reports: 6996, ratio: 2.6 },
+    year2024: { group: '두통(Headache)', reports: 6014, ratio: 2.4 },
+  },
+  {
+    rank: 10,
+    year2023: {
+      group: '흉부 불편감(Chest discomfort)',
+      reports: 4721,
+      ratio: 1.8,
+    },
+    year2024: { group: '졸림(Somnolence)', reports: 4661, ratio: 1.8 },
+  },
+];

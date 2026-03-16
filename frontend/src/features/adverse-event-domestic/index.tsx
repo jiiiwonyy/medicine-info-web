@@ -7,6 +7,7 @@ import RegionalReportTable from '@/features/adverse-event-domestic/components/Re
 import OriginalReporterTable from '@/features/adverse-event-domestic/components/OriginalReporterTable';
 import ReportTypeTable from '@/features/adverse-event-domestic/components/ReportTypeTable';
 import EfficacyGroupTable from '@/features/adverse-event-domestic/components/EfficacyGroupTable';
+import AdverseEventGroupTable from '@/features/adverse-event-domestic/components/AdverseEventGroupTable';
 import LookupGuideSection from '@/features/adverse-event-domestic/components/LookupGuideSection';
 
 export default function AdverseEventDomesticPage() {
@@ -22,6 +23,7 @@ export default function AdverseEventDomesticPage() {
       <OriginalReporterTable />
       <ReportTypeTable />
       <EfficacyGroupTable />
+      <AdverseEventGroupTable />
 
       <LookupGuideSection />
     </PageLayout>
