@@ -9,21 +9,71 @@ import ReportTypeTable from '@/features/adverse-event-domestic/components/Report
 import EfficacyGroupTable from '@/features/adverse-event-domestic/components/EfficacyGroupTable';
 import AdverseEventGroupTable from '@/features/adverse-event-domestic/components/AdverseEventGroupTable';
 import LookupGuideSection from '@/features/adverse-event-domestic/components/LookupGuideSection';
+import Button from '@/components/ui/Button';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
+
+const links = [
+  { id: 'yearly-reports', label: '연도별 현황' },
+  { id: 'reporter-type', label: '보고자별 현황' },
+  { id: 'regional-report', label: '지역센터 현황' },
+  { id: 'original-reporter', label: '원보고자 현황' },
+  { id: 'report-type', label: '보고구분별 현황' },
+  { id: 'efficacy-group', label: '효능군별 현황' },
+  { id: 'adverse-event-group', label: '이상사례별 현황' },
+];
 
 export default function AdverseEventDomesticPage() {
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <PageLayout title="국내 의약품 부작용 보고자료">
+      <div className="mb-10 p-4 rounded-[var(--radius-lg)] bg-muted/30 border border-border">
+        <h3 className={cn(textStyles.titleMd, 'mb-3 px-1')}>바로가기</h3>
+        <div className="flex flex-wrap gap-2">
+          {links.map((link) => (
+            <Button
+              key={link.id}
+              variant="secondary"
+              size="sm"
+              className="rounded-full bg-surface text-xs font-semibold hover:bg-muted"
+              onClick={() => scrollTo(link.id)}
+            >
+              {link.label}
+            </Button>
+          ))}
+        </div>
+      </div>
       <IntroSection />
       <ProvidedStatsSection />
 
-      <YearlyReportsBarChart />
-      <ReporterTypePieCharts />
+      <section id="yearly-reports" className="scroll-mt-20">
+        <YearlyReportsBarChart />
+      </section>
+      <section id="reporter-type" className="scroll-mt-20">
+        <ReporterTypePieCharts />
+      </section>
 
-      <RegionalReportTable />
-      <OriginalReporterTable />
-      <ReportTypeTable />
-      <EfficacyGroupTable />
-      <AdverseEventGroupTable />
+      <section id="regional-report" className="scroll-mt-20">
+        <RegionalReportTable />
+      </section>
+      <section id="original-reporter" className="scroll-mt-20">
+        <OriginalReporterTable />
+      </section>
+      <section id="report-type" className="scroll-mt-20">
+        <ReportTypeTable />
+      </section>
+      <section id="efficacy-group" className="scroll-mt-20">
+        <EfficacyGroupTable />
+      </section>
+      <section id="adverse-event-group" className="scroll-mt-20">
+        <AdverseEventGroupTable />
+      </section>
 
       <LookupGuideSection />
     </PageLayout>
