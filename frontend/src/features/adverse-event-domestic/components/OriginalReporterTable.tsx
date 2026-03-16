@@ -1,10 +1,27 @@
 import { originalReporterData } from '@/features/adverse-event-domestic/data/adverseEventData';
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
+import Callout from '@/components/ui/Callout';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 export default function OriginalReporterTable() {
   return (
     <div className="mb-10">
+      <SectionNumberHeader
+        title="최초 원보고자 (규제 목적 상 원보고자 ) 자격별 의약품등 이상사례 보고 현황"
+        number="3"
+        className="mb-4"
+      />
+      <Callout variant="info" className="mb-4">
+        원보고자는 이상사례 보고서식에서 의사(치과의사, 한의사포함),
+        약사(한약사포 함), 간호사, 기타 의료전문가, 변호사, 소비자, 기타
+        비의료전문가, 기타유관기 관, 기타로 구분되어 있다. 원보고자는 보고자에게
+        이상사례 정보를 제공한 사람을 의미한다. 여러 원보고자가 있는 경우, 가장
+        먼저 이상사례 정보를 제공한 사람을 최초 원보고자(규제 목적 상
+        원보고자)로 구분한다.
+      </Callout>
       <SectionHeading>🧑‍⚕️ 최초 원보고자 자격별 보고 현황</SectionHeading>
 
       <StatCard className="overflow-x-auto">
@@ -71,7 +88,7 @@ export default function OriginalReporterTable() {
           </tbody>
         </table>
 
-        <p className="text-xs text-muted-fg mt-4 text-right">
+        <p className={cn(textStyles.captionMd, 'mt-4 text-right')}>
           * 기타: 변호사, 유관기관, 모름 등 포함 (단위: 건)
         </p>
       </StatCard>

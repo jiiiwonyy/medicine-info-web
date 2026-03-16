@@ -4,14 +4,18 @@ import { textStyles } from '@/styles/typography';
 interface SectionNumberHeaderProps {
   number: number | string;
   title: string;
+  className?: string;
 }
 
 export default function SectionNumberHeader({
   number,
   title,
+  className,
 }: SectionNumberHeaderProps) {
   return (
-    <div className={cn(textStyles.titleMd, 'flex items-center gap-2')}>
+    <div
+      className={cn(textStyles.titleMd, 'flex items-center gap-2', className)}
+    >
       <span
         className={cn(
           textStyles.uiLg,

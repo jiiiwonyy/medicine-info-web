@@ -1,10 +1,25 @@
 import { reportTypeData } from '@/features/adverse-event-domestic/data/adverseEventData';
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
+import Callout from '@/components/ui/Callout';
+import { cn } from '@/shared/cn';
+import { textStyles } from '@/styles/typography';
 
 export default function ReportTypeTable() {
   return (
     <div className="mb-10">
+      <SectionNumberHeader
+        title="보고 구분별 의약품등 이상사례 보고 현황"
+        number="4"
+        className="mb-4"
+      />
+      <Callout variant="info" className="mb-4">
+        보고 구분은 이상사례 보고서식에서 자발적보고, 시험/연구, 모름, 기타로
+        구분되어 있다. 시험/연구는 임상시험, 개별환자사용, 재심사 보고
+        사용성적조사, 재심사 보고 시판 후 임 상연구, 재심사 보고 특별조사,
+        기타로 구분되어 있다.
+      </Callout>
       <SectionHeading>
         📋 보고 구분별 의약품등 이상사례 보고 현황
       </SectionHeading>
@@ -120,7 +135,7 @@ export default function ReportTypeTable() {
           </tbody>
         </table>
 
-        <p className="text-xs text-muted-fg mt-4 text-right">
+        <p className={cn(textStyles.captionMd, 'mt-4 text-right')}>
           * 기타(시험/연구): 약물역학조사 등 포함 | ** 기타: 문헌 등 포함 |
           (단위: 건)
         </p>
