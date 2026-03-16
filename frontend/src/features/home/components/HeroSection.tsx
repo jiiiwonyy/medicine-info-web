@@ -3,10 +3,14 @@ import { textStyles } from '@/styles/typography';
 
 export default function HeroSection() {
   return (
-    <div className="text-center space-y-3 py-4 mb-10">
-      <p className={cn(textStyles.displayLg, 'text-fg tracking-tight')}>
-        간호사를 위한{' '}
-        <span className="text-primary-700">투약안전 & 의약품 정보 시스템</span>
+    <div className="text-center space-y-3 mb-10">
+      <p className={cn(textStyles.titleLg, 'text-fg tracking-tight')}>
+        안전한 투약을 위한{' '}
+      </p>
+      <p
+        className={cn(textStyles.displayLg, 'text-primary-700 tracking-tight')}
+      >
+        의약품 안전 정보 시스템
       </p>
       <p className={cn(textStyles.bodyMd, 'text-muted-fg')}>
         안전한 투약을 위한 의약품 정보, 쉽고 정확하게
