@@ -41,9 +41,9 @@ export default function Header() {
     ],
 
     '부작용 보고자료': [
-      { label: '국내 부작용 보고건수', path: '/domestic' },
-      { label: '미국 FDA 부작용 보고건수', path: '/fda' },
-      { label: 'WHO 부작용 보고건수', path: '/who' },
+      { label: '국내 부작용 보고자료', path: '/domestic' },
+      { label: '미국 FDA 부작용 보고자료', path: '/fda' },
+      { label: 'WHO 부작용 보고자료', path: '/who' },
     ],
 
     '부작용보고 및 피해구제': [

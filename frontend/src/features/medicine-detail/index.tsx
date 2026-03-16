@@ -22,7 +22,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
 
-type TabKey = 'effect' | 'usage' | 'caution' | 'dur';
+type TabKey = 'effect' | 'usage' | 'caution' | 'dur' | 'signal';
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
