@@ -13,11 +13,24 @@ import { domesticData } from '@/features/adverse-event-domestic/data/adverseEven
 
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
+import Callout from '@/components/ui/Callout';
 
 export default function YearlyReportsBarChart() {
   return (
     <div className="mb-10">
-      <SectionHeading>연도별 보고 건수 현황</SectionHeading>
+      <SectionNumberHeader
+        title="의약품등 이상사례 보고 현황"
+        number="1"
+        className="mb-4"
+      />
+      <Callout variant="info" className="mb-4">
+        의약품등의 투여·사용 중 발생하였거나 알게 된 이상사례·약물이상반응에
+        대하여 의사, 치과의사, 한의사, 간호사, 약사, 한약사 또는 관련단체 및
+        기관 등과 환자 또는 소비자는 [식품의약품안전처 공고 제2023-057호]에 따라
+        한국의약품안전 관리원으로 보고할 수 있다.
+      </Callout>
+      <SectionHeading className="mb-4">연도별 보고 건수 현황</SectionHeading>
 
       <StatCard className="p-4">
         <div className="h-80 w-full">

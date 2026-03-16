@@ -28,7 +28,6 @@ export default function ResultChartsSection({
     <>
       <Card variant="strong">
         <div className="flex items-center justify-between mb-4">
-          <h2 className={cn(textStyles.titleSm)}>연도별 총 보고 건수</h2>
           <div className={cn(textStyles.bodySm, 'text-muted-fg')}>
             기준: DEMO.FDA_DT
           </div>

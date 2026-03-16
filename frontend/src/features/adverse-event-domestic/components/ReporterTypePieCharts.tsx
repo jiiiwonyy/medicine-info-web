@@ -15,6 +15,8 @@ import {
 
 import SectionHeading from './SectionHeading';
 import StatCard from './StatCard';
+import Callout from '@/components/ui/Callout';
+import SectionNumberHeader from '@/components/ui/SectionNumberHeader';
 
 function PieBlock({
   title,
@@ -61,6 +63,19 @@ function PieBlock({
 export default function ReporterTypePieCharts() {
   return (
     <div className="mb-10">
+      <SectionNumberHeader
+        title="보고자 유형별 의약품등 이상사례 보고 현황"
+        number="2"
+        className="mb-4"
+      />
+      <Callout variant="info" className="mb-4">
+        보고자는 이상사례보고서식에서 제약회사, 의료전문가, 지역의약품안전센터,
+        환자/ 소비자, 기타로 구분되어 있다. 지역의약품안전센터는 원내뿐만 아니라
+        협력병원 및 의료전문가, 환자/소비자, 제약회사 등의 이상사례 수집 및
+        평가를 수행하고 있다. 지역의약품안전센터를 통해 수집되는 의료전문가,
+        환자/소비자, 제약회사 등의 이상사례 보고는 지역의약품안전센터의 보고에
+        포함되었다. 기타는 공공 기관이나 환자단체 등을 포함한다.
+      </Callout>
       <SectionHeading>보고자 유형별 의약품등 이상사례 보고 현황</SectionHeading>
 
       <StatCard>
