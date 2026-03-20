@@ -50,24 +50,42 @@ def build_year_filter_sql(params: Dict[str, Any], year_from: Optional[int], year
     return sql
 
 
-def resolve_drug_norm(conn, drug: str) -> str:
+def resolve_synonyms(conn, drug: str) -> tuple[str, list[str]]:
     """
-    public.faers_drug_dict에서 선택된 drug 표시값을 norm으로 변환.
+    public.faers_drug_dict에서 drug의 norm과 synonym display 목록을 반환.
+    - norm: 대표 정규화 이름 (응답값 표시용)
+    - synonyms: lower(trim(display)) 목록 — DRUGNAME 필터에 직접 바인딩
+    dict에 없으면 입력값을 그대로 단독 조회한다.
     """
     cur = conn.cursor(cursor_factory=RealDictCursor)
     try:
-        sql = """
-          SELECT drugname_norm
-          FROM public.faers_drug_dict
-          WHERE lower(trim(drugname_display)) = lower(trim(%(drug)s))
-          LIMIT 1;
-        """
-        cur.execute(sql, {"drug": drug})
+        cur.execute(
+            """
+            SELECT drugname_norm
+            FROM public.faers_drug_dict
+            WHERE lower(trim(drugname_display)) = lower(trim(%(drug)s))
+            LIMIT 1;
+            """,
+            {"drug": drug},
+        )
         row = cur.fetchone()
+
         if not row:
-            # 혹시 display가 그대로 없으면 사용자가 넘긴 값을 norm으로 가정
-            return drug.strip().lower()
-        return row["drugname_norm"]
+            norm = drug.strip().lower()
+            return norm, [norm]
+
+        norm = row["drugname_norm"]
+
+        cur.execute(
+            """
+            SELECT DISTINCT lower(trim(drugname_display)) AS dn
+            FROM public.faers_drug_dict
+            WHERE drugname_norm = %(norm)s;
+            """,
+            {"norm": norm},
+        )
+        synonyms = [r["dn"] for r in cur.fetchall()]
+        return norm, synonyms
     finally:
         cur.close()
 
@@ -83,9 +101,9 @@ def faers_summary_selected(
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
-        drug_norm = resolve_drug_norm(conn, drug)
+        drug_norm, synonyms = resolve_synonyms(conn, drug)
 
-        params: Dict[str, Any] = {"drug_norm": drug_norm}
+        params: Dict[str, Any] = {"synonyms": synonyms}
         role_sql = build_role_filter_sql(role_filter)
         year_sql = build_year_filter_sql(params, year_from, year_to)
 
@@ -97,7 +115,7 @@ def faers_summary_selected(
         isr_count_sql = f"""
             SELECT COUNT(DISTINCT d2."ISR") AS matched_isr_count
             FROM "FAERS"."SD_FAERS_DRUG" d2
-            WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+            WHERE lower(trim(d2."DRUGNAME")) = ANY(%(synonyms)s)
             {role_sql}
         """
 
@@ -105,7 +123,7 @@ def faers_summary_selected(
             WITH matched_isr AS (
               SELECT DISTINCT d2."ISR"
               FROM "FAERS"."SD_FAERS_DRUG" d2
-              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              WHERE lower(trim(d2."DRUGNAME")) = ANY(%(synonyms)s)
               {role_sql}
             )
             SELECT
@@ -125,7 +143,7 @@ def faers_summary_selected(
             WITH matched_isr AS (
               SELECT DISTINCT d2."ISR"
               FROM "FAERS"."SD_FAERS_DRUG" d2
-              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              WHERE lower(trim(d2."DRUGNAME")) = ANY(%(synonyms)s)
               {role_sql}
             )
             SELECT
@@ -183,9 +201,9 @@ def faers_timeseries_selected(
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
-        drug_norm = resolve_drug_norm(conn, drug)
+        drug_norm, synonyms = resolve_synonyms(conn, drug)
 
-        params: Dict[str, Any] = {"drug_norm": drug_norm, "top": top}
+        params: Dict[str, Any] = {"synonyms": synonyms, "top": top}
         role_sql = build_role_filter_sql(role_filter)
         year_sql = build_year_filter_sql(params, year_from, year_to)
 
@@ -198,7 +216,7 @@ def faers_timeseries_selected(
             WITH matched_isr AS (
               SELECT DISTINCT d2."ISR"
               FROM "FAERS"."SD_FAERS_DRUG" d2
-              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              WHERE lower(trim(d2."DRUGNAME")) = ANY(%(synonyms)s)
               {role_sql}
             ),
             base AS (
@@ -275,7 +293,7 @@ def faers_suggest(
         return {"query": q, "items": []}
 
     sql = """
-        SELECT drugname_display
+        SELECT DISTINCT drugname_norm AS drugname_display
         FROM public.faers_drug_dict
         WHERE drugname_norm LIKE %(prefix)s
         ORDER BY drugname_norm
