@@ -94,62 +94,52 @@ def faers_summary_selected(
           AND d."FDA_DT"::text ~ '^[0-9]{8}$'
         """
 
-        isr_count_sql = f"""
-            SELECT COUNT(DISTINCT d2."ISR") AS matched_isr_count
-            FROM "FAERS"."standardized_drug" d2
-            WHERE d2.substance = %(substance)s
-            {role_sql}
-        """
-
-        yearly_total_sql = f"""
+        combined_sql = f"""
             WITH matched_isr AS (
               SELECT DISTINCT d2."ISR"
               FROM "FAERS"."standardized_drug" d2
               WHERE d2.substance = %(substance)s
               {role_sql}
+            ),
+            joined AS (
+              SELECT
+                m."ISR",
+                EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
+                r."pt"
+              FROM matched_isr m
+              JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+              JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
+              WHERE 1=1
+                {date_guard}
+                {year_sql}
+            ),
+            yearly AS (
+              SELECT year, COUNT(*) AS count
+              FROM joined
+              GROUP BY year
+              ORDER BY year
+            ),
+            top_pt AS (
+              SELECT pt, COUNT(*) AS total
+              FROM joined
+              GROUP BY pt
+              ORDER BY total DESC
+              LIMIT 10
+            ),
+            isr_count AS (
+              SELECT COUNT(DISTINCT "ISR") AS cnt FROM matched_isr
             )
             SELECT
-              EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
-              COUNT(*) AS count
-            FROM matched_isr m
-            JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-            JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
-            WHERE 1=1
-              {date_guard}
-              {year_sql}
-            GROUP BY year
-            ORDER BY year;
+              (SELECT cnt FROM isr_count)                          AS matched_isr_count,
+              (SELECT json_agg(t ORDER BY year) FROM yearly t)     AS yearly_total,
+              (SELECT json_agg(t ORDER BY total DESC) FROM top_pt t) AS top_pts;
         """
 
-        top_pt_sql = f"""
-            WITH matched_isr AS (
-              SELECT DISTINCT d2."ISR"
-              FROM "FAERS"."standardized_drug" d2
-              WHERE d2.substance = %(substance)s
-              {role_sql}
-            )
-            SELECT
-              r."pt" AS pt,
-              COUNT(*) AS total
-            FROM matched_isr m
-            JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-            JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
-            WHERE 1=1
-              {date_guard}
-              {year_sql}
-            GROUP BY r."pt"
-            ORDER BY total DESC
-            LIMIT 10;
-        """
-
-        cur.execute(isr_count_sql, params)
-        isr_count = cur.fetchone()["matched_isr_count"]
-
-        cur.execute(yearly_total_sql, params)
-        yearly_total = cur.fetchall()
-
-        cur.execute(top_pt_sql, params)
-        top_pts = cur.fetchall()
+        cur.execute(combined_sql, params)
+        row = cur.fetchone()
+        isr_count   = row["matched_isr_count"]
+        yearly_total = row["yearly_total"] or []
+        top_pts      = row["top_pts"] or []
 
         return {
             "drug": drug,
