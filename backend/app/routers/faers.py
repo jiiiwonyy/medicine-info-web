@@ -72,13 +72,14 @@ def resolve_substance(conn, drug: str) -> str:
         cur.close()
 
 
-@router.get("/summary")
-def faers_summary_selected(
+@router.get("/summary/count")
+def faers_summary_count(
     drug: str = Query(..., min_length=1, description="모달에서 선택한 약물명(표시값)"),
     role_filter: str = Query("all", description="all|suspect|ps|ss|c|i|dn|raw_all"),
     year_from: Optional[int] = Query(None, ge=1900, le=2100),
     year_to: Optional[int] = Query(None, ge=1900, le=2100),
 ):
+    """ISR 카운트만 빠르게 반환 (~5s). 차트 데이터는 /summary 참고."""
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -86,7 +87,50 @@ def faers_summary_selected(
         substance = resolve_substance(conn, drug)
 
         params: Dict[str, Any] = {"substance": substance}
-        role_sql = build_role_filter_sql(role_filter).replace('d2."ROLE_COD"', 'd2."ROLE_COD"')
+        role_sql = build_role_filter_sql(role_filter)
+
+        sql = f"""
+            SELECT COUNT(DISTINCT d2."ISR") AS cnt
+            FROM "FAERS"."standardized_drug" d2
+            WHERE d2.substance = %(substance)s
+            {role_sql}
+        """
+
+        cur.execute(sql, params)
+        row = cur.fetchone()
+
+        return {
+            "drug": drug,
+            "drug_norm": substance,
+            "role_filter": role_filter,
+            "year_from": year_from,
+            "year_to": year_to,
+            "matched_isr_count": int(row["cnt"]),
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"FAERS summary count failed: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
+
+
+@router.get("/summary")
+def faers_summary_selected(
+    drug: str = Query(..., min_length=1, description="모달에서 선택한 약물명(표시값)"),
+    role_filter: str = Query("all", description="all|suspect|ps|ss|c|i|dn|raw_all"),
+    year_from: Optional[int] = Query(None, ge=1900, le=2100),
+    year_to: Optional[int] = Query(None, ge=1900, le=2100),
+):
+    """연도별 보고 수 + 상위 부작용 반환 (~21s). ISR 카운트는 /summary/count 참고."""
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    try:
+        substance = resolve_substance(conn, drug)
+
+        params: Dict[str, Any] = {"substance": substance}
+        role_sql = build_role_filter_sql(role_filter)
         year_sql = build_year_filter_sql(params, year_from, year_to)
 
         date_guard = """
@@ -95,7 +139,7 @@ def faers_summary_selected(
         """
 
         combined_sql = f"""
-            WITH matched_isr AS (
+            WITH matched_isr AS MATERIALIZED (
               SELECT DISTINCT d2."ISR"
               FROM "FAERS"."standardized_drug" d2
               WHERE d2.substance = %(substance)s
@@ -125,19 +169,14 @@ def faers_summary_selected(
               GROUP BY pt
               ORDER BY total DESC
               LIMIT 10
-            ),
-            isr_count AS (
-              SELECT COUNT(DISTINCT "ISR") AS cnt FROM matched_isr
             )
             SELECT
-              (SELECT cnt FROM isr_count)                          AS matched_isr_count,
-              (SELECT json_agg(t ORDER BY year) FROM yearly t)     AS yearly_total,
+              (SELECT json_agg(t ORDER BY year) FROM yearly t)       AS yearly_total,
               (SELECT json_agg(t ORDER BY total DESC) FROM top_pt t) AS top_pts;
         """
 
         cur.execute(combined_sql, params)
         row = cur.fetchone()
-        isr_count   = row["matched_isr_count"]
         yearly_total = row["yearly_total"] or []
         top_pts      = row["top_pts"] or []
 
@@ -147,7 +186,6 @@ def faers_summary_selected(
             "role_filter": role_filter,
             "year_from": year_from,
             "year_to": year_to,
-            "matched_isr_count": int(isr_count),
             "yearly_total": [{"year": int(r["year"]), "count": int(r["count"])} for r in yearly_total],
             "top_pts": [{"pt": r["pt"], "total": int(r["total"])} for r in top_pts],
         }

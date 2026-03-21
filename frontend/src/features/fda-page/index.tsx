@@ -7,6 +7,7 @@ import { textStyles } from '@/styles/typography';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useFaersSuggestQuery } from '@/features/fda-page/api/fda';
 import {
+  useFaersSummaryCountQuery,
   useFaersSummaryQuery,
   useFaersTimeseriesQuery,
 } from '@/features/fda-page/hooks/useFaers';
@@ -53,6 +54,14 @@ export default function FdaPage() {
 
   const canSearch = selectedDrug.trim().length > 0;
 
+  const countQuery = useFaersSummaryCountQuery({
+    drug: selectedDrug,
+    enabled: canSearch,
+    role_filter: roleFilter,
+    year_from: yearFrom,
+    year_to: yearTo,
+  });
+
   const summaryQuery = useFaersSummaryQuery({
     drug: selectedDrug,
     enabled: canSearch,
@@ -69,9 +78,10 @@ export default function FdaPage() {
     year_to: yearTo,
   });
 
-  const loading = summaryQuery.isLoading || tsQuery.isLoading;
-  const error = summaryQuery.error || tsQuery.error;
+  const chartsLoading = summaryQuery.isLoading || tsQuery.isLoading;
+  const error = countQuery.error || summaryQuery.error || tsQuery.error;
 
+  const countData = countQuery.data;
   const summary = summaryQuery.data;
   const timeseries = tsQuery.data;
 
@@ -100,30 +110,35 @@ export default function FdaPage() {
         suggestError={!!suggestQuery.error}
       />
 
-      {loading && <Spinner />}
-
       {error && (
         <div className={cn(textStyles.bodySm, 'text-danger-700')}>
           데이터를 불러오는데 실패했습니다.
         </div>
       )}
 
-      {summary && timeseries && (
+      {countData && (
         <div className="space-y-8">
           <ResultHeaderCards
-            drug={summary.drug}
-            matchedIsrCount={summary.matched_isr_count}
+            drug={countData.drug}
+            matchedIsrCount={countData.matched_isr_count}
           />
 
-          <ResultChartsSection
-            summary={summary}
-            timeseries={timeseries}
-            topPts={topPts}
-          />
+          {chartsLoading && <Spinner />}
 
-          <InterpretationCard />
+          {summary && timeseries && (
+            <>
+              <ResultChartsSection
+                summary={summary}
+                timeseries={timeseries}
+                topPts={topPts}
+              />
+              <InterpretationCard />
+            </>
+          )}
         </div>
       )}
+
+      {!countData && countQuery.isLoading && <Spinner />}
     </PageLayout>
   );
 }
