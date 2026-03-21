@@ -50,26 +50,83 @@ def build_year_filter_sql(params: Dict[str, Any], year_from: Optional[int], year
     return sql
 
 
-def resolve_drug_norm(conn, drug: str) -> str:
+def resolve_substance(conn, drug: str) -> str:
     """
-    public.faers_drug_dict에서 선택된 drug 표시값을 norm으로 변환.
+    public.faers_drug_dict에서 drug → substance(norm) 반환.
+    dict에 없으면 입력값을 그대로 반환.
     """
     cur = conn.cursor(cursor_factory=RealDictCursor)
     try:
-        sql = """
-          SELECT drugname_norm
-          FROM public.faers_drug_dict
-          WHERE lower(trim(drugname_display)) = lower(trim(%(drug)s))
-          LIMIT 1;
-        """
-        cur.execute(sql, {"drug": drug})
+        cur.execute(
+            """
+            SELECT drugname_norm
+            FROM public.faers_drug_dict
+            WHERE drugname_display = lower(trim(%(drug)s))
+            LIMIT 1;
+            """,
+            {"drug": drug},
+        )
         row = cur.fetchone()
-        if not row:
-            # 혹시 display가 그대로 없으면 사용자가 넘긴 값을 norm으로 가정
-            return drug.strip().lower()
-        return row["drugname_norm"]
+        return row["drugname_norm"] if row else drug.strip().lower()
     finally:
         cur.close()
+
+
+@router.get("/summary/count")
+def faers_summary_count(
+    drug: str = Query(..., min_length=1, description="모달에서 선택한 약물명(표시값)"),
+    role_filter: str = Query("all", description="all|suspect|ps|ss|c|i|dn|raw_all"),
+    year_from: Optional[int] = Query(None, ge=1900, le=2100),
+    year_to: Optional[int] = Query(None, ge=1900, le=2100),
+):
+    """ISR 카운트만 빠르게 반환 (~5s). 차트 데이터는 /summary 참고."""
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    try:
+        substance = resolve_substance(conn, drug)
+
+        params: Dict[str, Any] = {"substance": substance}
+        role_sql = build_role_filter_sql(role_filter)
+        has_year = year_from is not None or year_to is not None
+
+        if has_year:
+            year_sql = build_year_filter_sql(params, year_from, year_to)
+            sql = f"""
+                SELECT COUNT(DISTINCT d2."ISR") AS cnt
+                FROM "FAERS"."standardized_drug" d2
+                JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = d2."ISR"
+                WHERE d2.substance = %(substance)s
+                  {role_sql}
+                  AND d."FDA_DT" IS NOT NULL
+                  AND d."FDA_DT"::text ~ '^[0-9]{{8}}$'
+                  {year_sql}
+            """
+        else:
+            sql = f"""
+                SELECT COUNT(DISTINCT d2."ISR") AS cnt
+                FROM "FAERS"."standardized_drug" d2
+                WHERE d2.substance = %(substance)s
+                  {role_sql}
+            """
+
+        cur.execute(sql, params)
+        row = cur.fetchone()
+
+        return {
+            "drug": drug,
+            "drug_norm": substance,
+            "role_filter": role_filter,
+            "year_from": year_from,
+            "year_to": year_to,
+            "matched_isr_count": int(row["cnt"]),
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"FAERS summary count failed: {str(e)}")
+    finally:
+        cur.close()
+        conn.close()
 
 
 @router.get("/summary")
@@ -79,13 +136,14 @@ def faers_summary_selected(
     year_from: Optional[int] = Query(None, ge=1900, le=2100),
     year_to: Optional[int] = Query(None, ge=1900, le=2100),
 ):
+    """연도별 보고 수 + 상위 부작용 반환 (~21s). ISR 카운트는 /summary/count 참고."""
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
-        drug_norm = resolve_drug_norm(conn, drug)
+        substance = resolve_substance(conn, drug)
 
-        params: Dict[str, Any] = {"drug_norm": drug_norm}
+        params: Dict[str, Any] = {"substance": substance}
         role_sql = build_role_filter_sql(role_filter)
         year_sql = build_year_filter_sql(params, year_from, year_to)
 
@@ -94,70 +152,54 @@ def faers_summary_selected(
           AND d."FDA_DT"::text ~ '^[0-9]{8}$'
         """
 
-        isr_count_sql = f"""
-            SELECT COUNT(DISTINCT d2."ISR") AS matched_isr_count
-            FROM "FAERS"."SD_FAERS_DRUG" d2
-            WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
-            {role_sql}
-        """
-
-        yearly_total_sql = f"""
-            WITH matched_isr AS (
+        combined_sql = f"""
+            WITH matched_isr AS MATERIALIZED (
               SELECT DISTINCT d2."ISR"
-              FROM "FAERS"."SD_FAERS_DRUG" d2
-              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              FROM "FAERS"."standardized_drug" d2
+              WHERE d2.substance = %(substance)s
               {role_sql}
+            ),
+            joined AS (
+              SELECT
+                m."ISR",
+                EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
+                r."pt"
+              FROM matched_isr m
+              JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
+              JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
+              WHERE 1=1
+                {date_guard}
+                {year_sql}
+            ),
+            yearly AS (
+              SELECT year, COUNT(DISTINCT "ISR") AS count
+              FROM joined
+              GROUP BY year
+              ORDER BY year
+            ),
+            top_pt AS (
+              SELECT pt, COUNT(*) AS total
+              FROM joined
+              GROUP BY pt
+              ORDER BY total DESC
+              LIMIT 10
             )
             SELECT
-              EXTRACT(YEAR FROM to_date(d."FDA_DT"::text, 'YYYYMMDD'))::int AS year,
-              COUNT(*) AS count
-            FROM matched_isr m
-            JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-            JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
-            WHERE 1=1
-              {date_guard}
-              {year_sql}
-            GROUP BY year
-            ORDER BY year;
+              (SELECT json_agg(t ORDER BY year) FROM yearly t)       AS yearly_total,
+              (SELECT json_agg(t ORDER BY total DESC) FROM top_pt t) AS top_pts;
         """
 
-        top_pt_sql = f"""
-            WITH matched_isr AS (
-              SELECT DISTINCT d2."ISR"
-              FROM "FAERS"."SD_FAERS_DRUG" d2
-              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
-              {role_sql}
-            )
-            SELECT
-              r."pt" AS pt,
-              COUNT(*) AS total
-            FROM matched_isr m
-            JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = m."ISR"
-            JOIN "FAERS"."SD_FAERS_REAC" r ON {REAC_ISR_COL} = m."ISR"
-            WHERE 1=1
-              {date_guard}
-              {year_sql}
-            GROUP BY r."pt"
-            ORDER BY total DESC
-            LIMIT 10;
-        """
-
-        cur.execute(isr_count_sql, params)
-        isr_count = cur.fetchone()["matched_isr_count"]
-
-        cur.execute(yearly_total_sql, params)
-        yearly_total = cur.fetchall()
-
-        cur.execute(top_pt_sql, params)
-        top_pts = cur.fetchall()
+        cur.execute(combined_sql, params)
+        row = cur.fetchone()
+        yearly_total = row["yearly_total"] or []
+        top_pts      = row["top_pts"] or []
 
         return {
             "drug": drug,
-            "drug_norm": drug_norm,
+            "drug_norm": substance,
             "role_filter": role_filter,
             "year_from": year_from,
             "year_to": year_to,
-            "matched_isr_count": int(isr_count),
             "yearly_total": [{"year": int(r["year"]), "count": int(r["count"])} for r in yearly_total],
             "top_pts": [{"pt": r["pt"], "total": int(r["total"])} for r in top_pts],
         }
@@ -183,9 +225,9 @@ def faers_timeseries_selected(
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
-        drug_norm = resolve_drug_norm(conn, drug)
+        substance = resolve_substance(conn, drug)
 
-        params: Dict[str, Any] = {"drug_norm": drug_norm, "top": top}
+        params: Dict[str, Any] = {"substance": substance, "top": top}
         role_sql = build_role_filter_sql(role_filter)
         year_sql = build_year_filter_sql(params, year_from, year_to)
 
@@ -197,8 +239,8 @@ def faers_timeseries_selected(
         sql = f"""
             WITH matched_isr AS (
               SELECT DISTINCT d2."ISR"
-              FROM "FAERS"."SD_FAERS_DRUG" d2
-              WHERE lower(trim(d2."DRUGNAME")) = %(drug_norm)s
+              FROM "FAERS"."standardized_drug" d2
+              WHERE d2.substance = %(substance)s
               {role_sql}
             ),
             base AS (
@@ -245,7 +287,7 @@ def faers_timeseries_selected(
 
         return {
             "drug": drug,
-            "drug_norm": drug_norm,
+            "drug_norm": substance,
             "top": top,
             "role_filter": role_filter,
             "year_from": year_from,
@@ -275,10 +317,17 @@ def faers_suggest(
         return {"query": q, "items": []}
 
     sql = """
-        SELECT drugname_display
-        FROM public.faers_drug_dict
-        WHERE drugname_norm LIKE %(prefix)s
-        ORDER BY drugname_norm
+        SELECT drugname_display, freq
+        FROM (
+            SELECT DISTINCT ON (drugname_norm)
+                drugname_display,
+                drugname_norm,
+                freq
+            FROM public.faers_drug_dict
+            WHERE drugname_display LIKE %(prefix)s
+            ORDER BY drugname_norm, freq DESC
+        ) sub
+        ORDER BY freq DESC
         LIMIT %(limit)s;
     """
 
