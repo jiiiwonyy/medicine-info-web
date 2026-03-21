@@ -88,13 +88,27 @@ def faers_summary_count(
 
         params: Dict[str, Any] = {"substance": substance}
         role_sql = build_role_filter_sql(role_filter)
+        has_year = year_from is not None or year_to is not None
 
-        sql = f"""
-            SELECT COUNT(DISTINCT d2."ISR") AS cnt
-            FROM "FAERS"."standardized_drug" d2
-            WHERE d2.substance = %(substance)s
-            {role_sql}
-        """
+        if has_year:
+            year_sql = build_year_filter_sql(params, year_from, year_to)
+            sql = f"""
+                SELECT COUNT(DISTINCT d2."ISR") AS cnt
+                FROM "FAERS"."standardized_drug" d2
+                JOIN "FAERS"."SD_FAERS_DEMO" d ON d."ISR" = d2."ISR"
+                WHERE d2.substance = %(substance)s
+                  {role_sql}
+                  AND d."FDA_DT" IS NOT NULL
+                  AND d."FDA_DT"::text ~ '^[0-9]{{8}}$'
+                  {year_sql}
+            """
+        else:
+            sql = f"""
+                SELECT COUNT(DISTINCT d2."ISR") AS cnt
+                FROM "FAERS"."standardized_drug" d2
+                WHERE d2.substance = %(substance)s
+                  {role_sql}
+            """
 
         cur.execute(sql, params)
         row = cur.fetchone()
@@ -158,7 +172,7 @@ def faers_summary_selected(
                 {year_sql}
             ),
             yearly AS (
-              SELECT year, COUNT(*) AS count
+              SELECT year, COUNT(DISTINCT "ISR") AS count
               FROM joined
               GROUP BY year
               ORDER BY year
