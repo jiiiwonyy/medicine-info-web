@@ -89,7 +89,7 @@ export default function FdaPage() {
   const topPts = useMemo(() => summary?.top_pts ?? [], [summary]);
 
   return (
-    <PageLayout title="FDA(FAERS) 부작용 보고 분석">
+    <PageLayout title="미국 FDA(FAERS) 부작용 보고 자료">
       <SearchPanel
         q={q}
         onChangeQ={setQ}
