@@ -15,6 +15,7 @@ import {
 import SearchPanel from '@/features/fda-page/section/SearchPanel';
 import ResultHeaderCards from '@/features/fda-page/section/ResultHeaderCards';
 import ResultChartsSection from '@/features/fda-page/section/ResultChartSection';
+import ChartsSkeleton from '@/features/fda-page/section/ChartsSkeleton';
 import InterpretationCard from '@/features/fda-page/section/InterpretationCard';
 
 export default function FdaPage() {
@@ -123,17 +124,17 @@ export default function FdaPage() {
             matchedIsrCount={countData.matched_isr_count}
           />
 
-          {chartsLoading && <Spinner />}
+          {chartsLoading && <ChartsSkeleton />}
 
           {summary && timeseries && (
-            <>
+            <div className="animate-fade-in-up space-y-8">
               <ResultChartsSection
                 summary={summary}
                 timeseries={timeseries}
                 topPts={topPts}
               />
               <InterpretationCard />
-            </>
+            </div>
           )}
         </div>
       )}
