@@ -1,8 +1,17 @@
 import { Card } from '@/components/ui/Card';
 
-function SkeletonBlock({ className }: { className?: string }) {
+function SkeletonBlock({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
-    <div className={`rounded bg-border animate-pulse ${className ?? ''}`} />
+    <div
+      className={`rounded bg-border animate-pulse ${className ?? ''}`}
+      style={style}
+    />
   );
 }
 
@@ -11,13 +20,17 @@ export default function ChartsSkeleton() {
     <>
       {/* 연도별 보고 수 차트 */}
       <Card variant="strong">
-        <SkeletonBlock className="w-28 h-3 mb-4" />
+        <SkeletonBlock className="w-28 h-3 mb-6" />
         <div className="flex items-end gap-2 h-[220px] px-2">
           {Array.from({ length: 14 }).map((_, i) => (
             <SkeletonBlock
               key={i}
               className="flex-1"
-              style={{ height: `${30 + Math.round(Math.sin(i * 0.9 + 1) * 30 + 50)}%` } as React.CSSProperties}
+              style={
+                {
+                  height: `${30 + Math.round(Math.sin(i * 0.9 + 1) * 30 + 50)}%`,
+                } as React.CSSProperties
+              }
             />
           ))}
         </div>
@@ -30,7 +43,12 @@ export default function ChartsSkeleton() {
           <div className="space-y-3">
             {Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="flex justify-between items-center">
-                <SkeletonBlock className="h-3" style={{ width: `${55 + (i % 3) * 12}%` } as React.CSSProperties} />
+                <SkeletonBlock
+                  className="h-3"
+                  style={
+                    { width: `${55 + (i % 3) * 12}%` } as React.CSSProperties
+                  }
+                />
                 <SkeletonBlock className="w-10 h-3" />
               </div>
             ))}
