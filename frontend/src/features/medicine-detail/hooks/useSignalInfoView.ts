@@ -6,12 +6,19 @@ export function useSignalInfoView() {
   const [error, setError] = useState<string | null>(null);
 
   const handleView = async (signalId: number) => {
+    const newTab = window.open('', '_blank');
+
     setError(null);
     setIsLoading(true);
     try {
       const { url } = await fetchSignalInfoViewUrl(signalId);
-      window.open(url, '_blank', 'noopener,noreferrer');
+      if (newTab) {
+        newTab.location.href = url;
+      } else {
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }
     } catch {
+      newTab?.close();
       setError('PDF를 불러오는데 실패했습니다.');
     } finally {
       setIsLoading(false);
