@@ -40,8 +40,11 @@ export function useSafetyLetters() {
   const onPrev = () => setOffset((v) => Math.max(0, v - limit));
   const onNext = () => setOffset((v) => v + limit);
 
-  const onDownload = async (letterId: number, fileIndex: number) => {
-    const { url } = await fetchSafetyLetterDownloadUrl({ letterId, fileIndex });
+  const onView = async (letterId: number) => {
+    const { url } = await fetchSafetyLetterDownloadUrl({
+      letterId,
+      fileIndex: 0,
+    });
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
@@ -65,6 +68,6 @@ export function useSafetyLetters() {
     onSearch,
     onPrev,
     onNext,
-    onDownload,
+    onView,
   };
 }

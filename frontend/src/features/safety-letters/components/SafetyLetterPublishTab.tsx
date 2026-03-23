@@ -20,7 +20,7 @@ export default function SafetyLetterPublishTab({
   onSearch,
   onPrev,
   onNext,
-  onDownload,
+  onView,
 }: {
   qInput: string;
   setQInput: (v: string) => void;
@@ -38,7 +38,7 @@ export default function SafetyLetterPublishTab({
   onSearch: () => void;
   onPrev: () => void;
   onNext: () => void;
-  onDownload: (letterId: number, fileIndex: number) => Promise<void>;
+  onView: (letterId: number) => Promise<void>;
 }) {
   return (
     <>
@@ -77,7 +77,7 @@ export default function SafetyLetterPublishTab({
         )}
 
         {items.map((it) => (
-          <SafetyLetterCard key={it.id} item={it} onDownload={onDownload} />
+          <SafetyLetterCard key={it.id} item={it} onView={onView} />
         ))}
       </div>
 

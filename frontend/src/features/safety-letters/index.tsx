@@ -41,7 +41,7 @@ export default function SafetyLetterPage() {
             onSearch={s.onSearch}
             onPrev={s.onPrev}
             onNext={s.onNext}
-            onDownload={s.onDownload}
+            onView={s.onView}
           />
         </TabsContent>
       </Tabs>

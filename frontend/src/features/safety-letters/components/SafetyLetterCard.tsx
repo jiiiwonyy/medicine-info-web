@@ -5,10 +5,10 @@ import { textStyles } from '@/styles/typography';
 
 export default function SafetyLetterCard({
   item,
-  onDownload,
+  onView,
 }: {
   item: SafetyLetterType;
-  onDownload: (letterId: number, fileIndex: number) => Promise<void>;
+  onView: (letterId: number) => Promise<void>;
 }) {
   const files = item.files ?? [];
 
@@ -42,8 +42,9 @@ export default function SafetyLetterCard({
         ) : (
           files.map((f, idx) => (
             <button
+              type="button"
               key={`${item.id}-${idx}`}
-              onClick={() => onDownload(item.id, idx)}
+              onClick={() => onView(item.id)}
               className="w-full flex items-center justify-between border border-gray-200 rounded-lg px-3 py-2 hover:bg-gray-50 transition"
             >
               <span className={cn(textStyles.bodySm, 'truncate')}>
