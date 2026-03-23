@@ -23,6 +23,7 @@ export function useSignalInfos() {
     data,
     isLoading,
     isError,
+    refetch,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -54,7 +55,17 @@ export function useSignalInfos() {
 
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setQ(qInput.trim());
+    const nextQ = qInput.trim();
+    setActionError(null);
+
+    if (!nextQ) return;
+
+    if (nextQ === q) {
+      void refetch();
+      return;
+    }
+
+    setQ(nextQ);
   };
 
   const onView = async (signalId: number) => {
