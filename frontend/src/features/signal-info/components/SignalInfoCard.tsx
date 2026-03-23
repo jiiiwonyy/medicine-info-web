@@ -12,7 +12,7 @@ export default function SignalInfoCard({
   item: SignalInfoItem;
   mainTitle: string;
   onView: (signalId: number) => Promise<void>;
-  onDownload: (signalId: number) => Promise<void>;
+  onDownload?: (signalId: number) => Promise<void>;
 }) {
   return (
     <div className="border border-gray-300 rounded-2xl bg-white shadow-sm hover:shadow-md transition p-4 flex flex-col gap-3">
@@ -33,14 +33,16 @@ export default function SignalInfoCard({
           <Button type="button" size="sm" onClick={() => onView(item.id)}>
             보기
           </Button>
-          <Button
-            type="button"
-            onClick={() => onDownload(item.id)}
-            variant="secondary"
-            size="sm"
-          >
-            다운로드
-          </Button>
+          {onDownload && (
+            <Button
+              type="button"
+              onClick={() => onDownload(item.id)}
+              variant="secondary"
+              size="sm"
+            >
+              다운로드
+            </Button>
+          )}
         </div>
       </div>
     </div>
