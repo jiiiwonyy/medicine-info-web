@@ -40,7 +40,11 @@ export default function MedicineSearchResultPage() {
         {query ? '검색결과 리스트' : '등록된 의약품 목록'} ( {s.total}개 )
       </h2>
 
-      {(s.isFetching && empty) || s.error ? (
+      {s.error ? (
+        <div className={cn(textStyles.bodySm, 'text-danger-700 my-10 text-center')}>
+          데이터를 불러오는데 실패했습니다.
+        </div>
+      ) : s.isFetching && empty ? (
         <div className="flex justify-center my-10">
           <Spinner />
         </div>

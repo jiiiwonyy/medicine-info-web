@@ -12,13 +12,21 @@ export type RoleFilter =
   | 'dn'
   | 'raw_all';
 
-export type FaersSummaryResponse = {
+export type FaersSummaryCountResponse = {
   drug: string;
   drug_norm: string;
   role_filter: RoleFilter;
   year_from: number | null;
   year_to: number | null;
   matched_isr_count: number;
+};
+
+export type FaersSummaryResponse = {
+  drug: string;
+  drug_norm: string;
+  role_filter: RoleFilter;
+  year_from: number | null;
+  year_to: number | null;
   yearly_total: { year: number; count: number }[];
   top_pts: { pt: string; total: number }[];
 };
@@ -34,6 +42,16 @@ export type FaersTimeseriesResponse = {
   series: { pt: string; data: { year: number; count: number }[] }[];
   rows?: { year: number; pt: string; count: number }[];
 };
+
+export async function getFaersSummaryCount(params: {
+  drug: string;
+  role_filter?: RoleFilter;
+  year_from?: number;
+  year_to?: number;
+}) {
+  const res = await api.get<FaersSummaryCountResponse>('/faers/summary/count', { params });
+  return res.data;
+}
 
 export async function getFaersSummary(params: {
   drug: string;

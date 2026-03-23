@@ -2,3 +2,4 @@
 .env.local
 # test coverage
 frontend/coverage/
+backend/scripts/

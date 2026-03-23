@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import {
+  getFaersSummaryCount,
   getFaersSummary,
   getFaersTimeseries,
 } from '@/features/fda-page/api/fda';
@@ -13,6 +14,45 @@ export type RoleFilter =
   | 'i'
   | 'dn'
   | 'raw_all';
+
+export function useFaersSummaryCountQuery(params: {
+  drug: string;
+  enabled?: boolean;
+  role_filter?: RoleFilter;
+  year_from?: number;
+  year_to?: number;
+}) {
+  const {
+    drug,
+    enabled = true,
+    role_filter = 'all',
+    year_from,
+    year_to,
+  } = params;
+
+  const canFetch = enabled && !!drug?.trim();
+
+  return useQuery({
+    queryKey: [
+      'faers',
+      'summary',
+      'count',
+      drug,
+      role_filter,
+      year_from ?? null,
+      year_to ?? null,
+    ],
+    queryFn: () =>
+      getFaersSummaryCount({
+        drug,
+        role_filter,
+        year_from,
+        year_to,
+      }),
+    enabled: canFetch,
+    staleTime: 1000 * 60 * 10,
+  });
+}
 
 export function useFaersSummaryQuery(params: {
   drug: string;
