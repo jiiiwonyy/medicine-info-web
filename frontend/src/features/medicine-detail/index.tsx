@@ -21,6 +21,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
+import { SignalInfoSection } from './section/SignalInfoSection';
 
 type TabKey = 'effect' | 'usage' | 'caution' | 'dur' | 'signal';
 
@@ -61,16 +62,18 @@ export default function Detail() {
   };
 
   if (isLoading) return <Spinner />;
-  if (isError) return (
-    <div className={cn(textStyles.bodySm, 'text-danger-700 p-6')}>
-      데이터를 불러오는데 실패했습니다. {error?.message}
-    </div>
-  );
-  if (!med) return (
-    <div className={cn(textStyles.bodySm, 'text-muted-fg p-6')}>
-      해당 약품을 찾을 수 없습니다.
-    </div>
-  );
+  if (isError)
+    return (
+      <div className={cn(textStyles.bodySm, 'text-danger-700 p-6')}>
+        데이터를 불러오는데 실패했습니다. {error?.message}
+      </div>
+    );
+  if (!med)
+    return (
+      <div className={cn(textStyles.bodySm, 'text-muted-fg p-6')}>
+        해당 약품을 찾을 수 없습니다.
+      </div>
+    );
 
   const baseRows: Array<[string, unknown]> = [
     ['품목기준코드', med.item_code],
@@ -172,7 +175,7 @@ export default function Detail() {
       </Tabs>
 
       {/* 본문 내용 */}
-      <section id="detail" className="scroll-mt-24 space-y-8 mb-6">
+      <section id="detail" className="scroll-mt-24 space-y-12 mb-6">
         <section id="effect" className="scroll-mt-24 pt-4">
           <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
             📌 효능·효과
@@ -205,6 +208,13 @@ export default function Detail() {
             📌 의약품안전사용(DUR)
           </h2>
           <DurSection dur={dur} />
+        </section>
+
+        <section id="signal" className="scroll-mt-24">
+          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
+            📌 실마리정보 알리미
+          </h2>
+          <SignalInfoSection signalInfos={med.signal_infos ?? []} />
         </section>
       </section>
 

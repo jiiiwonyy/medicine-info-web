@@ -1,23 +1,22 @@
 import { useState } from 'react';
-import type { SignalInfo } from '../types';
 import { fetchSignalInfoViewUrl } from '../api/signalInfo';
 
 export function useSignalInfoView() {
-  const [loadingId, setLoadingId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleView = async (info: SignalInfo) => {
+  const handleView = async (signalId: number) => {
     setError(null);
-    setLoadingId(info.id);
+    setIsLoading(true);
     try {
-      const { url } = await fetchSignalInfoViewUrl(info.id);
+      const { url } = await fetchSignalInfoViewUrl(signalId);
       window.open(url, '_blank', 'noopener,noreferrer');
     } catch {
       setError('PDF를 불러오는데 실패했습니다.');
     } finally {
-      setLoadingId(null);
+      setIsLoading(false);
     }
   };
 
-  return { loadingId, error, handleView };
+  return { isLoading, error, handleView };
 }
