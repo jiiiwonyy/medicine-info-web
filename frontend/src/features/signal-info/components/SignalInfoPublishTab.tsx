@@ -4,6 +4,9 @@ import { textStyles } from '@/styles/typography';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import SignalInfoCard from '@/features/signal-info/components/SignalInfoCard';
+import type { SignalInfoItem } from '@/features/signal-info/types';
+
+type DisplayItem = SignalInfoItem & { docNo: string; mainTitle: string };
 
 export default function SignalInfoPublishTab({
   total,
@@ -24,7 +27,7 @@ export default function SignalInfoPublishTab({
   loading: boolean;
   err: string | null;
   onSearch: (e: React.FormEvent) => Promise<void>;
-  displayItems: Array<any>;
+  displayItems: DisplayItem[];
   hasMore: boolean;
   loadMore: () => Promise<void>;
   onView: (signalId: number) => Promise<void>;

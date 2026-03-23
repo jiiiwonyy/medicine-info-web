@@ -27,8 +27,8 @@ export interface Medicine {
   dosage_and_administration?: string;
   precautions?: string;
   dur?: {
-    interactions: any[];
-    age: any[];
-    pregnancy: any[];
+    interactions: import('@/types/dur').DURInteraction[];
+    age: import('@/types/dur').DURAgeLimit[];
+    pregnancy: import('@/types/dur').DURPregnancyWarning[];
   };
 }

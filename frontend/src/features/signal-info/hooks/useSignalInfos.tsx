@@ -34,8 +34,8 @@ export function useSignalInfos() {
       setItems(data.items ?? []);
       setTotal(data.total ?? 0);
       setOffset((data.items ?? []).length);
-    } catch (e: any) {
-      setErr(e?.message ?? '목록을 불러오지 못했어요.');
+    } catch (e: unknown) {
+      setErr(e instanceof Error ? e.message : '목록을 불러오지 못했어요.');
     } finally {
       setLoading(false);
     }
@@ -54,8 +54,8 @@ export function useSignalInfos() {
       setItems((prev) => [...prev, ...(data.items ?? [])]);
       setTotal(data.total ?? 0);
       setOffset((prev) => prev + (data.items ?? []).length);
-    } catch (e: any) {
-      setErr(e?.message ?? '더 보기를 불러오지 못했어요.');
+    } catch (e: unknown) {
+      setErr(e instanceof Error ? e.message : '더 보기를 불러오지 못했어요.');
     } finally {
       setLoading(false);
     }
@@ -78,8 +78,8 @@ export function useSignalInfos() {
       setErr(null);
       const { url } = await fetchSignalInfoViewUrl({ signalId });
       window.open(url, '_blank', 'noopener,noreferrer');
-    } catch (e: any) {
-      setErr(e?.message ?? '원문을 열 수 없어요.');
+    } catch (e: unknown) {
+      setErr(e instanceof Error ? e.message : '원문을 열 수 없어요.');
     }
   };
 
@@ -88,8 +88,8 @@ export function useSignalInfos() {
       setErr(null);
       const { url } = await fetchSignalInfoDownloadUrl({ signalId });
       window.location.href = url;
-    } catch (e: any) {
-      setErr(e?.message ?? '다운로드를 시작할 수 없어요.');
+    } catch (e: unknown) {
+      setErr(e instanceof Error ? e.message : '다운로드를 시작할 수 없어요.');
     }
   };
 
