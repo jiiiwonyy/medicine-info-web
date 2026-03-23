@@ -17,6 +17,7 @@ export default function SafetyLetterPublishTab({
   limit,
   isLoading,
   isError,
+  viewError,
   onSearch,
   onPrev,
   onNext,
@@ -34,6 +35,7 @@ export default function SafetyLetterPublishTab({
 
   isLoading: boolean;
   isError: boolean;
+  viewError: string | null;
 
   onSearch: () => void;
   onPrev: () => void;
@@ -68,7 +70,16 @@ export default function SafetyLetterPublishTab({
 
       <div className="space-y-3">
         {isLoading && <Spinner />}
-        {isError && <div>목록을 불러오지 못했습니다.</div>}
+        {isError && (
+          <div className={cn(textStyles.bodySm, 'text-danger-700')}>
+            목록을 불러오지 못했습니다.
+          </div>
+        )}
+        {viewError && (
+          <div className={cn(textStyles.bodySm, 'text-danger-700')}>
+            {viewError}
+          </div>
+        )}
 
         {!isLoading && items.length === 0 && (
           <div className="text-gray-500 border border-dashed border-gray-300 rounded-lg p-6 text-center">
