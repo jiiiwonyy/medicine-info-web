@@ -6,30 +6,34 @@ import Input from '@/components/ui/Input';
 import SignalInfoCard from '@/features/signal-info/components/SignalInfoCard';
 import type { SignalInfoItem } from '@/features/signal-info/types';
 
-type DisplayItem = SignalInfoItem & { docNo: string; mainTitle: string };
+type DisplayItem = SignalInfoItem & { docNo: string | null; mainTitle: string };
 
 export default function SignalInfoPublishTab({
   total,
-  q,
-  setQ,
-  loading,
-  err,
+  qInput,
+  setQInput,
+  isLoading,
+  isError,
+  actionError,
   onSearch,
   displayItems,
   hasMore,
   loadMore,
+  isFetchingMore,
   onView,
   onDownload,
 }: {
   total: number;
-  q: string;
-  setQ: (v: string) => void;
-  loading: boolean;
-  err: string | null;
-  onSearch: (e: React.FormEvent) => Promise<void>;
+  qInput: string;
+  setQInput: (v: string) => void;
+  isLoading: boolean;
+  isError: boolean;
+  actionError: string | null;
+  onSearch: (e: React.FormEvent) => void;
   displayItems: DisplayItem[];
   hasMore: boolean;
-  loadMore: () => Promise<void>;
+  loadMore: () => void;
+  isFetchingMore: boolean;
   onView: (signalId: number) => Promise<void>;
   onDownload: (signalId: number) => Promise<void>;
 }) {
@@ -44,25 +48,32 @@ export default function SignalInfoPublishTab({
 
       <form onSubmit={onSearch} className="flex gap-2 mb-4">
         <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
+          value={qInput}
+          onChange={(e) => setQInput(e.target.value)}
           placeholder="제목 검색 (예: KSC, KSPC, 성분명 등)"
           className="flex-1"
         />
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={isLoading}>
           검색
         </Button>
       </form>
 
-      {err && (
-        <div className="mb-4 border border-red-200 bg-red-50 text-red-700 rounded-lg p-3 text-sm">
-          {err}
+      {isError && (
+        <div className={cn(textStyles.bodySm, 'text-danger-700 mb-4')}>
+          목록을 불러오지 못했습니다.
+        </div>
+      )}
+      {actionError && (
+        <div className={cn(textStyles.bodySm, 'text-danger-700 mb-4')}>
+          {actionError}
         </div>
       )}
 
       <div className="space-y-3 mb-4">
-        {displayItems.length === 0 && !loading ? (
-          <div className="p-6 text-center text-gray-500 border rounded-2xl bg-gray-50">
+        {isLoading ? (
+          <Spinner />
+        ) : displayItems.length === 0 ? (
+          <div className="p-6 text-center text-muted-fg border border-dashed border-border rounded-2xl">
             검색 결과가 없어요.
           </div>
         ) : (
@@ -80,12 +91,12 @@ export default function SignalInfoPublishTab({
 
       <div className="flex justify-center">
         {hasMore ? (
-          <Button type="button" onClick={loadMore} disabled={loading}>
-            {loading ? <Spinner /> : '더 보기'}
+          <Button type="button" onClick={loadMore} disabled={isFetchingMore}>
+            {isFetchingMore ? <Spinner /> : '더 보기'}
           </Button>
         ) : (
-          <p className="text-sm text-muted-fg">
-            {loading ? <Spinner /> : '마지막 항목이에요.'}
+          <p className={cn(textStyles.bodySm, 'text-muted-fg')}>
+            마지막 항목이에요.
           </p>
         )}
       </div>

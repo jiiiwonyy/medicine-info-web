@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   fetchSignalInfos,
   fetchSignalInfoDownloadUrl,
@@ -13,93 +14,80 @@ const LIMIT = 20;
 export function useSignalInfos() {
   const [activeTab, setActiveTab] = useState<SignalInfoTabKey>('info');
 
+  const [qInput, setQInput] = useState('');
   const [q, setQ] = useState('');
-  const [items, setItems] = useState<SignalInfoItem[]>([]);
-  const [total, setTotal] = useState(0);
-  const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
 
-  const hasMore = offset < total;
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  const loadFirst = async () => {
-    setLoading(true);
-    setErr(null);
-    try {
-      const data = await fetchSignalInfos({
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['signalInfos', q],
+    queryFn: ({ pageParam }) =>
+      fetchSignalInfos({
         limit: LIMIT,
-        offset: 0,
-        q: q.trim() || undefined,
-      });
-      setItems(data.items ?? []);
-      setTotal(data.total ?? 0);
-      setOffset((data.items ?? []).length);
-    } catch (e: unknown) {
-      setErr(e instanceof Error ? e.message : '목록을 불러오지 못했어요.');
-    } finally {
-      setLoading(false);
-    }
-  };
+        offset: pageParam as number,
+        q: q || undefined,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.reduce(
+        (sum, p) => sum + (p.items?.length ?? 0),
+        0,
+      );
+      return loaded < (lastPage.total ?? 0) ? loaded : undefined;
+    },
+    initialPageParam: 0,
+    enabled: activeTab === 'publish',
+    staleTime: 1000 * 60 * 5,
+  });
 
-  const loadMore = async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    setErr(null);
-    try {
-      const data = await fetchSignalInfos({
-        limit: LIMIT,
-        offset,
-        q: q.trim() || undefined,
-      });
-      setItems((prev) => [...prev, ...(data.items ?? [])]);
-      setTotal(data.total ?? 0);
-      setOffset((prev) => prev + (data.items ?? []).length);
-    } catch (e: unknown) {
-      setErr(e instanceof Error ? e.message : '더 보기를 불러오지 못했어요.');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const items: SignalInfoItem[] = useMemo(
+    () => data?.pages.flatMap((p) => p.items ?? []) ?? [],
+    [data],
+  );
+  const total = data?.pages[0]?.total ?? 0;
 
-  useEffect(() => {
-    if (activeTab !== 'publish') return;
-    if (items.length > 0 || loading) return;
-    loadFirst();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab]);
-
-  const onSearch = async (e: React.FormEvent) => {
+  const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    await loadFirst();
+    setQ(qInput.trim());
   };
 
   const onView = async (signalId: number) => {
+    setActionError(null);
     try {
-      setErr(null);
       const { url } = await fetchSignalInfoViewUrl({ signalId });
       window.open(url, '_blank', 'noopener,noreferrer');
     } catch (e: unknown) {
-      setErr(e instanceof Error ? e.message : '원문을 열 수 없어요.');
+      setActionError(e instanceof Error ? e.message : '원문을 열 수 없어요.');
     }
   };
 
   const onDownload = async (signalId: number) => {
+    setActionError(null);
     try {
-      setErr(null);
       const { url } = await fetchSignalInfoDownloadUrl({ signalId });
       window.location.href = url;
     } catch (e: unknown) {
-      setErr(e instanceof Error ? e.message : '다운로드를 시작할 수 없어요.');
+      setActionError(
+        e instanceof Error ? e.message : '다운로드를 시작할 수 없어요.',
+      );
     }
   };
 
-  const displayItems = useMemo(() => {
-    return items.map((it) => ({
-      ...it,
-      docNo: extractDocNo(it.title),
-      mainTitle: trimDocNo(it.title),
-    }));
-  }, [items]);
+  const displayItems = useMemo(
+    () =>
+      items.map((it) => ({
+        ...it,
+        docNo: extractDocNo(it.title),
+        mainTitle: trimDocNo(it.title),
+      })),
+    [items],
+  );
 
   return {
     LIMIT,
@@ -107,18 +95,21 @@ export function useSignalInfos() {
     activeTab,
     setActiveTab,
 
+    qInput,
+    setQInput,
     q,
-    setQ,
 
     items,
     displayItems,
     total,
-    offset,
-    loading,
-    err,
-    hasMore,
 
-    loadMore,
+    isLoading,
+    isError,
+    actionError,
+    hasMore: hasNextPage ?? false,
+    isFetchingMore: isFetchingNextPage,
+
+    loadMore: fetchNextPage,
     onSearch,
     onView,
     onDownload,
