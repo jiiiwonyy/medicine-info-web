@@ -54,7 +54,7 @@ export default function DurSection({ dur }: Props) {
         const theme = SECTION_THEME[key];
 
         const columns = Object.keys(list[0] as Record<string, unknown>).filter(
-          (k) => !HIDDEN_KEYS.includes(k as any),
+          (k) => !(HIDDEN_KEYS as readonly string[]).includes(k),
         );
 
         return (
@@ -104,7 +104,9 @@ export default function DurSection({ dur }: Props) {
                           {columns.map((col) => (
                             <Td key={col}>
                               <TableContent>
-                                {String((row as any)[col] ?? '')}
+                                {String(
+                                  (row as Record<string, unknown>)[col] ?? '',
+                                )}
                               </TableContent>
                             </Td>
                           ))}
