@@ -59,7 +59,10 @@ export default function HeaderNav({
   };
 
   return (
-    <div className="w-full bg-primary relative" onMouseLeave={() => onOpenMain(null)}>
+    <div
+      className="w-full bg-primary relative"
+      onMouseLeave={() => onOpenMain(null)}
+    >
       {/* 데스크탑 네비게이션 */}
       <div className="hidden md:flex xl:px-72 w-full items-center justify-center space-x-3">
         {mainTabs.map((tab) => (
@@ -81,7 +84,7 @@ export default function HeaderNav({
 
       {/* 데스크탑 드롭다운 */}
       {openMain && subTabs && (
-        <div className="hidden md:block absolute left-0 top-full w-full bg-surface shadow-md z-20 border-b border-border">
+        <div className="hidden md:block absolute left-0 top-full w-full bg-surface shadow-md z-50 border-b border-border">
           <div className="mx-auto w-full max-w-6xl px-8 py-6">
             <h3
               className={cn(
@@ -119,7 +122,7 @@ export default function HeaderNav({
       )}
 
       {/* 모바일 상단 바 */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3">
+      <div className="md:hidden flex items-center justify-between px-4 py-3 z-50">
         <span className={cn(textStyles.uiLg, 'text-primary-fg')}>메뉴</span>
         <button
           onClick={() => setMobileOpen((v) => !v)}
@@ -132,20 +135,20 @@ export default function HeaderNav({
 
       {/* 모바일 드롭다운 메뉴 */}
       {mobileOpen && (
-        <div className="md:hidden absolute left-0 top-full w-full bg-surface shadow-md z-20 border-b border-border">
+        <div className="md:hidden absolute left-0 top-full w-full bg-surface shadow-md z-50 border-b border-border">
           {mainTabs.map((tab) => {
             const isExpanded = mobileExpanded === tab;
             const subs = subTabsMap[tab];
             return (
               <div key={tab} className="border-b border-border last:border-b-0">
                 <button
-                  onClick={() =>
-                    setMobileExpanded(isExpanded ? null : tab)
-                  }
+                  onClick={() => setMobileExpanded(isExpanded ? null : tab)}
                   className={cn(
                     'w-full flex items-center justify-between px-5 py-4 transition',
                     textStyles.uiLg,
-                    isExpanded ? 'text-primary bg-primary-50' : 'text-fg hover:bg-muted',
+                    isExpanded
+                      ? 'text-primary bg-primary-50'
+                      : 'text-fg hover:bg-muted',
                   )}
                 >
                   <span>{tab}</span>
@@ -157,7 +160,10 @@ export default function HeaderNav({
                     stroke="currentColor"
                     strokeWidth="2"
                     strokeLinecap="round"
-                    className={cn('transition-transform', isExpanded && 'rotate-180')}
+                    className={cn(
+                      'transition-transform',
+                      isExpanded && 'rotate-180',
+                    )}
                   >
                     <polyline points="3,5 8,11 13,5" />
                   </svg>

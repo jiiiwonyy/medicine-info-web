@@ -40,9 +40,19 @@ export function useSafetyLetters() {
   const onPrev = () => setOffset((v) => Math.max(0, v - limit));
   const onNext = () => setOffset((v) => v + limit);
 
-  const onDownload = async (letterId: number, fileIndex: number) => {
-    const { url } = await fetchSafetyLetterDownloadUrl({ letterId, fileIndex });
-    window.open(url, '_blank', 'noopener,noreferrer');
+  const [viewError, setViewError] = useState<string | null>(null);
+
+  const onView = async (letterId: number) => {
+    setViewError(null);
+    try {
+      const { url } = await fetchSafetyLetterDownloadUrl({
+        letterId,
+        fileIndex: 0,
+      });
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {
+      setViewError('파일을 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.');
+    }
   };
 
   return {
@@ -61,10 +71,11 @@ export function useSafetyLetters() {
 
     isLoading,
     isError,
+    viewError,
 
     onSearch,
     onPrev,
     onNext,
-    onDownload,
+    onView,
   };
 }

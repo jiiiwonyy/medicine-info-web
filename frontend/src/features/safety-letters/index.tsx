@@ -38,10 +38,11 @@ export default function SafetyLetterPage() {
             limit={s.limit}
             isLoading={s.isLoading}
             isError={s.isError}
+            viewError={s.viewError}
             onSearch={s.onSearch}
             onPrev={s.onPrev}
             onNext={s.onNext}
-            onDownload={s.onDownload}
+            onView={s.onView}
           />
         </TabsContent>
       </Tabs>
