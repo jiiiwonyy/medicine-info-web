@@ -47,7 +47,8 @@ def _presigned_url(key: str, filename: str):
     s3 = _get_s3_client()
 
     quoted = urllib.parse.quote(filename)
-    content_disp = f"inline; filename*=UTF-8''{quoted}"
+    disposition = "inline" if filename.lower().endswith(".pdf") else "attachment"
+    content_disp = f"{disposition}; filename*=UTF-8''{quoted}"
 
     return s3.generate_presigned_url(
         ClientMethod="get_object",
