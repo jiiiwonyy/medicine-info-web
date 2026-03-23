@@ -37,21 +37,20 @@ instance.interceptors.response.use(
       return Promise.reject(new Error('네트워크 연결을 확인해주세요.'));
     }
 
-    switch (status) {
-      case 400:
-        console.error(`[400 Bad Request] ${url}`);
-        break;
-      case 404:
-        console.warn(`[404 Not Found] ${url}`);
-        break;
-      case 500:
-        console.error(`[500 Server Error] ${url}`);
-        break;
-      default:
-        console.error(`[API Error ${status}] ${url}`);
-    }
+    const messages: Record<number, string> = {
+      400: '잘못된 요청입니다.',
+      401: '인증이 필요합니다.',
+      403: '접근 권한이 없습니다.',
+      404: '요청한 데이터를 찾을 수 없습니다.',
+      500: '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+      502: '서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.',
+      503: '서비스를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해주세요.',
+    };
 
-    return Promise.reject(error);
+    const message = messages[status] ?? `오류가 발생했습니다. (${status})`;
+    console.error(`[API Error ${status}] ${url}`);
+
+    return Promise.reject(new Error(message));
   },
 );
 
