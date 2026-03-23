@@ -144,8 +144,51 @@ def update_json_parsed(medicine_id: int):
     cur.close()
     conn.close()
 
+def get_signal_infos_by_medicine(cur, product_name: str, main_ingredient: str | None) -> list:
+    conditions: list[str] = []
+    params: list[str] = []
 
+    if product_name:
+        conditions.append("drug_name ILIKE %s")
+        params.append(f"%{product_name}%")
 
+    if main_ingredient:
+        conditions.append("drug_name ILIKE %s")
+        params.append(f"%{main_ingredient}%")
+
+    if product_name:
+        conditions.append("%s ILIKE '%%' || drug_name || '%%'")
+        params.append(product_name)
+
+    if main_ingredient:
+        conditions.append("%s ILIKE '%%' || drug_name || '%%'")
+        params.append(main_ingredient)
+
+    raw_tokens: list[str] = []
+
+    if main_ingredient:
+        raw_tokens += re.split(r'[\s,/\-]+', main_ingredient)
+
+    if product_name:
+        raw_tokens += re.split(r'[\s,/\-]+', product_name)
+
+    tokens = list({t.strip() for t in raw_tokens if len(t.strip()) >= 3})
+
+    for t in tokens:
+        conditions.append("drug_name ILIKE %s")
+        params.append(f"%{t}%")
+
+    if not conditions:
+        return []
+
+    cur.execute(f"""
+        SELECT DISTINCT ON (id) id, title, pdf_key, raw_filename, drug_name, created_at
+        FROM signal_info
+        WHERE {" OR ".join(conditions)}
+        ORDER BY id, created_at DESC
+    """, params)
+
+    return cur.fetchall()
 
 def search_medicines(q: str, limit: int = 20, last_id: Optional[int] = None) -> Tuple[list, int]:
     conn = get_connection()
@@ -298,6 +341,11 @@ def get_medicine_by_id(external_id: int):
 
     if not med_tokens:
         medicine["dur"] = {"interactions": [], "age": [], "pregnancy": []}
+        medicine["signal_infos"] = get_signal_infos_by_medicine(
+            cur,
+            product_name=medicine.get("product_name", "") or "",
+            main_ingredient=medicine.get("main_ingredient"),
+        )
         cur.close()
         conn.close()
         return medicine
@@ -335,8 +383,14 @@ def get_medicine_by_id(external_id: int):
         "pregnancy": dur_preg,
     }
 
+    medicine["signal_infos"] = get_signal_infos_by_medicine(
+        cur,
+        product_name=medicine.get("product_name", "") or "",
+        main_ingredient=medicine.get("main_ingredient"),
+    )
+
     cur.close()
     conn.close()
     return medicine
 
-
+    
