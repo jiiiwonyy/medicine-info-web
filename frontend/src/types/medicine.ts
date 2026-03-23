@@ -31,4 +31,5 @@ export interface Medicine {
     age: import('@/types/dur').DURAgeLimit[];
     pregnancy: import('@/types/dur').DURPregnancyWarning[];
   };
+  signal_infos?: import('@/features/medicine-detail/types').SignalInfo[];
 }
