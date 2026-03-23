@@ -7,12 +7,12 @@ import YearlyTotalChart from '@/features/fda-page/components/YearlyTotalChart';
 import TopPtTimeseriesChart from '@/features/fda-page/components/TopPtTimeseriesChart';
 
 type SummaryLike = {
-  yearly_total: any;
+  yearly_total: { year: number; count: number }[];
 };
 
 type TimeseriesLike = {
   years: number[];
-  series: any;
+  series: { pt: string; data: { year: number; count: number }[] }[];
 };
 
 export default function ResultChartsSection({
@@ -22,7 +22,7 @@ export default function ResultChartsSection({
 }: {
   summary: SummaryLike;
   timeseries: TimeseriesLike;
-  topPts: any[];
+  topPts: { pt: string; total: number }[];
 }) {
   return (
     <>

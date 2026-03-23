@@ -61,8 +61,16 @@ export default function Detail() {
   };
 
   if (isLoading) return <Spinner />;
-  if (isError) return <p className="text-red-600">❗ 오류: {error?.message}</p>;
-  if (!med) return <p>해당 약품을 찾을 수 없습니다.</p>;
+  if (isError) return (
+    <div className={cn(textStyles.bodySm, 'text-danger-700 p-6')}>
+      데이터를 불러오는데 실패했습니다. {error?.message}
+    </div>
+  );
+  if (!med) return (
+    <div className={cn(textStyles.bodySm, 'text-muted-fg p-6')}>
+      해당 약품을 찾을 수 없습니다.
+    </div>
+  );
 
   const baseRows: Array<[string, unknown]> = [
     ['품목기준코드', med.item_code],
