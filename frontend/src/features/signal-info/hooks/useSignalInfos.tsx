@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import {
   fetchSignalInfos,
   fetchSignalInfoDownloadUrl,
@@ -18,12 +18,12 @@ export function useSignalInfos() {
   const [q, setQ] = useState('');
 
   const [actionError, setActionError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const {
     data,
     isLoading,
     isError,
-    refetch,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -61,7 +61,7 @@ export function useSignalInfos() {
     if (!nextQ) return;
 
     if (nextQ === q) {
-      void refetch();
+      void queryClient.resetQueries({ queryKey: ['signalInfos', q] });
       return;
     }
 
