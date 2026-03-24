@@ -140,7 +140,13 @@
 
 <br/>
 
-## ⚙️ 5. 프로젝트 로컬 실행 방법 (How to Run)
+## 📚 5. Design System (Storybook)
+
+컴포넌트 기반 UI 설계를 위해 Storybook을 활용하여 디자인 시스템을 구축했습니다.
+
+👉 [Storybook 바로가기](https://69c2babd55cd9575e24b03e0-aftmioxvru.chromatic.com/)
+
+## ⚙️ 6. 프로젝트 로컬 실행 방법 (How to Run)
 
 ```bash
 # 1. 저장소 클론
@@ -161,7 +167,7 @@ uvicorn app.main:app --reload
 ```
 <br/>
 
-## 📂 6. 프로젝트 구조 (Folder Structure)
+## 📂 7. 프로젝트 구조 (Folder Structure)
 ```bash
 medicineInfoWeb/
 ├── frontend/src/
