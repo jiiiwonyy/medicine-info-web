@@ -3,3 +3,5 @@
 # test coverage
 frontend/coverage/
 backend/scripts/
+# Storybook build output
+frontend/storybook-static/
