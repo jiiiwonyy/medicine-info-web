@@ -14,7 +14,7 @@ export const searchMedicines = async (
   limit: number = 20,
   lastId?: number,
 ): Promise<SearchResponse> => {
-  const params: Record<string, any> = { limit, last_id: lastId };
+  const params: Record<string, string | number | undefined> = { limit, last_id: lastId };
 
   if (q && q.trim() !== '') {
     params.q = q.trim();

@@ -33,14 +33,16 @@ export default function SignalInfoPage() {
         <TabsContent value="publish" className="mt-0">
           <SignalInfoPublishTab
             total={s.total}
-            q={s.q}
-            setQ={s.setQ}
-            loading={s.loading}
-            err={s.err}
+            qInput={s.qInput}
+            setQInput={s.setQInput}
+            isLoading={s.isLoading}
+            isError={s.isError}
+            actionError={s.actionError}
             onSearch={s.onSearch}
             displayItems={s.displayItems}
             hasMore={s.hasMore}
             loadMore={s.loadMore}
+            isFetchingMore={s.isFetchingMore}
             onView={s.onView}
             onDownload={s.onDownload}
           />

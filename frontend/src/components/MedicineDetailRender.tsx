@@ -2,7 +2,19 @@ import { TableWrap } from '@/components/ui/Table';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 
-export default function MedicineDetailRenderer({ data }: { data: any }) {
+type DetailItem = {
+  type: 'text' | 'table';
+  html: string;
+};
+
+type DetailSection = {
+  title?: string;
+  items?: DetailItem[];
+};
+
+type DetailData = string | DetailSection[];
+
+export default function MedicineDetailRenderer({ data }: { data: DetailData | null | undefined }) {
   if (!data) return null;
 
   if (typeof data === 'string') {
@@ -18,7 +30,7 @@ export default function MedicineDetailRenderer({ data }: { data: any }) {
               <h3 className={textStyles.titleMd}>{section.title}</h3>
             )}
 
-            {section.items?.map((item: any, i: number) => {
+            {section.items?.map((item, i) => {
               if (item.type === 'text') {
                 return (
                   <p
