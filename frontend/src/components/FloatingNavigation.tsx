@@ -27,15 +27,8 @@ const collectIds = (items: NavItem[]): string[] =>
   ]);
 
 export default function FloatingNavigation({
-  dur,
   headerOffset = 72,
 }: FloatingNavProps) {
-  const hasDur = !!(
-    dur?.interactions?.length ||
-    dur?.age?.length ||
-    dur?.pregnancy?.length
-  );
-
   const navTree: NavItem[] = useMemo(() => {
     const detailChildren: NavItem[] = [
       { id: 'effect', label: '효능·효과' },
@@ -45,10 +38,10 @@ export default function FloatingNavigation({
 
     return [
       { id: 'detail', label: '의약품 상세정보', children: detailChildren },
-      ...(hasDur ? [{ id: 'dur', label: '의약품안전사용(DUR)' }] : []),
+      { id: 'dur', label: '의약품안전사용(DUR)' },
       { id: 'signal', label: '실마리정보' },
     ];
-  }, [hasDur]);
+  }, []);
 
   const allIds = useMemo(() => collectIds(navTree), [navTree]);
   const activeId = useScrollSpy(allIds, headerOffset);
@@ -57,7 +50,7 @@ export default function FloatingNavigation({
     activeId === item.id || !!item.children?.some((c) => c.id === activeId);
 
   return (
-    <aside className="fixed top-1/3 right-20 hidden lg:flex flex-col space-y-2 bg-bg border rounded shadow-md p-3 z-50 min-w-52">
+    <aside className="fixed top-1/3 right-4 hidden xl:flex flex-col space-y-2 bg-bg border rounded shadow-md p-3 z-50 min-w-52">
       <nav aria-label="보조 내비게이션" className="space-y-1">
         {navTree.map((item) => (
           <div key={item.id}>

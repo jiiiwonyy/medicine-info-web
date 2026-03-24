@@ -45,6 +45,18 @@ export default function DurSection({ dur }: Props) {
     { key: 'pregnancy', list: (dur.pregnancy ?? []) as DurRow[] },
   ];
 
+  const isEmpty = sections.every(({ list }) => list.length === 0);
+
+  if (isEmpty) {
+    return (
+      <div className="mt-4 border border-dashed border-border rounded-lg py-8 text-center">
+        <p className={cn(textStyles.bodyMd, 'text-muted-fg')}>
+          해당 약품에 대한 의약품안전사용(DUR) 정보가 없습니다.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-10 mt-8">
       {sections.map(({ key, list }) => {
@@ -54,7 +66,7 @@ export default function DurSection({ dur }: Props) {
         const theme = SECTION_THEME[key];
 
         const columns = Object.keys(list[0] as Record<string, unknown>).filter(
-          (k) => !HIDDEN_KEYS.includes(k as any),
+          (k) => !(HIDDEN_KEYS as readonly string[]).includes(k),
         );
 
         return (
@@ -104,7 +116,9 @@ export default function DurSection({ dur }: Props) {
                           {columns.map((col) => (
                             <Td key={col}>
                               <TableContent>
-                                {String((row as any)[col] ?? '')}
+                                {String(
+                                  (row as Record<string, unknown>)[col] ?? '',
+                                )}
                               </TableContent>
                             </Td>
                           ))}

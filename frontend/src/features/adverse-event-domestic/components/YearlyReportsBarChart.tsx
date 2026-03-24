@@ -71,8 +71,9 @@ export default function YearlyReportsBarChart() {
                 <LabelList
                   dataKey="reports"
                   position="top"
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  formatter={(value: any) => value?.toLocaleString() ?? ''}
+                  formatter={(value) =>
+                    typeof value === 'number' ? value.toLocaleString() : String(value ?? '')
+                  }
                   style={{ fill: '#6b7280', fontSize: '12px' }}
                 />
               </Bar>
