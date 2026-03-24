@@ -1,5 +1,10 @@
+node_modules/
+__pycache__/
+*.pyc
 .env
 .env.local
 # test coverage
 frontend/coverage/
 backend/scripts/
+# Storybook build output
+frontend/storybook-static/
