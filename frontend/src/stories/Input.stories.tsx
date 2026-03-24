@@ -42,3 +42,26 @@ export const WithValue: Story = {
     placeholder: '약품명 입력',
   },
 };
+
+export const AllVariants: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4 max-w-sm">
+      <div className="flex flex-col gap-1">
+        <label className="text-sm text-muted-fg">기본</label>
+        <Input placeholder="검색어를 입력하세요" />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm text-muted-fg">값 있음</label>
+        <Input defaultValue="타이레놀" placeholder="약품명 입력" />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm text-muted-fg">에러</label>
+        <Input hasError defaultValue="잘못된 입력" placeholder="약품명 입력" />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm text-muted-fg">비활성화</label>
+        <Input disabled placeholder="비활성화된 입력" />
+      </div>
+    </div>
+  ),
+};
