@@ -1,4 +1,3 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
@@ -21,56 +20,33 @@ export default function WhoAreaSection({ areas }: { areas: WhoArea[] }) {
           것을 권고합니다.
         </p>
 
-        <Tabs defaultValue={areas[0]?.key ?? 'highRisk'}>
-          <TabsList
-            className={cn(
-              'h-auto rounded-full bg-transparent p-0 gap-2 flex flex-wrap',
-            )}
-          >
-            {areas.map((a) => (
-              <TabsTrigger
-                key={a.key}
-                value={a.key}
+        <div className="flex flex-col gap-4">
+          {areas.map((a) => (
+            <div
+              key={a.key}
+              className="rounded-xl border border-border bg-muted p-5"
+            >
+              <div className={cn(textStyles.headingLg, 'mb-2 text-fg')}>
+                {a.title}
+              </div>
+              <p
                 className={cn(
-                  textStyles.bodySm,
-                  'rounded-full border px-4 py-2',
-                  // 기본 TabsTrigger active 스타일 대신 "pill" 느낌으로 덮어쓰기
-                  'data-[state=active]:bg-fg data-[state=active]:text-surface data-[state=active]:shadow-none',
-                  'border-border bg-surface text-muted-fg hover:bg-muted',
+                  textStyles.bodyMd,
+                  'mb-3 text-muted-fg leading-relaxed',
                 )}
               >
-                {a.key === 'highRisk' && '고위험 상황'}
-                {a.key === 'polypharmacy' && '다약제 복용'}
-                {a.key === 'transition' && '치료 전환기'}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {areas.map((a) => (
-            <TabsContent key={a.key} value={a.key} className="mt-4">
-              <div className="rounded-xl border border-border bg-muted p-5 animate-in fade-in slide-in-from-top-1 duration-200">
-                <div className={cn(textStyles.headingLg, 'mb-2 text-fg')}>
-                  {a.title}
-                </div>
-                <p
-                  className={cn(
-                    textStyles.bodyMd,
-                    'mb-3 text-muted-fg leading-relaxed',
-                  )}
-                >
-                  {a.subtitle}
-                </p>
-                <ul className="list-disc pl-5 space-y-1">
-                  {a.bullets.map((b) => (
-                    <li key={b} className={cn(textStyles.bodyMd, 'text-fg')}>
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </TabsContent>
+                {a.subtitle}
+              </p>
+              <ul className="list-disc pl-5 space-y-1">
+                {a.bullets.map((b) => (
+                  <li key={b} className={cn(textStyles.bodyMd, 'text-fg')}>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
-        </Tabs>
+        </div>
       </Card>
     </section>
   );
