@@ -150,7 +150,7 @@
 
 ```bash
 # 1. 저장소 클론
-git clone https://github.com/jiiiwonyy/medicine-info-web.git
+git clone https://github.com/jiiiwonyy/medisafenurse.git
 cd medicine-info-web
 
 # 2. 프론트엔드 실행
