@@ -1,16 +1,6 @@
 import * as React from 'react';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import SubTitle from '@/components/ui/SubTitle';
-
-export function SectionTitle({
-  children,
-  className,
-}: React.PropsWithChildren<{ className?: string }>) {
-  return (
-    <SubTitle className={cn('text-fg', className)}>{children}</SubTitle>
-  );
-}
 
 export function InfoList({ items }: { items: React.ReactNode[] }) {
   return (
