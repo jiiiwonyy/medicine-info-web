@@ -2,6 +2,8 @@ import { Card } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import SubTitle from '@/components/ui/SubTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 
 export default function SignalInfoInfoTab() {
   return (
@@ -9,11 +11,9 @@ export default function SignalInfoInfoTab() {
       <Card variant="primary">
         <div className="grid grid-cols-1 gap-8">
           <Card variant="outlined">
-            <h4
-              className={cn(textStyles.titleSm, 'mb-3 flex items-center gap-2')}
-            >
+            <ItemTitle className="mb-3 flex items-center gap-2">
               🔍 실마리정보 (Signal)
-            </h4>
+            </ItemTitle>
             <p className={cn(textStyles.bodyMd, 'leading-relaxed')}>
               약물과 이상사례 간{' '}
               <strong className="text-primary">새로운 잠재적 인과관계</strong>{' '}
@@ -24,11 +24,9 @@ export default function SignalInfoInfoTab() {
           </Card>
 
           <Card variant="outlined">
-            <h4
-              className={cn(textStyles.titleSm, 'mb-3 flex items-center gap-2')}
-            >
+            <ItemTitle className="mb-3 flex items-center gap-2">
               📢 실마리 소식지
-            </h4>
+            </ItemTitle>
             <p className={cn(textStyles.bodyMd, 'leading-relaxed')}>
               KAERS(한국의약품안전관리원 이상사례 보고시스템) 데이터를 분석하여,
               식약처가 안전성 검토 및 조치를 진행한 결과를
@@ -64,7 +62,7 @@ export default function SignalInfoInfoTab() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card padding="lg" className="bg-gray-100 border border-gray-200">
-            <h4 className={cn(textStyles.titleSm, 'mb-2')}>1. 부작용</h4>
+            <ItemTitle className="mb-2">1. 부작용</ItemTitle>
             <p className={cn(textStyles.bodyMd, 'mb-1 text-muted-fg')}>
               Side Effect
             </p>
@@ -75,7 +73,7 @@ export default function SignalInfoInfoTab() {
           </Card>
 
           <div className="bg-sky-100 p-6 rounded-xl border border-sky-100">
-            <h4 className={cn(textStyles.titleSm, 'mb-2')}>2. 이상사례 (AE)</h4>
+            <ItemTitle className="mb-2">2. 이상사례 (AE)</ItemTitle>
             <p className={cn(textStyles.bodyMd, 'mb-1 text-muted-fg')}>
               Adverse Event
             </p>
@@ -90,9 +88,9 @@ export default function SignalInfoInfoTab() {
           </div>
 
           <div className="bg-sky-600 p-6 rounded-xl text-white shadow-md">
-            <h4 className={cn(textStyles.titleSm, 'mb-2')}>
+            <ItemTitle className="mb-2">
               3. 약물이상반응 (ADR)
-            </h4>
+            </ItemTitle>
             <p className={cn(textStyles.bodyMd, 'mb-1')}>
               Adverse Drug Reaction
             </p>
@@ -105,17 +103,12 @@ export default function SignalInfoInfoTab() {
       </section>
 
       <section>
-        <h3
-          className={cn(
-            textStyles.titleMd,
-            'mb-6 pb-2 border-b border-gray-200',
-          )}
-        >
+        <SubTitle className="mb-6 pb-2 border-b border-gray-200">
           실마리정보 확인 및 관련 사이트
-        </h3>
+        </SubTitle>
 
         <Card variant="muted" padding="lg">
-          <h4 className={cn(textStyles.titleSm, 'mb-4')}>📢 확인 경로 안내</h4>
+          <ItemTitle className="mb-4">📢 확인 경로 안내</ItemTitle>
           <ol className="space-y-4">
             <li className="flex gap-3 items-start">
               <span

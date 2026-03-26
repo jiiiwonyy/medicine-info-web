@@ -8,7 +8,7 @@ const meta: Meta<typeof Card> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'outlined', 'elevated', 'muted', 'primary', 'strong'],
+      options: ['default', 'outlined', 'elevated', 'muted', 'primary', 'strong', 'empty'],
     },
     padding: {
       control: 'select',
@@ -60,10 +60,18 @@ export const Primary: Story = {
   },
 };
 
+export const Empty: Story = {
+  render: () => (
+    <Card variant="empty" padding="lg" className="text-center">
+      <p className="text-muted-fg">관련 데이터가 없습니다.</p>
+    </Card>
+  ),
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-4 max-w-sm">
-      {(['default', 'outlined', 'elevated', 'muted', 'primary', 'strong'] as const).map(
+      {(['default', 'outlined', 'elevated', 'muted', 'primary', 'strong', 'empty'] as const).map(
         (variant) => (
           <Card key={variant} variant={variant} padding="md">
             <p className="font-medium capitalize">{variant}</p>

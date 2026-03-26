@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { cn } from '@/shared/cn';
-import { textStyles } from '@/styles/typography';
 import type { StepTheme } from '../types';
 import { MdArrowDownward, MdCheckCircle } from 'react-icons/md';
 import { Card } from '@/components/ui/Card';
+import SubTitle from '@/components/ui/SubTitle';
 
 export function FlowWrap({ children }: React.PropsWithChildren) {
   const items = React.Children.toArray(children);
@@ -47,9 +47,7 @@ export function FlowBlock({
   return (
     <section className="flex flex-col h-full">
       {/* h-full for grid stretch */}
-      <h3 className={cn(textStyles.titleMd, 'text-fg flex-shrink-0')}>
-        {title}
-      </h3>
+      <SubTitle className="text-fg flex-shrink-0">{title}</SubTitle>
       <Card variant="outlined" padding="lg" className="mt-3 flex-1 shadow-sm">
         {children}
       </Card>
@@ -81,9 +79,7 @@ export function FinalBlock({
           <MdCheckCircle size={14} />
           Final Check
         </span>
-        <h3 className={cn(textStyles.titleLg, 'text-fg text-center')}>
-          {title}
-        </h3>
+        <SubTitle className="text-fg">{title}</SubTitle>
       </div>
 
       <Card

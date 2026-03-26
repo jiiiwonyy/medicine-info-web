@@ -2,6 +2,7 @@ import Spinner from '@/components/Spinner';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import Button from '@/components/ui/Button';
+import SubTitle from '@/components/ui/SubTitle';
 import Input from '@/components/ui/Input';
 import SignalInfoCard from '@/features/signal-info/components/SignalInfoCard';
 import type { SignalInfoItem } from '@/features/signal-info/types';
@@ -40,7 +41,7 @@ export default function SignalInfoPublishTab({
   return (
     <>
       <div className="mb-3 flex items-center justify-between">
-        <h3 className={cn(textStyles.titleMd)}>최근 발행 현황</h3>
+        <SubTitle>최근 발행 현황</SubTitle>
         <p className={cn(textStyles.bodySm, 'text-muted-fg')}>
           총 <span className="font-semibold">{total}</span>건
         </p>

@@ -3,6 +3,8 @@ import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { Step } from '@/features/kops/components/ReportSteps';
+import SectionTitle from '@/components/ui/SectionTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 
 export default function ReportSection({
   reportTypes,
@@ -11,7 +13,7 @@ export default function ReportSection({
 }) {
   return (
     <div className="mt-12">
-      <h2 className={cn(textStyles.titleMd, 'text-fg')}>📝 보고하기</h2>
+      <SectionTitle className="text-fg">📝 보고하기</SectionTitle>
 
       <p
         className={cn(textStyles.bodyMd, 'mt-2 text-muted-fg leading-relaxed')}
@@ -24,7 +26,7 @@ export default function ReportSection({
       </p>
 
       <Card variant="muted" padding="lg" className="mt-5">
-        <h3 className={cn(textStyles.titleSm, 'text-fg')}>▸ 보고 유형</h3>
+        <ItemTitle className="text-fg">▸ 보고 유형</ItemTitle>
         <ul
           className={cn(
             textStyles.bodyMd,
@@ -38,7 +40,7 @@ export default function ReportSection({
       </Card>
 
       <Card variant="outlined" padding="lg" className="mt-4 border-border">
-        <h3 className={cn(textStyles.titleSm, 'text-fg mb-4')}>▸ 보고 절차</h3>
+        <ItemTitle className="text-fg mb-4">▸ 보고 절차</ItemTitle>
 
         <div className="flex flex-col md:flex-row items-start justify-center gap-6 md:gap-10">
           <Step n={1} title="보고하기 클릭" />
@@ -51,29 +53,29 @@ export default function ReportSection({
           </div>
           <Step n={3} title="보고서 작성" />
         </div>
-
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Button asChild variant="primary">
-            <a
-              href="https://www.kops.or.kr/portal/rcp/rcpReport/rcpReportList.do"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 보고하기 바로가기
-            </a>
-          </Button>
-
-          <Button asChild variant="secondary">
-            <a
-              href="https://www.kops.or.kr/portal/main.do"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 KOPS 메인
-            </a>
-          </Button>
-        </div>
       </Card>
+
+      <div className="mt-5 flex flex-wrap gap-3">
+        <Button asChild variant="primary" className="flex-1">
+          <a
+            href="https://www.kops.or.kr/portal/rcp/rcpReport/rcpReportList.do"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            🔗 보고하기 바로가기
+          </a>
+        </Button>
+
+        <Button asChild variant="secondary" className="flex-1">
+          <a
+            href="https://www.kops.or.kr/portal/main.do"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            🔗 KOPS 메인
+          </a>
+        </Button>
+      </div>
     </div>
   );
 }

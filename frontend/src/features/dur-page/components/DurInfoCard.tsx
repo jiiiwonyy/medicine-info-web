@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import ItemTitle from '@/components/ui/ItemTitle';
 
 export default function DurInfoCard({
   icon,
@@ -23,7 +24,7 @@ export default function DurInfoCard({
         </div>
       </div>
 
-      <h4 className={cn(textStyles.titleSm, 'mt-4')}>{title}</h4>
+      <ItemTitle className="mt-4">{title}</ItemTitle>
       <p
         className={cn(textStyles.bodyMd, 'mt-3 text-muted-fg leading-relaxed')}
       >

@@ -96,14 +96,6 @@ export default function FdaPage() {
         debouncedQ={debouncedQ.trim()}
         selectedDrug={selectedDrug}
         onSelectDrug={setSelectedDrug}
-        roleOnlySuspect={roleOnlySuspect}
-        onChangeRoleOnlySuspect={setRoleOnlySuspect}
-        yearFrom={yearFrom}
-        yearTo={yearTo}
-        onChangeYearRange={(from, to) => {
-          setYearFrom(from);
-          setYearTo(to);
-        }}
         suggestOpen={suggestOpen}
         setSuggestOpen={setSuggestOpen}
         suggestItems={suggestQuery.data?.items ?? []}
@@ -120,6 +112,14 @@ export default function FdaPage() {
       {countData && (
         <div className="space-y-8">
           <ResultHeaderCards
+            roleOnlySuspect={roleOnlySuspect}
+            onChangeRoleOnlySuspect={setRoleOnlySuspect}
+            yearFrom={yearFrom}
+            yearTo={yearTo}
+            onChangeYearRange={(from, to) => {
+              setYearFrom(from);
+              setYearTo(to);
+            }}
             drug={countData.drug}
             matchedIsrCount={countData.matched_isr_count}
           />

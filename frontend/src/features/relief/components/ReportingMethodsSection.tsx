@@ -2,18 +2,15 @@ import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { MdComputer, MdPhoneInTalk } from 'react-icons/md';
+import SectionTitle from '@/components/ui/SectionTitle';
+import SubTitle from '@/components/ui/SubTitle';
 
 export default function ReportingMethodsSection() {
   return (
     <section>
-      <h2
-        className={cn(
-          textStyles.titleMd,
-          'mb-6 text-fg border-b border-border pb-2',
-        )}
-      >
+      <SectionTitle className="mb-6 text-fg border-b border-border pb-2">
         이상사례 보고 방법
-      </h2>
+      </SectionTitle>
 
       <div className="grid gap-6 md:grid-cols-2">
         <Card
@@ -32,9 +29,9 @@ export default function ReportingMethodsSection() {
             <MdComputer size={36} />
           </div>
 
-          <h3 className={cn(textStyles.titleMd, 'text-fg mb-3')}>
+          <SubTitle className="text-fg mb-3">
             온라인 보고
-          </h3>
+          </SubTitle>
           <p className={cn(textStyles.bodySm, 'mb-8 leading-relaxed')}>
             의약품안전나라 의약품통합정보시스템을
             <br />
@@ -74,7 +71,7 @@ export default function ReportingMethodsSection() {
             <MdPhoneInTalk size={36} />
           </div>
 
-          <h3 className={cn(textStyles.titleMd, 'text-fg mb-3')}>전화 보고</h3>
+          <SubTitle className="text-fg mb-3">전화 보고</SubTitle>
           <p className={cn(textStyles.bodySm, 'mb-8 leading-relaxed')}>
             한국의약품안전관리원 대표전화
             <br />

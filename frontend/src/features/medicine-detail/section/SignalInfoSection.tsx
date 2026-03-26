@@ -3,6 +3,7 @@ import { textStyles } from '@/styles/typography';
 import type { SignalInfo } from '../types';
 import { useSignalInfoView } from '../hooks/useSignalInfoView';
 import Callout from '@/components/ui/Callout';
+import { Card } from '@/components/ui/Card';
 import SignalInfoCard from '@/features/signal-info/components/SignalInfoCard';
 import { trimDocNo } from '@/features/signal-info/utils';
 
@@ -41,11 +42,11 @@ export function SignalInfoSection({ signalInfos }: Props) {
       )}
 
       {isEmpty ? (
-        <div className="border border-dashed border-border rounded-lg py-8 text-center">
+        <Card variant="empty" className="py-8 text-center">
           <p className={cn(textStyles.bodyMd, 'text-muted-fg')}>
             이 약품과 관련된 실마리정보가 없습니다.
           </p>
-        </div>
+        </Card>
       ) : (
         <>
           <p className={cn(textStyles.bodyMd, 'text-muted-fg mb-4')}>

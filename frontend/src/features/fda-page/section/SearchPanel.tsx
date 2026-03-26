@@ -1,7 +1,7 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import FdaSearchBar from '@/features/fda-page/components/FdaSearchBar';
-import YearRangeFilter from '@/features/fda-page/components/YearRangeFilter';
+
 import FdaSuggestModal from '@/features/fda-page/components/FdaSuggestModal';
 
 type SuggestItem = { value: string } | string;
@@ -12,11 +12,7 @@ export default function SearchPanel({
   debouncedQ,
   selectedDrug,
   onSelectDrug,
-  roleOnlySuspect,
-  onChangeRoleOnlySuspect,
-  yearFrom,
-  yearTo,
-  onChangeYearRange,
+
   suggestOpen,
   setSuggestOpen,
   suggestItems,
@@ -29,13 +25,6 @@ export default function SearchPanel({
 
   selectedDrug: string;
   onSelectDrug: (drug: string) => void;
-
-  roleOnlySuspect: boolean;
-  onChangeRoleOnlySuspect: (v: boolean) => void;
-
-  yearFrom?: number;
-  yearTo?: number;
-  onChangeYearRange: (from?: number, to?: number) => void;
 
   suggestOpen: boolean;
   setSuggestOpen: (v: boolean) => void;
@@ -66,25 +55,6 @@ export default function SearchPanel({
           setSuggestOpen(false);
         }}
       />
-
-      <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
-        <YearRangeFilter
-          yearFrom={yearFrom}
-          yearTo={yearTo}
-          onChange={(from, to) => onChangeYearRange(from, to)}
-        />
-
-        <div className="flex flex-wrap gap-3 items-center">
-          <label className={cn(textStyles.bodySm, 'flex items-center gap-2')}>
-            <input
-              type="checkbox"
-              checked={roleOnlySuspect}
-              onChange={(e) => onChangeRoleOnlySuspect(e.target.checked)}
-            />
-            의심약(PS/SS)만
-          </label>
-        </div>
-      </div>
 
       {!selectedDrug && (
         <div className={cn(textStyles.bodySm, 'text-muted-fg')}>
