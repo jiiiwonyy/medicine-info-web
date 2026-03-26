@@ -4,13 +4,18 @@ import '../src/index.css';
 const preview: Preview = {
   parameters: {
     backgrounds: {
-      default: 'light',
-      values: [
-        { name: 'light', value: '#ffffff' },
-        { name: 'muted', value: '#f8fafc' },
-      ],
+      options: {
+        light: { name: 'light', value: '#ffffff' },
+        muted: { name: 'muted', value: '#f8fafc' }
+      }
     },
   },
+
+  initialGlobals: {
+    backgrounds: {
+      value: 'light'
+    }
+  }
 };
 
 export default preview;
