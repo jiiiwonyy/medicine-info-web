@@ -73,7 +73,14 @@ export default function Header() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center mb-7">
+    <>
+      {openMain && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40"
+          onClick={() => setOpenMain(null)}
+        />
+      )}
+    <div className="w-full flex flex-col items-center mb-7 relative z-50">
       <HeaderTop
         logoSrc={logo}
         query={q}
@@ -94,5 +101,6 @@ export default function Header() {
         onNavigate={(path) => navigate(path)}
       />
     </div>
+    </>
   );
 }
