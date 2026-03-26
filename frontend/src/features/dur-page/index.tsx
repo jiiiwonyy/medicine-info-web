@@ -4,6 +4,8 @@ import { Card } from '@/components/ui/Card';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
 import SectionTitle from '@/components/ui/SectionTitle';
+import SubTitle from '@/components/ui/SubTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 import DurInfoCard from '@/features/dur-page/components/DurInfoCard';
 import { DUR_MAIN_INFO, DUR_USE_CASES } from '@/features/dur-page/data/DurData';
 
@@ -77,7 +79,7 @@ export default function DURPage() {
 
         {/* DUR 활용 사례 */}
         <section className="space-y-4">
-          <h3 className={textStyles.titleMd}>DUR 활용 사례</h3>
+          <SectionTitle>DUR 활용 사례</SectionTitle>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {DUR_USE_CASES.map((item) => (
@@ -95,7 +97,7 @@ export default function DURPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <h4 className={textStyles.titleSm}>{item.title}</h4>
+                    <ItemTitle>{item.title}</ItemTitle>
                     <p
                       className={cn(
                         textStyles.bodyMd,
@@ -114,9 +116,9 @@ export default function DURPage() {
         {/* 마무리 강조 섹션 */}
         <section>
           <Card variant="primary" padding="lg" className="text-center">
-            <h3 className={cn(textStyles.titleMd, 'text-2xl mb-4')}>
+            <SubTitle className="text-2xl mb-4">
               DUR 활용의 의의
-            </h3>
+            </SubTitle>
             <p
               className={cn(textStyles.bodyMd, 'text-muted-fg leading-relaxed')}
             >

@@ -1,12 +1,11 @@
 import Button from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { cn } from '@/shared/cn';
-import { textStyles } from '@/styles/typography';
+import SubTitle from '@/components/ui/SubTitle';
 
 export default function SafetyLetterInfoTab() {
   return (
     <div className="border border-gray-200 rounded-xl p-4 bg-white">
-      <div className={cn(textStyles.titleMd)}>의약품 안전성서한(속보)란?</div>
+      <SubTitle>의약품 안전성서한(속보)란?</SubTitle>
 
       <div className="mt-4">
         <p className="mb-6">
@@ -20,7 +19,7 @@ export default function SafetyLetterInfoTab() {
           발행하는 공식 문서입니다.
         </p>
 
-        <h3 className={cn(textStyles.titleMd, 'mt-8 mb-2')}>최근 발행 현황</h3>
+        <SubTitle className="mt-8 mb-2">최근 발행 현황</SubTitle>
         <table className="w-full border-collapse border border-gray-300 mb-6 text-center">
           <thead>
             <tr className="bg-primary-50">
@@ -48,9 +47,9 @@ export default function SafetyLetterInfoTab() {
           </tbody>
         </table>
 
-        <h3 className={cn(textStyles.titleMd, 'mt-8 mb-2')}>
+        <SubTitle className="mt-8 mb-2">
           안전성 서한 확인 방법
-        </h3>
+        </SubTitle>
         <ul className="list-disc pl-6 mb-4 space-y-1">
           <li>메인 화면에서 바로 확인</li>
           <li>
@@ -71,7 +70,7 @@ export default function SafetyLetterInfoTab() {
           </a>
         </Button>
 
-        <h3 className={cn(textStyles.titleMd, 'mt-8 mb-2')}>검색 예시</h3>
+        <SubTitle className="mt-8 mb-2">검색 예시</SubTitle>
         <Card variant="muted" className="p-4 rounded">
           <p>
             검색창에서 <span className="font-semibold">“리도카인”</span> 입력

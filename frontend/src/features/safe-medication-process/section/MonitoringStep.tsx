@@ -5,6 +5,7 @@ import { textStyles } from '@/styles/typography';
 import { FinalBlock } from '../components/FlowLayout';
 import { Card } from '@/components/ui/Card';
 import SectionTitle from '@/components/ui/SectionTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 import {
   PieChart,
   Pie,
@@ -50,9 +51,9 @@ function ConsiderationSection() {
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-surface-muted border border-border/60">
                 {item.icon}
               </div>
-              <h4 className={cn(textStyles.titleSm, 'text-fg')}>
+              <ItemTitle className="text-fg">
                 {item.title}
-              </h4>
+              </ItemTitle>
               <p
                 className={cn(
                   textStyles.bodyMd,
@@ -153,9 +154,9 @@ function ErrorAnalysisSection() {
 
           {/* 오른쪽 원인 목록 */}
           <div className="flex-1 min-w-0">
-            <h4 className={cn(textStyles.titleSm, 'text-fg mb-4')}>
+            <ItemTitle className="text-fg mb-4">
               사고를 부르는 &apos;관찰의 빈틈&apos;
-            </h4>
+            </ItemTitle>
             <ol className="space-y-8">
               {ERROR_CAUSES.map((item, idx) => (
                 <li key={idx} className="flex items-start gap-4">

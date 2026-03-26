@@ -8,6 +8,7 @@ import {
 } from 'recharts';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import ItemTitle from '@/components/ui/ItemTitle';
 import {
   reporterData2023,
   reporterData2024,
@@ -27,7 +28,7 @@ function PieBlock({
 }) {
   return (
     <div className="flex flex-col items-center h-80 md:h-96">
-      <h5 className={cn(textStyles.titleSm, 'mb-2')}>{title}</h5>
+      <ItemTitle className="mb-2">{title}</ItemTitle>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie

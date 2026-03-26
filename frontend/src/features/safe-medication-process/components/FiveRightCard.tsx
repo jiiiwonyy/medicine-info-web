@@ -11,7 +11,7 @@ export function RightCard({ item }: { item: RightItem; theme: StepTheme }) {
     <div
       className={cn('rounded-xl border border-success p-4 flex flex-col gap-2')}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3">
         <span className="text-2xl leading-none rounded-full bg-success-50 p-3">
           {item.icon}
         </span>

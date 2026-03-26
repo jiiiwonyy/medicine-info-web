@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import SubTitle from '@/components/ui/SubTitle';
 
 export function SectionTitle({
   children,
   className,
 }: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <h2 className={cn(textStyles.titleMd, 'text-fg', className)}>{children}</h2>
+    <SubTitle className={cn('text-fg', className)}>{children}</SubTitle>
   );
 }
 

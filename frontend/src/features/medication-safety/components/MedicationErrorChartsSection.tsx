@@ -15,6 +15,7 @@ import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import Callout from '@/components/ui/Callout';
+import ItemTitle from '@/components/ui/ItemTitle';
 
 const preventableData = [
   { name: '예방 가능', value: 67, fill: 'rgb(var(--primary))' },
@@ -38,9 +39,9 @@ function PreventableDonutPanel() {
         >
           WHO, 2022
         </p>
-        <h3 className={cn(textStyles.titleSm, 'text-fg mt-0.5')}>
+        <ItemTitle className="text-fg mt-0.5">
           투약 오류의 예방 가능성
-        </h3>
+        </ItemTitle>
         <p className={cn(textStyles.bodySm, 'text-muted-fg mt-1')}>
           투약 오류 중 우리가 막을 수 있었던 건은 얼마나 될까요?
         </p>
@@ -100,9 +101,9 @@ function HospitalizationBarPanel() {
         >
           의료 오류 발생 빈도
         </p>
-        <h3 className={cn(textStyles.titleSm, 'text-fg mt-0.5')}>
+        <ItemTitle className="text-fg mt-0.5">
           치료 과정 중 투약의 비중과 위험도
-        </h3>
+        </ItemTitle>
         <p className={cn(textStyles.bodySm, 'text-muted-fg mt-1')}>
           병원 입원 원인 분석 — 전체 입원 중 투약 오류 관련 비율 (6~7%)
         </p>

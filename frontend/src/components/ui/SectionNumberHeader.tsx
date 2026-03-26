@@ -13,7 +13,7 @@ export default function SectionNumberHeader({
   className,
 }: SectionNumberHeaderProps) {
   return (
-    <div
+    <h4
       className={cn(textStyles.titleMd, 'flex items-center gap-2', className)}
     >
       <span
@@ -25,6 +25,6 @@ export default function SectionNumberHeader({
         {number}
       </span>
       {title}
-    </div>
+    </h4>
   );
 }

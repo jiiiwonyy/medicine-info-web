@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { Card } from '@/components/ui/Card';
+import SubTitle from '@/components/ui/SubTitle';
 
 function Frac({ num, den }: { num: React.ReactNode; den: React.ReactNode }) {
   return (
@@ -81,9 +82,9 @@ export default function IVRateTip() {
     <section className="space-y-5 mt-8">
       <div className="flex items-center gap-2">
         <span className="text-xl">💡</span>
-        <h3 className={cn(textStyles.titleMd, 'text-fg')}>
+        <SubTitle className="text-fg">
           수액주입속도 계산 참고
-        </h3>
+        </SubTitle>
       </div>
 
       <Card variant="outlined" padding="lg" className="shadow-sm space-y-3">

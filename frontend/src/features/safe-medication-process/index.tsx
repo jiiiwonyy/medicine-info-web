@@ -2,6 +2,7 @@ import * as React from 'react';
 import PageLayout from '@/components/PageLayout';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import SectionTitle from '@/components/ui/SectionTitle';
 import ArrowStepper from '@/features/safe-medication-process/components/MedicationStepper';
 import { STEPS } from '@/features/safe-medication-process/data/StepMeta';
 import type { StepKey } from '@/features/safe-medication-process/types';
@@ -44,15 +45,15 @@ export default function SafetyMedicationProcess() {
                 >
                   {active.badge}
                 </div>
-                <h2
+                <div
                   className={cn(
-                    textStyles.titleLg,
                     'mt-1',
+                    textStyles.titleLg,
                     active.theme.headerText,
                   )}
                 >
                   {active.title} 단계
-                </h2>
+                </div>
               </div>
             </div>
           </div>
