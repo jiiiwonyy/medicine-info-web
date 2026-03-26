@@ -137,7 +137,7 @@ const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
         id={panelId}
         aria-labelledby={triggerId}
         className={cn(
-          'mt-2 animate-fade-in-up focus-visible:outline-none',
+          'mt-2 animate-fade-in-up motion-reduce:animate-none focus-visible:outline-none',
           className,
         )}
         {...props}
