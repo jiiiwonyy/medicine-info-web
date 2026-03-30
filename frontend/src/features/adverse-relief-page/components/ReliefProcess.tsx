@@ -1,6 +1,8 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { Card } from '@/components/ui/Card';
+import SectionTitle from '@/components/ui/SectionTitle';
+import SubTitle from '@/components/ui/SubTitle';
 
 export default function ReliefProcessVertical() {
   const steps = [
@@ -80,14 +82,7 @@ export default function ReliefProcessVertical() {
 
   return (
     <section className="py-8 text-fg leading-relaxed">
-      <h2
-        className={cn(
-          textStyles.titleLg,
-          'border-b-2 border-primary-700 pb-2 mb-10',
-        )}
-      >
-        의약품 부작용 피해구제 절차
-      </h2>
+      <SectionTitle className="mb-10">의약품 부작용 피해구제 절차</SectionTitle>
 
       <div className="space-y-10 relative">
         {steps.map((step, index) => (
@@ -113,9 +108,9 @@ export default function ReliefProcessVertical() {
               padding="lg"
               className="w-full border-border"
             >
-              <h3 className={cn(textStyles.titleMd, 'text-primary-800 mb-2')}>
+              <SubTitle className="text-primary-800 mb-2">
                 {step.title}
-              </h3>
+              </SubTitle>
               <p className={cn(textStyles.bodyMd, 'text-gray-700 mb-2')}>
                 {step.desc}
               </p>

@@ -20,6 +20,7 @@ import {
   SECTION_THEME,
   type DurKey,
 } from '@/features/medicine-detail/data/durData';
+import { Card } from '@/components/ui/Card';
 
 interface Props {
   dur: DurData;
@@ -49,11 +50,11 @@ export default function DurSection({ dur }: Props) {
 
   if (isEmpty) {
     return (
-      <div className="mt-4 border border-dashed border-border rounded-lg py-8 text-center">
-        <p className={cn(textStyles.bodyMd, 'text-muted-fg')}>
+      <Card variant="empty" className="py-8 text-center">
+        <p className="text-muted-fg">
           해당 약품에 대한 의약품안전사용(DUR) 정보가 없습니다.
         </p>
-      </div>
+      </Card>
     );
   }
 

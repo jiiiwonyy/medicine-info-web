@@ -22,6 +22,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { textStyles } from '@/styles/typography';
 import { cn } from '@/shared/cn';
 import { SignalInfoSection } from './section/SignalInfoSection';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 type TabKey = 'effect' | 'usage' | 'caution' | 'dur' | 'signal';
 
@@ -177,9 +178,9 @@ export default function Detail() {
       {/* 본문 내용 */}
       <section id="detail" className="scroll-mt-24 space-y-12 mb-6">
         <section id="effect" className="scroll-mt-24 pt-4">
-          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
+          <SectionTitle className="text-primary mb-2">
             📌 효능·효과
-          </h2>
+          </SectionTitle>
           <MedicineDetailRenderer data={med.efficacy} />
         </section>
 
@@ -187,9 +188,9 @@ export default function Detail() {
           id="usage"
           className="scroll-mt-24 pt-4 border-t border-border"
         >
-          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
+          <SectionTitle className="text-primary mb-2">
             📌 용법·용량
-          </h2>
+          </SectionTitle>
           <MedicineDetailRenderer data={med.dosage_and_administration} />
         </section>
 
@@ -197,23 +198,23 @@ export default function Detail() {
           id="caution"
           className="pt-4 border-t border-border scroll-mt-24"
         >
-          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
+          <SectionTitle className="text-primary mb-2">
             📌 사용상의 주의사항
-          </h2>
+          </SectionTitle>
           <MedicineDetailRenderer data={med.precautions} />
         </section>
 
         <section id="dur" className="scroll-mt-24">
-          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
+          <SectionTitle className="text-primary mb-2">
             📌 의약품안전사용(DUR)
-          </h2>
+          </SectionTitle>
           <DurSection dur={dur} />
         </section>
 
         <section id="signal" className="scroll-mt-24">
-          <h2 className={cn(textStyles.titleMd, 'text-primary mb-2')}>
+          <SectionTitle className="text-primary mb-2">
             📌 실마리정보 알리미
-          </h2>
+          </SectionTitle>
           <SignalInfoSection signalInfos={med.signal_infos ?? []} />
         </section>
       </section>

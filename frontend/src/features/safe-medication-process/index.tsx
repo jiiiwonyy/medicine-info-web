@@ -44,15 +44,15 @@ export default function SafetyMedicationProcess() {
                 >
                   {active.badge}
                 </div>
-                <h2
+                <div
                   className={cn(
-                    textStyles.titleLg,
                     'mt-1',
+                    textStyles.titleLg,
                     active.theme.headerText,
                   )}
                 >
                   {active.title} 단계
-                </h2>
+                </div>
               </div>
             </div>
           </div>

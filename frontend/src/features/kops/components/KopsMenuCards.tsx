@@ -3,11 +3,13 @@ import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import type { MenuCardItem } from '@/features/kops/data/kopsData';
+import SectionTitle from '@/components/ui/SectionTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 
 export default function KopsMenuCards({ items }: { items: MenuCardItem[] }) {
   return (
     <div className="mt-10">
-      <h2 className={cn(textStyles.titleMd, 'text-fg')}>주요 메뉴</h2>
+      <SectionTitle className="text-fg">주요 메뉴</SectionTitle>
 
       <div className="mt-5 grid grid-cols-1 gap-4">
         {items.map(({ emoji, title, desc, href, note }) => (
@@ -19,10 +21,10 @@ export default function KopsMenuCards({ items }: { items: MenuCardItem[] }) {
           >
             <div className="flex items-start justify-between gap-4 flex-wrap">
               <div className="min-w-0">
-                <h3 className={cn(textStyles.titleSm, 'text-fg')}>
+                <ItemTitle className="text-fg">
                   <span className="mr-2">{emoji}</span>
                   {title}
-                </h3>
+                </ItemTitle>
 
                 <p
                   className={cn(

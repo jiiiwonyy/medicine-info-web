@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import PageLayout from '@/components/PageLayout';
 import Spinner from '@/components/Spinner';
+import SubTitle from '@/components/ui/SubTitle';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { useMedicineSearchInfinite } from '@/features/medicine-search/hooks/useMedicineSearchInfinite';
@@ -36,9 +37,9 @@ export default function MedicineSearchResultPage() {
         )}
       </h2>
 
-      <h2 className={cn(textStyles.titleMd, 'text-primary mb-6')}>
+      <SubTitle className="text-primary mb-6">
         {query ? '검색결과 리스트' : '등록된 의약품 목록'} ( {s.total}개 )
-      </h2>
+      </SubTitle>
 
       {s.error ? (
         <div className={cn(textStyles.bodySm, 'text-danger-700 my-10 text-center')}>

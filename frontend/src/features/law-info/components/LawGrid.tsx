@@ -1,15 +1,16 @@
 import { Card } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
-import { textStyles } from '@/styles/typography';
+import SectionTitle from '@/components/ui/SectionTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 import type { LawLinkItem } from '@/features/law-info/types';
 
 export default function LawGrid({ laws }: { laws: LawLinkItem[] }) {
   return (
     <section>
-      <h3 className={cn(textStyles.titleMd, 'text-primary-700 mt-10 mb-4')}>
+      <SectionTitle className="mt-10 mb-4">
         📚 주요 보건의료 관련 법률 바로가기
-      </h3>
+      </SectionTitle>
 
       <div className="grid md:grid-cols-2 gap-4">
         {laws.map((law) => (
@@ -21,9 +22,9 @@ export default function LawGrid({ laws }: { laws: LawLinkItem[] }) {
               'transition hover:shadow-[var(--shadow-sm)] hover:-translate-y-0.5',
             )}
           >
-            <h4 className={cn(textStyles.titleSm, 'text-primary-700 mb-3')}>
+            <ItemTitle className="text-primary-700 mb-3">
               {law.title}
-            </h4>
+            </ItemTitle>
 
             <div className="flex flex-wrap gap-2">
               <Button asChild size="sm" variant="primary">

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '@/assets/logo.png';
 
@@ -12,6 +12,10 @@ export default function Header() {
 
   const [q, setQ] = useState('');
   const [openMain, setOpenMain] = useState<string | null>(null);
+
+  useEffect(() => {
+    setOpenMain(null);
+  }, [location.pathname]);
 
   const mainTabs = useMemo(
     () => [
@@ -73,26 +77,34 @@ export default function Header() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center mb-7">
-      <HeaderTop
-        logoSrc={logo}
-        query={q}
-        onChangeQuery={setQ}
-        onSearch={handleSearch}
-        onClickLogo={() => {
-          setQ('');
-          navigate('/');
-        }}
-      />
+    <>
+      {openMain && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40"
+          onClick={() => setOpenMain(null)}
+        />
+      )}
+      <div className="w-full flex flex-col items-center mb-7 relative z-50">
+        <HeaderTop
+          logoSrc={logo}
+          query={q}
+          onChangeQuery={setQ}
+          onSearch={handleSearch}
+          onClickLogo={() => {
+            setQ('');
+            navigate('/');
+          }}
+        />
 
-      <HeaderNav
-        mainTabs={mainTabs}
-        subTabsMap={subTabsMap}
-        openMain={openMain}
-        onOpenMain={setOpenMain}
-        pathname={location.pathname}
-        onNavigate={(path) => navigate(path)}
-      />
-    </div>
+        <HeaderNav
+          mainTabs={mainTabs}
+          subTabsMap={subTabsMap}
+          openMain={openMain}
+          onOpenMain={setOpenMain}
+          pathname={location.pathname}
+          onNavigate={(path) => navigate(path)}
+        />
+      </div>
+    </>
   );
 }

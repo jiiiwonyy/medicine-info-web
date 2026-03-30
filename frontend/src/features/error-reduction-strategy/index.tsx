@@ -8,7 +8,7 @@ export default function ErrorReductionStrategyPage() {
   return (
     <PageLayout title="투약 오류 감소 전략">
       <Tabs defaultValue="safe-medication" className="mt-2">
-        <TabsList className="w-full flex">
+        <TabsList className="w-full">
           <TabsTrigger value="safe-medication" className="flex-1">
             💊 안전한 투약 전략
           </TabsTrigger>

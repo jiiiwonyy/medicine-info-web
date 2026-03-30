@@ -3,6 +3,7 @@ import { textStyles } from '@/styles/typography';
 import { Card } from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import SectionTitle from '@/components/ui/SectionTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 import vigiAccessHome from '@/assets/who-adverse/vigiacess_home.png';
 import searchDrug from '@/assets/who-adverse/search_drug.png';
 import resultGraphic from '@/assets/who-adverse/result_graphic.png';
@@ -85,9 +86,9 @@ export default function VigiAccessGuideSection() {
 
       {/* allopurinol 검색 예시 */}
       <div className="space-y-4">
-        <h4 className={cn(textStyles.titleSm, 'text-fg')}>
+        <ItemTitle className="text-fg">
           💊 "allopurinol" 검색한 예시
-        </h4>
+        </ItemTitle>
 
         <Card variant="muted" padding="lg" className="space-y-4">
           {/* 부작용 목록 결과 */}

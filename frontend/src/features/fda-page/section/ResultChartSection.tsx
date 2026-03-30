@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import ItemTitle from '@/components/ui/ItemTitle';
 
 import TopPtList from '@/features/fda-page/components/TopPtList';
 import YearlyTotalChart from '@/features/fda-page/components/YearlyTotalChart';
@@ -37,14 +38,14 @@ export default function ResultChartsSection({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card variant="strong" className="w-full">
-          <h2 className={cn(textStyles.titleSm, 'mb-4')}>Top PT</h2>
+          <ItemTitle className="mb-4">Top PT</ItemTitle>
           <TopPtList items={topPts} />
         </Card>
 
         <Card variant="strong" className="w-full md:col-span-2">
-          <h2 className={cn(textStyles.titleSm, 'mb-4')}>
+          <ItemTitle className="mb-4">
             Top5 PT 연도별 추이
-          </h2>
+          </ItemTitle>
           <TopPtTimeseriesChart
             years={timeseries.years}
             series={timeseries.series}

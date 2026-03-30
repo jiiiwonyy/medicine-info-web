@@ -6,7 +6,9 @@ type CardVariant =
   | 'elevated'
   | 'muted'
   | 'primary'
-  | 'strong';
+  | 'strong'
+  | 'empty';
+
 type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 const variantStyles: Record<CardVariant, string> = {
@@ -26,6 +28,8 @@ const variantStyles: Record<CardVariant, string> = {
 
   // ⭐ 연한 파랑 강조 섹션 (DUR 강조/마무리용)
   primary: 'bg-primary-100 border border-primary-200',
+
+  empty: 'bg-surface border border-dashed border-border',
 };
 
 const paddingStyles: Record<CardPadding, string> = {

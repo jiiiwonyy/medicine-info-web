@@ -10,9 +10,8 @@ import EfficacyGroupTable from '@/features/adverse-event-domestic/components/Eff
 import AdverseEventGroupTable from '@/features/adverse-event-domestic/components/AdverseEventGroupTable';
 import LookupGuideSection from '@/features/adverse-event-domestic/components/LookupGuideSection';
 import Button from '@/components/ui/Button';
-import { cn } from '@/shared/cn';
-import { textStyles } from '@/styles/typography';
 import SectionTitle from '@/components/ui/SectionTitle';
+import SubTitle from '@/components/ui/SubTitle';
 
 const links = [
   { id: 'yearly-reports', label: '연도별 현황' },
@@ -35,7 +34,7 @@ export default function AdverseEventDomesticPage() {
   return (
     <PageLayout title="국내 의약품 부작용 보고자료">
       <div className="mb-10 p-4 rounded-[var(--radius-lg)] bg-muted/30 border border-border">
-        <h3 className={cn(textStyles.titleMd, 'mb-3 px-1')}>바로가기</h3>
+        <SubTitle className="mb-3 px-1">바로가기</SubTitle>
         <div className="flex flex-wrap gap-2">
           {links.map((link) => (
             <Button

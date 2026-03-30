@@ -5,6 +5,8 @@ import ReportItemsSection from '@/features/relief/components/ReportItemSection';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import SectionTitle from '@/components/ui/SectionTitle';
+import ItemTitle from '@/components/ui/ItemTitle';
 
 export default function ReliefPage() {
   return (
@@ -33,7 +35,7 @@ export default function ReliefPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card padding="lg" className="bg-gray-100 border border-gray-200">
-              <h4 className={cn(textStyles.titleSm, 'mb-2')}>1. 부작용</h4>
+              <ItemTitle className="mb-2">1. 부작용</ItemTitle>
               <p className={cn(textStyles.bodyMd, 'mb-1 text-muted-fg')}>
                 Side Effect
               </p>
@@ -44,9 +46,9 @@ export default function ReliefPage() {
             </Card>
 
             <div className="bg-sky-100 p-6 rounded-xl border border-sky-100">
-              <h4 className={cn(textStyles.titleSm, 'mb-2')}>
+              <ItemTitle className="mb-2">
                 2. 이상사례 (AE)
-              </h4>
+              </ItemTitle>
               <p className={cn(textStyles.bodyMd, 'mb-1 text-muted-fg')}>
                 Adverse Event
               </p>
@@ -64,9 +66,9 @@ export default function ReliefPage() {
             </div>
 
             <div className="bg-sky-600 p-6 rounded-xl text-white shadow-md">
-              <h4 className={cn(textStyles.titleSm, 'mb-2')}>
+              <ItemTitle className="mb-2">
                 3. 약물이상반응 (ADR)
-              </h4>
+              </ItemTitle>
               <p className={cn(textStyles.bodyMd, 'mb-1')}>
                 Adverse Drug Reaction
               </p>
@@ -83,14 +85,9 @@ export default function ReliefPage() {
             'border-l-4 border-l-danger',
           )}
         >
-          <h2
-            className={cn(
-              textStyles.titleSm,
-              'mb-4 text-danger flex items-center gap-2',
-            )}
-          >
+          <ItemTitle className="mb-4 text-danger flex items-center gap-2">
             ⚠️ 중대한 이상사례·약물이상반응
-          </h2>
+          </ItemTitle>
           <p className={cn(textStyles.bodySm, 'mb-4')}>
             다음 각 항목의 어느 하나에 해당하는 경우를 말합니다.
           </p>
@@ -113,14 +110,9 @@ export default function ReliefPage() {
         </section>
         <section className="space-y-8">
           <div>
-            <h2
-              className={cn(
-                textStyles.titleMd,
-                'mb-4 text-fg border-b border-border pb-2',
-              )}
-            >
+            <SectionTitle className="mb-4 text-fg border-b border-border pb-2">
               의약품 이상사례 보고의 필요성
-            </h2>
+            </SectionTitle>
             <Card variant="outlined">
               <p
                 className={cn(
@@ -144,14 +136,9 @@ export default function ReliefPage() {
           </div>
 
           <div>
-            <h2
-              className={cn(
-                textStyles.titleMd,
-                'mb-4 text-fg border-b border-border pb-2',
-              )}
-            >
+            <SectionTitle className="mb-4 text-fg border-b border-border pb-2">
               이상사례 보고 후 과정
-            </h2>
+            </SectionTitle>
             <Card variant="primary" padding="lg">
               <div className="flex flex-col md:flex-row items-stretch gap-0">
                 {[

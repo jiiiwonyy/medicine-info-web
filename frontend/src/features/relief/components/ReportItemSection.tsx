@@ -1,5 +1,6 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
+import SectionTitle from '@/components/ui/SectionTitle';
 
 const reportItems = [
   { title: '환자 기본정보', desc: '연령, 성별, 상태 등' },
@@ -12,14 +13,9 @@ const reportItems = [
 export default function ReportItemsSection() {
   return (
     <section>
-      <h2
-        className={cn(
-          textStyles.titleMd,
-          'mb-4 text-fg border-b border-border pb-2',
-        )}
-      >
+      <SectionTitle className="mb-4 text-fg border-b border-border pb-2">
         보고 시 작성 항목
-      </h2>
+      </SectionTitle>
 
       <p className={cn(textStyles.bodyMd, 'mb-6')}>
         부작용 보고를 위해 사이트에 접속하면 아래와 같은 항목들을 입력하게
