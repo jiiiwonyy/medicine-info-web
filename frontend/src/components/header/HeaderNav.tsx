@@ -61,13 +61,14 @@ export default function HeaderNav({
   return (
     <div
       className="w-full bg-primary relative"
+      onMouseLeave={() => onOpenMain(null)}
     >
       {/* 데스크탑 네비게이션 */}
       <div className="hidden md:flex xl:px-72 w-full items-center justify-center space-x-3">
         {mainTabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => onOpenMain(openMain === tab ? null : tab)}
+            onMouseEnter={() => onOpenMain(tab)}
             className={cn(
               'px-4 py-3 cursor-pointer transition',
               textStyles.uiLg,

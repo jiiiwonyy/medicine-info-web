@@ -1,13 +1,13 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { Card } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
 import SectionTitle from '@/components/ui/SectionTitle';
 import ItemTitle from '@/components/ui/ItemTitle';
 import vigiAccessHome from '@/assets/who-adverse/vigiacess_home.png';
 import searchDrug from '@/assets/who-adverse/search_drug.png';
 import resultGraphic from '@/assets/who-adverse/result_graphic.png';
 import resultReportedPotential from '@/assets/who-adverse/result_reported_potential.png';
+import LinkButton from '@/components/ui/LinkButton';
 
 const VIGIACCESS_URL = 'https://www.vigiaccess.org/';
 
@@ -53,11 +53,11 @@ export default function VigiAccessGuideSection() {
           아래 사이트에 접속하여 하단에 체크하고 <SearchDatabaseButton /> 를
           누르면 의약품에 대한 부작용 보고자료를 검색할 수 있습니다.
         </p>
-        <Button asChild size="sm" variant="secondary">
-          <a href={VIGIACCESS_URL} target="_blank" rel="noopener noreferrer">
-            🔗 {VIGIACCESS_URL}
-          </a>
-        </Button>
+        <LinkButton
+          href={VIGIACCESS_URL}
+          text={VIGIACCESS_URL}
+          variant="white"
+        />
         {/* 체크박스 + Search database 버튼 화면 이미지 */}
         <div className="rounded-lg overflow-hidden border border-border">
           <img
@@ -86,9 +86,7 @@ export default function VigiAccessGuideSection() {
 
       {/* allopurinol 검색 예시 */}
       <div className="space-y-4">
-        <ItemTitle className="text-fg">
-          💊 "allopurinol" 검색한 예시
-        </ItemTitle>
+        <ItemTitle className="text-fg">💊 "allopurinol" 검색한 예시</ItemTitle>
 
         <Card variant="muted" padding="lg" className="space-y-4">
           {/* 부작용 목록 결과 */}
