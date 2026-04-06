@@ -1,5 +1,4 @@
 import PageLayout from '@/components/PageLayout';
-import Button from '@/components/ui/Button';
 import LawIntro from '@/features/law-info/components/LawIntro';
 import LawRoleSection from '@/features/law-info/components/LawRoleSection';
 import LawFeatureSection from '@/features/law-info/components/LawFeatureSection';

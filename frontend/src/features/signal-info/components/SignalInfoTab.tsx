@@ -1,5 +1,4 @@
 import { Card } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import SubTitle from '@/components/ui/SubTitle';

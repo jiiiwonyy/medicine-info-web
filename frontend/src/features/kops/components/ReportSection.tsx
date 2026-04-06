@@ -1,4 +1,3 @@
-import Button from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
