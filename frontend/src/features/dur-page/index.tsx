@@ -8,6 +8,7 @@ import SubTitle from '@/components/ui/SubTitle';
 import ItemTitle from '@/components/ui/ItemTitle';
 import DurInfoCard from '@/features/dur-page/components/DurInfoCard';
 import { DUR_MAIN_INFO, DUR_USE_CASES } from '@/features/dur-page/data/DurData';
+import LinkButton from '@/components/ui/LinkButton';
 
 export default function DURPage() {
   return (
@@ -33,6 +34,11 @@ export default function DURPage() {
               사용을 사전에 차단하거나 주의를 환기하는 것을 목적으로 합니다.
             </p>
           </Callout>
+
+          <LinkButton
+            href="https://www.health.kr/searchDrug/search_DUR.asp"
+            text="DUR 바로가기"
+          />
         </section>
 
         {/* DUR 서비스 제공 방식 */}
@@ -116,9 +122,7 @@ export default function DURPage() {
         {/* 마무리 강조 섹션 */}
         <section>
           <Card variant="primary" padding="lg" className="text-center">
-            <SubTitle className="text-2xl mb-4">
-              DUR 활용의 의의
-            </SubTitle>
+            <SubTitle className="text-2xl mb-4">DUR 활용의 의의</SubTitle>
             <p
               className={cn(textStyles.bodyMd, 'text-muted-fg leading-relaxed')}
             >

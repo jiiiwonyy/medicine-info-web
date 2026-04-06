@@ -1,5 +1,4 @@
 import PageLayout from '@/components/PageLayout';
-import Button from '@/components/ui/Button';
 import Callout from '@/components/ui/Callout';
 import { Card } from '@/components/ui/Card';
 import { cn } from '@/shared/cn';
@@ -10,6 +9,7 @@ import {
   KPIS_URL,
 } from '@/features/medication-guide/data/medicationGuide';
 import SectionTitle from '@/components/ui/SectionTitle';
+import LinkButton from '@/components/ui/LinkButton';
 
 const FEATURES = [
   { icon: '🔍', text: '제품명으로 검색 시 해당 의약품의 복약지도서 확인 가능' },
@@ -68,11 +68,7 @@ export default function MedicationGuidePage() {
         <HowToSection steps={[...KPIS_STEPS]} />
       </section>
 
-      <Button asChild className="w-full">
-        <a href={KPIS_URL} target="_blank" rel="noopener noreferrer">
-          🔗 약학정보원 복약지도서 검색 바로가기
-        </a>
-      </Button>
+      <LinkButton href={KPIS_URL} text="약학정보원 복약지도서 검색 바로가기" />
     </PageLayout>
   );
 }

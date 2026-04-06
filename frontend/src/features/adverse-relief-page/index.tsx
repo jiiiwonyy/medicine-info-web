@@ -4,8 +4,8 @@ import ReliefProcess from '@/features/adverse-relief-page/components/ReliefProce
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import { Card } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
 import SectionTitle from '@/components/ui/SectionTitle';
+import LinkButton from '@/components/ui/LinkButton';
 
 const COVERAGE_ITEMS = [
   {
@@ -150,33 +150,20 @@ export default function AdverseReliefPage() {
         </Card>
 
         <div className="flex flex-wrap gap-3">
-          <Button asChild>
-            <a
-              href="https://nedrug.mfds.go.kr/cntnts/230"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 의약품부작용피해구제 민원신청 바로가기
-            </a>
-          </Button>
-          <Button asChild>
-            <a
-              href="https://karp.drugsafe.or.kr/frt/ara/AplCtf.do"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 신청서 작성 바로가기
-            </a>
-          </Button>
-          <Button asChild>
-            <a
-              href="https://www.youtube.com/watch?v=rcxfVtL8nlM"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              🔗 신청 방법 유튜브 안내 보기
-            </a>
-          </Button>
+          <LinkButton
+            href="https://nedrug.mfds.go.kr/cntnts/230"
+            text="의약품부작용피해구제 민원신청 바로가기"
+          />
+          <LinkButton
+            href="https://karp.drugsafe.or.kr/frt/ara/AplCtf.do"
+            text="신청서 작성 바로가기"
+            variant="white"
+          />
+          <LinkButton
+            href="https://www.youtube.com/watch?v=rcxfVtL8nlM"
+            text="신청 방법 유튜브 안내 보기"
+            variant="white"
+          />
         </div>
       </section>
 

@@ -1,9 +1,9 @@
 import { Card } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
 import SubTitle from '@/components/ui/SubTitle';
 import ItemTitle from '@/components/ui/ItemTitle';
+import LinkButton from '@/components/ui/LinkButton';
 
 export default function SignalInfoInfoTab() {
   return (
@@ -88,9 +88,7 @@ export default function SignalInfoInfoTab() {
           </div>
 
           <div className="bg-sky-600 p-6 rounded-xl text-white shadow-md">
-            <ItemTitle className="mb-2">
-              3. 약물이상반응 (ADR)
-            </ItemTitle>
+            <ItemTitle className="mb-2">3. 약물이상반응 (ADR)</ItemTitle>
             <p className={cn(textStyles.bodyMd, 'mb-1')}>
               Adverse Drug Reaction
             </p>
@@ -156,24 +154,15 @@ export default function SignalInfoInfoTab() {
         </Card>
 
         <div className="flex flex-wrap gap-4 justify-center mt-6">
-          <Button asChild>
-            <a
-              href="https://nedrug.mfds.go.kr/bbs/3"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>🔗</span> 의약품안전나라 실마리정보 바로가기
-            </a>
-          </Button>
-          <Button asChild variant="secondary">
-            <a
-              href="https://www.drugsafe.or.kr/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>🏢</span> 한국의약품안전관리원 홈
-            </a>
-          </Button>
+          <LinkButton
+            href="https://nedrug.mfds.go.kr/bbs/3"
+            text="의약품안전나라 실마리정보 바로가기"
+          />
+          <LinkButton
+            href="https://www.drugsafe.or.kr/"
+            text="한국의약품안전관리원 홈"
+            variant="white"
+          />
         </div>
       </section>
     </div>
