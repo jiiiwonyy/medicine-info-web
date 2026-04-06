@@ -5,6 +5,7 @@ import { textStyles } from '@/styles/typography';
 import { Step } from '@/features/kops/components/ReportSteps';
 import SectionTitle from '@/components/ui/SectionTitle';
 import ItemTitle from '@/components/ui/ItemTitle';
+import LinkButton from '@/components/ui/LinkButton';
 
 export default function ReportSection({
   reportTypes,
@@ -56,25 +57,15 @@ export default function ReportSection({
       </Card>
 
       <div className="mt-5 flex flex-wrap gap-3">
-        <Button asChild variant="primary" className="flex-1">
-          <a
-            href="https://www.kops.or.kr/portal/rcp/rcpReport/rcpReportList.do"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            🔗 보고하기 바로가기
-          </a>
-        </Button>
-
-        <Button asChild variant="secondary" className="flex-1">
-          <a
-            href="https://www.kops.or.kr/portal/main.do"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            🔗 KOPS 메인
-          </a>
-        </Button>
+        <LinkButton
+          href="https://www.kops.or.kr/portal/rcp/rcpReport/rcpReportList.do"
+          text="보고하기 바로가기"
+        />
+        <LinkButton
+          href="https://www.kops.or.kr/portal/main.do"
+          text="KOPS 메인"
+          variant="white"
+        />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { cn } from '@/shared/cn';
 import { textStyles } from '@/styles/typography';
-import Button from '@/components/ui/Button';
 import SectionTitle from '@/components/ui/SectionTitle';
+import LinkButton from '@/components/ui/LinkButton';
 
 export default function LookupGuideSection() {
   return (
@@ -17,15 +17,10 @@ export default function LookupGuideSection() {
         <li>상단 메뉴 → 전자민원/보고 → 이상사례 → 이상사례보고 동향</li>
       </ol>
 
-      <Button asChild>
-        <a
-          href="https://nedrug.mfds.go.kr/bbs/2"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          🔗 의약품안전나라 이상사례보고동향 바로가기
-        </a>
-      </Button>
+      <LinkButton
+        href="https://nedrug.mfds.go.kr/bbs/2"
+        text="의약품안전나라 이상사례보고동향 바로가기"
+      />
     </div>
   );
 }

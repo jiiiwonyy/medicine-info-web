@@ -1,6 +1,6 @@
-import Button from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import SubTitle from '@/components/ui/SubTitle';
+import LinkButton from '@/components/ui/LinkButton';
 
 export default function SafetyLetterInfoTab() {
   return (
@@ -47,10 +47,8 @@ export default function SafetyLetterInfoTab() {
           </tbody>
         </table>
 
-        <SubTitle className="mt-8 mb-2">
-          안전성 서한 확인 방법
-        </SubTitle>
-        <ul className="list-disc pl-6 mb-4 space-y-1">
+        <SubTitle className="mt-8 mb-2">안전성 서한 확인 방법</SubTitle>
+        <ul className="list-disc pl-6 mb-6 space-y-1">
           <li>메인 화면에서 바로 확인</li>
           <li>
             메뉴 경로:{' '}
@@ -60,15 +58,11 @@ export default function SafetyLetterInfoTab() {
             </span>
           </li>
         </ul>
-        <Button asChild>
-          <a
-            href="https://nedrug.mfds.go.kr/pbp/CCBAC01"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            🔗 안전성 서한 바로가기
-          </a>
-        </Button>
+
+        <LinkButton
+          href="https://nedrug.mfds.go.kr/pbp/CCBAC01"
+          text="의약품안전나라 안전성 서한 바로가기"
+        />
 
         <SubTitle className="mt-8 mb-2">검색 예시</SubTitle>
         <Card variant="muted" className="p-4 rounded">
